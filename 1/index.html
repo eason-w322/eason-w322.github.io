@@ -1,16 +1,19 @@
 <style>
   .section {
-    text-align: center;
+    text-align: center;       /* centre headings and the inline images as a group */
   }
   .section img {
-    display: block;
-    margin: 0 auto;
+    display: inline-block;    /* allow images to sit on the same line */
+    max-width: 300px;
+    height: auto;
+    margin: 0 1rem;           /* horizontal space between the images */
+    border: 1px solid #ccc;
   }
 </style>
 
 <div class="section">
   <h1>Part 1</h1>
   <p>Selfie: The Wrong Way vs. The Right Way</p>
-  <img src="https://github.com/eason-w322/eason-w322.github.io/blob/main/images/selfie.jpg" alt="Close‑up Selfie" width="300">
-  <img src="../images/zoom-selfie.jpg" alt="Zoom Selfie" width="300">
+  <img src="../images/selfie.jpg" alt="Close‑up Selfie">
+  <img src="../images/zoom-selfie.jpg" alt="Zoom Selfie">
 </div>
