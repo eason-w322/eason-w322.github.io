@@ -1,22 +1,31 @@
 <style>
   .section {
-    text-align: center;
+    text-align: center; /* centre the heading and the row of images */
   }
-  /* Flex row for the two images */
+
   .image-row {
     display: flex;
     justify-content: center;
-    gap: 1rem;            /* horizontal space between images */
+    gap: 1rem;
     margin-top: 1rem;
   }
   .image-row figure {
     margin: 0;
-    text-align: center;   /* centre each caption under its image */
+    text-align: center;
   }
   .image-row img {
     max-width: 300px;
     height: auto;
     border: 1px solid #ccc;
+  }
+
+  /* Paragraph styling */
+  .description {
+    max-width: 650px;   /* roughly the width of the two images plus the gap */
+    margin: 1rem auto;  /* centre the paragraph box on the page */
+    text-align: left;   /* but keep the text itself left‑aligned */
+    font-size: 1.1em;   /* slightly larger font size */
+    line-height: 1.4;
   }
 </style>
 
@@ -34,13 +43,13 @@
     </figure>
   </div>
 
-  <p style="max-width: 600px; margin: 1rem auto;">
-    In the close‑up photo on the left, my friend is holding the phone very close
-    to my face. At that short distance the camera is using a wide‑angle focal
-    length, which exaggerates features and introduces noticeable distortion.
-    For the image on the right my friend took a step back and used the camera’s
-    zoom to fill the frame. The longer focal length flattens the perspective,
-    so my facial features look more natural and evenly proportioned. Overall,
-    shooting from farther away and zooming in produces a more flattering result.
+  <p class="description">
+    In the close‑up photo on the left, my friend is holding the phone very close to my face.
+    At that short distance the camera is using a wide‑angle focal length, which
+    exaggerates features and causes more distortion to my face. For the image on
+    the right my friend took a step back and used the camera’s zoom to fill the frame.
+    The longer focal length flattens the perspective, so my facial features look
+    more natural and evenly proportioned. Overall, shooting from farther away and
+    zooming in produces a more flattering result.
   </p>
 </div>
