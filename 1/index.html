@@ -1,92 +1,149 @@
-<style>
-  .section {
-    text-align: center; /* centre the heading and the row of images */
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CS180 – Project 0</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #fafafa;
+      color: #333;
+    }
 
-  .image-row {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-  .image-row figure {
-    margin: 0;
-    text-align: center;
-  }
-  .image-row img {
-    max-width: 300px;
-    height: auto;
-    border: 1px solid #ccc;
-  }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      background-color: #1f2937;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 500;
+    }
 
-  /* Paragraph styling */
-  .description {
-    max-width: 650px;   /* roughly the width of the two images plus the gap */
-    margin: 1rem auto;  /* centre the paragraph box on the page */
-    text-align: left;   /* but keep the text itself left‑aligned */
-    font-size: 1.1em;   /* slightly larger font size */
-    line-height: 1.4;
-  }
-</style>
+    .header div {
+      flex: 1;
+      text-align: center;
+    }
 
-<div class="section">
-  <h1>Part 1</h1>
-  <p>Selfie: The Wrong Way vs. The Right Way</p>
-  <div class="image-row">
-    <figure>
-      <img src="../images/closeselfie.jpg" alt="Close‑up Selfie">
-      <figcaption>Close‑up Selfie</figcaption>
-    </figure>
-    <figure>
-      <img src="../images/zoozoomselfie.jpg" alt="Zoom Selfie">
-      <figcaption>Zoom Selfie</figcaption>
-    </figure>
+    .header div:first-child {
+      text-align: left;
+    }
+
+    .header div:last-child {
+      text-align: right;
+    }
+
+    .section {
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .image-row {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .image-row figure {
+      margin: 0;
+      text-align: center;
+    }
+
+    .image-row img {
+      max-width: 300px;
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .description {
+      max-width: 650px;
+      margin: 1.5rem auto;
+      text-align: left;
+      font-size: 1.1em;
+      line-height: 1.5;
+    }
+
+    figcaption {
+      font-size: 0.95em;
+      margin-top: 0.5rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <div>Your Name</div>
+    <div>CS180</div>
+    <div>Project 0</div>
   </div>
-
-  <p class="description">
-    In the close‑up photo on the left, my friend is holding the phone very close to my face.
-    At that short distance the camera is using a wide‑angle focal length, which
-    exaggerates features and causes more distortion to my face. For the image on
-    the right my friend took a step back and used the camera’s zoom to fill the frame.
-    The longer focal length flattens the perspective, so my facial features look
-    more natural and evenly proportioned. Overall, shooting from farther away and
-    zooming in produces a more flattering result.
-  </p>
-</div>
-
-<div class="section">
-  <h1>Part 2</h1>
-  <p>Architectural Perspective Compression</p>
-
-  <div class="image-row">
-    <figure>
-      <img src="../images/close.jpg" alt="Wide‑angle View">
-      <figcaption>Wide‑angle View</figcaption>
-    </figure>
-    <figure>
-      <img src="../images/farlamp.jpg" alt="Compressed Perspective">
-      <figcaption>Compressed Perspective</figcaption>
-    </figure>
-  </div>
-
-  <p class="description">
-  The wide-angle view on the left makes the lamp feel isolated and tall, while the longer lens 
-  on the right compresses space, making the lamp and background appear closer and more compact.
-  </p>
 
   <div class="section">
-  <h1>Part 3</h1>
-  <p>Dolly Zoom</p>
+    <h1>Part 1</h1>
+    <p>Selfie: The Wrong Way vs. The Right Way</p>
+    <div class="image-row">
+      <figure>
+        <img src="../images/closeselfie.jpg" alt="Close‑up Selfie">
+        <figcaption>Close‑up Selfie</figcaption>
+      </figure>
+      <figure>
+        <img src="../images/zoozoomselfie.jpg" alt="Zoom Selfie">
+        <figcaption>Zoom Selfie</figcaption>
+      </figure>
+    </div>
 
-  <div class="image-row">
-    <figure>
-      <img src="../images/a4xexu.gif" alt="Dolly Zoom – Wide Start">
-      <figcaption>Dolly Zoom – Wide Start</figcaption>
-    </figure>
+    <p class="description">
+      In the close‑up photo on the left, my friend is holding the phone very close to my face.
+      The wide‑angle lens exaggerates my features. On the right, they stood farther back and zoomed in,
+      giving a more natural and flattering look.
+    </p>
   </div>
 
-  <p class="description">
-    As the camera moves away from the labubu(subject) while zooming in, the background stretches 
-    and shifts unnaturally. This dolly zoom effect keeps the subject the same size but distorts space behind.
-  </p>
-</div>
+  <div class="section">
+    <h1>Part 2</h1>
+    <p>Architectural Perspective Compression</p>
+
+    <div class="image-row">
+      <figure>
+        <img src="../images/close.jpg" alt="Wide‑angle View">
+        <figcaption>Wide‑angle View</figcaption>
+      </figure>
+      <figure>
+        <img src="../images/farlamp.jpg" alt="Compressed Perspective">
+        <figcaption>Compressed Perspective</figcaption>
+      </figure>
+    </div>
+
+    <p class="description">
+      The wide-angle view makes the lamp appear isolated and tall. With a longer lens,
+      the space compresses, bringing background elements visually closer to the subject.
+    </p>
+  </div>
+
+  <div class="section">
+    <h1>Part 3</h1>
+    <p>Dolly Zoom</p>
+
+    <div class="image-row">
+      <figure>
+        <img src="../images/a4xexu.gif" alt="Dolly Zoom – Wide Start">
+        <figcaption>Dolly Zoom – Wide Start</figcaption>
+      </figure>
+    </div>
+
+    <p class="description">
+      As the camera moves back while zooming in, the background stretches dramatically.
+      This dolly zoom keeps the subject the same size but shifts the surrounding space
+      for a surreal effect.
+    </p>
+  </div>
+
+</body>
+</html>
