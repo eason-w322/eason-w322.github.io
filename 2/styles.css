@@ -170,7 +170,7 @@ figcaption {
 }
 
 .results-table img {
-  width: 400px;  /* larger images */
+  width: 350px;  /* larger images */
   border-radius: 12px;
   display: block;
   margin: 0 auto;
@@ -180,4 +180,11 @@ figcaption {
   font-size: 0.85rem;   /* smaller font */
   color: var(--muted);
   margin-top: 6px;
+}
+#other-examples img {
+  width: 350px;   /* same size as results table images */
+  height: auto;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto 6px; /* center image and add spacing for caption */
 }
