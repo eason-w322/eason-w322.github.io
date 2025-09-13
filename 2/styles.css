@@ -216,3 +216,23 @@ figcaption {
 @media (min-width: 1100px) {
   #emir-failure .figure-280 img { width: 400px; }
 }
+/* Make the sidebar narrow and tucked to the left */
+.container {
+  grid-template-columns: 120px 1fr;  /* was 200px */
+  gap: 16px;                         /* a bit tighter gap */
+}
+
+/* Slimmer TOC card */
+.toc {
+  padding: 10px;                     /* was 16px */
+  border-radius: 12px;
+}
+
+/* Smaller link rows; keep them on one line with ellipsis */
+.toc a {
+  font-size: 0.85rem;                /* smaller text */
+  padding: 6px 8px;                  /* tighter rows */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;           /* trims long labels nicely */
+}
