@@ -181,4 +181,16 @@ figcaption {
   color: var(--muted);
   margin-top: 6px;
 }
-
+#emir-failure img {
+  width: 280px;       /* or 300px to match your other grid */
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0,0,0,.4);
+  display: block;
+}
+#emir-failure .img-name {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-top: 6px;
+}
