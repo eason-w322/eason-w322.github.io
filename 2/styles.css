@@ -170,7 +170,7 @@ figcaption {
 }
 
 .results-table img {
-  width: 350px;  /* larger images */
+  width: 320px;  /* larger images */
   border-radius: 12px;
   display: block;
   margin: 0 auto;
