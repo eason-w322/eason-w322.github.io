@@ -181,10 +181,4 @@ figcaption {
   color: var(--muted);
   margin-top: 6px;
 }
-#other-examples img {
-  width: 350px;   /* same size as results table images */
-  height: auto;
-  border-radius: 12px;
-  display: block;
-  margin: 0 auto 6px; /* center image and add spacing for caption */
-}
+
