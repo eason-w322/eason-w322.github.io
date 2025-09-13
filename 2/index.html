@@ -26,7 +26,7 @@
     <section id="overview" class="card">
       <h2>Overview</h2>
       <p>
-        In this project, I reconstruct color images from Prokudin-Gorskii glass plates (top=Blue, middle=Green, bottom=Red) by aligning the G and R channels to B using a windowed search with normalized cross-correlation (NCC) and a coarse-to-fine image-pyramid approach for large <code>.tif</code> files.
+        In this project, I reconstruct color images from Prokudin-Gorskii glass plates (top=Blue, middle=Green, bottom=Red) by aligning the G and R channels to B using a windowed search with normalized cross-correlation (NCC) and a multi-scale image-pyramid approach for large <code>.tif</code> files.
       </p>
     </section>
 
@@ -95,7 +95,7 @@
     </section>
 
     <section id="pyramid" class="card">
-      <h2>Image Pyramid (Coarse → Fine)</h2>
+      <h2>Image Pyramid (Multi-scale)</h2>
       <p>
         However, single-scale alignment with NCC fails to produce well-aligned results for large <code>.tif</code> images, most notably for <strong>Emir</strong>. 
         This happens because NCC assumes consistent relative intensity across channels, but in Emir the brightness varies significantly. 
