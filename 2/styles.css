@@ -224,8 +224,8 @@ figcaption {
 
 /* Slimmer TOC card */
 .toc {
-  padding: 10px;                     /* was 16px */
-  border-radius: 12px;
+  padding: 8px;                     /* was 16px */
+  border-radius: 10px;
 }
 
 /* Smaller link rows; keep them on one line with ellipsis */
