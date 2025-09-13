@@ -197,3 +197,22 @@ figcaption {
   color: var(--muted);
   margin-top: 6px;
 }
+/* Center the Emir figure and make the image a bit larger */
+#emir-failure .figure-280 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centers the image + caption */
+  gap: 8px;
+  margin: 0 auto;        /* centers the whole figure in the card */
+}
+
+#emir-failure .figure-280 img {
+  width: 360px;          /* slightly bigger (was 280/300) */
+  max-width: 95%;        /* stay responsive on small screens */
+  height: auto;
+}
+
+/* Optional: bump size a bit more on wide screens */
+@media (min-width: 1100px) {
+  #emir-failure .figure-280 img { width: 400px; }
+}
