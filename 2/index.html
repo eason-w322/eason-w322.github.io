@@ -33,13 +33,25 @@
     <section id="approach" class="card">
       <h2>Single-Scale Alignment</h2>
       <p>
-        The glass plate is first divided into three equal parts corresponding to the blue, green, and red channels. 
-        To minimize boundary artifacts, I crop the central region with a crop fraction of 0.15. 
-        Within a search window of [-15, +15], I implement normalized cross-correlation (NCC) to determine the optimal displacement (dy, dx) 
-        that maximizes the similarity score. I applied this method to three sample images (shown below). 
-        The results demonstrate strong alignment overall, though the outer edges exhibit some color fringing due to border inconsistencies. 
-        To address this, I implemented an additional <code>crop_border</code> function, which successfully removes most of the noisy edge artifacts.
-      </p>
+    I first divided the scanned glass plate into three equal parts corresponding to the Blue, Green, and Red channels. 
+    Since the borders often contain misaligned or damaged scan edges, I cropped out 15% from all sides and worked only 
+    with the central region. This ensures that the alignment focuses on meaningful image content rather than noisy borders.
+  </p>
+  <p>
+    To align channels, I used <strong>normalized cross-correlation (NCC)</strong> within a displacement search window of 
+    <code>[-15, +15]</code> pixels in both directions. For each candidate shift, NCC measures the similarity between the 
+    base Blue channel and the shifted Green or Red channel. By normalizing the correlation, the metric is not dominated 
+    by absolute intensity but instead emphasizes how well the two patches vary together. The displacement <code>(dy, dx)</code> 
+    with the highest NCC score is chosen as the optimal alignment.
+  </p>
+  <p>
+    I applied this method to smaller <code>.jpg</code> images such as <em>Cathedral</em>, <em>Monastery</em>, and 
+    <em>Tobolsk</em>. The results demonstrate sharp alignment across channels: edges line up well and the colors combine 
+    naturally into a coherent RGB image. However, I observed some color fringing around the outer edges of the images. 
+    This happens because even after alignment, the very borders of the scans often differ across channels. To mitigate 
+    this, I introduced a <code>crop_border</code> function that trims the final stacked RGB image slightly, removing most 
+    of these residual artifacts.
+  </p>
       <!-- Formula Section -->
       <div class="formula">
         <p><strong>Normalized Cross-Correlation (NCC):</strong></p>
