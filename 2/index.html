@@ -82,11 +82,33 @@
 
     <section id="pyramid" class="card">
       <h2>Image Pyramid (Coarse → Fine)</h2>
-      <ol>
-        <li>Downsample by factor 2 until min(H,W) is small.</li>
-        <li>Search at coarsest level; upscale displacement; refine in a ±r window at each finer level.</li>
-        <li>Optionally use gradient magnitude for robust matching (exposure differences).</li>
-      </ol>
+      <p>
+    However, single-scale alignment with NCC fails to produce well-aligned results for large <code>.tif</code> images, most notably for <strong>Emir</strong>. 
+    This happens because NCC assumes consistent relative intensity across channels, but in Emir the brightness varies significantly. 
+    These exposure differences make the correlation score noisy, leading to poor alignment.
+  </p>
+  <p>
+    To address this, I implemented a <strong>coarse-to-fine image pyramid</strong>. 
+    The image is iteratively downsampled by a factor of two, creating up to six levels. 
+    I wrote a function, <code>pick_levels</code>, which automatically determines the appropriate number of pyramid levels 
+    based on the original image size, while ensuring a minimum resolution of 200 pixels at the coarsest level.
+  </p>
+  <p>
+    At each level, I compute the <strong>gradient magnitude</strong> of the images and perform NCC to estimate the displacement offsets. 
+    Using gradient magnitude rather than raw intensity reduces the influence of brightness and exposure differences, 
+    since edges are more stable across channels than absolute intensity values. 
+    The offsets are first estimated at the coarsest level, then upscaled and refined progressively at finer resolutions, 
+    allowing the algorithm to recover large displacements while still achieving precise pixel-level alignment.
+  </p>
+      <!-- Formula Section -->
+  <div class="formula">
+    <p><strong>Gradient Magnitude:</strong></p>
+    \[
+      |\nabla I| = \sqrt{\left(\frac{\partial I}{\partial x}\right)^2 + \left(\frac{\partial I}{\partial y}\right)^2}
+    \]
+  </div>
+</section>
+
     </section>
 
     <section id="results" class="card">
