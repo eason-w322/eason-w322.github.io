@@ -181,15 +181,18 @@ figcaption {
   color: var(--muted);
   margin-top: 6px;
 }
-#emir-failure img {
-  width: 280px;       /* or 300px to match your other grid */
+/* Standalone figure with a fixed image width */
+.figure-280 img {
+  width: 280px;            /* set the visual size */
   max-width: 100%;
   height: auto;
   border-radius: 12px;
   box-shadow: 0 6px 20px rgba(0,0,0,.4);
   display: block;
+  margin: 0;               /* remove stray gaps */
 }
-#emir-failure .img-name {
+
+.figure-280 .img-name {
   font-size: 0.85rem;
   color: var(--muted);
   margin-top: 6px;
