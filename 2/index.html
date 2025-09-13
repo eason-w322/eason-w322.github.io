@@ -47,8 +47,7 @@
   <p>
     I applied this method to smaller <code>.jpg</code> images such as <em>Cathedral</em>, <em>Monastery</em>, and 
     <em>Tobolsk</em>. The results demonstrate sharp alignment across channels: edges line up well and the colors combine 
-    naturally into a coherent RGB image. However, I observed some color fringing around the outer edges of the images. 
-    This happens because even after alignment, the very borders of the scans often differ across channels. To mitigate 
+    naturally into a coherent RGB image. However, I observed some color fringing around the outer edges of the images. To mitigate 
     this, I introduced a <code>crop_border</code> function that trims the final stacked RGB image slightly, removing most 
     of these residual artifacts.
   </p>
