@@ -98,29 +98,28 @@
 
 <h3>Pyramid Approach</h3>
 <p>
-  Single-scale exhaustive search is slow on large <code>.tif</code> images because it must try many
-  shifts at full resolution. To speed this up, I use a <strong>multi-scale image pyramid</strong>:
-  the image is downsampled by 2 several times (up to six levels, depending on size).
-  A helper, <code>pick_levels</code>, picks the number of levels so the coarsest image still has
-  a minimum dimension of about 200 pixels.
+  Single-scale exhaustive search is slow on large <code>.tif</code> images because it must test many
+  shifts at full resolution. I use a <strong>multi-scale image pyramid</strong> to make this efficient:
+  the image is downsampled by 2 several times (up to six levels, depending on size). A helper
+  (<code>pick_levels</code>) chooses the number of levels so the coarsest image still has a minimum
+  dimension of ~200 pixels.
 </p>
 <p>
-  At the <em>coarsest</em> level I search in a wider window of <strong>±12</strong> pixels to catch
-  big shifts. Then, for each finer level, I <strong>double</strong> the previous offset (to match the
-  higher resolution) and <strong>refine</strong> it within a small <strong>±3</strong> pixel window.
-  This coarse-to-fine process is fast and still gives precise, pixel-level alignment at the end.
-  In practice it aligns large Prokudin–Gorskii plates in seconds.
+  At the <em>coarsest</em> level, I search in a wider window of <strong>±12</strong> pixels to capture
+  large displacements. For each finer level, I <strong>double</strong> the previous offset (to match
+  the higher resolution) and <strong>refine</strong> it within a small <strong>±3</strong> pixel window.
+  This coarse-to-fine procedure is fast and still yields precise, pixel-level alignment at the end.
+  In practice, it aligns large Prokudin–Gorskii plates in seconds.
 </p>
 
 <h3>Problem Encountered: Emir</h3>
 <p>
-  The pyramid works well on most images, but it fails on <em>emir.tif</em> when I use raw
-  (zero-mean) NCC on intensities. Even though ZNCC handles global brightness changes, the channels
-  in Emir differ in <em>structure</em>: the robe is strong in Blue but not in Red, while walls/skin
-  are stronger in Red. These differences make the correlation surface noisy and the search locks
-  onto the wrong place.
+  The pyramid works well on most images, but it fails on <em>emir.tif</em> when using raw
+  (zero-mean) NCC on intensities. Although ZNCC handles global brightness changes, the channels in
+  Emir differ in structure: the robe contributes strongly in Blue but less in Red, while skin and
+  walls are stronger in Red. These cross-channel differences create a noisy correlation surface and
+  can steer the search to an incorrect offset.
 </p>
-
 <section id="emir-failure" class="card">
   <h2>Emir Misalignment (Raw NCC)</h2>
   <figure class="figure-280">
