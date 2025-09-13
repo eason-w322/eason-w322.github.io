@@ -236,3 +236,67 @@ figcaption {
   overflow: hidden;
   text-overflow: ellipsis;           /* trims long labels nicely */
 }
+html { scroll-behavior: smooth; }
+
+/* Thinner sidebar column */
+.container {
+  grid-template-columns: 84px 1fr;   /* tweak 84px → 80px or 92px as you like */
+  gap: 12px;
+}
+
+/* Remove the card/box look from the TOC */
+.toc {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 4px 0;
+  border-radius: 0;
+  margin-left: 0;
+}
+
+/* Compact, interactive links */
+.toc a {
+  position: relative;
+  display: block;
+  padding: 6px 8px 6px 14px;          /* space for the accent bar on the left */
+  font-size: 0.86rem;
+  line-height: 1.15;
+  color: var(--text);
+  text-decoration: none;
+  border-radius: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background .18s ease, color .18s ease, transform .12s ease;
+}
+
+/* Subtle left accent bar */
+.toc a::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 36%;
+  background: transparent;
+  border-radius: 2px;
+  transition: height .18s ease, background .18s ease;
+}
+
+/* Hover interaction */
+.toc a:hover {
+  background: rgba(255,255,255,.05);
+  color: var(--accent);
+  transform: translateX(2px);
+}
+.toc a:hover::before {
+  background: var(--accent);
+  height: 70%;
+}
+
+/* Mobile keeps your existing single-column layout */
+@media (max-width: 900px) {
+  .container { grid-template-columns: 1fr; }
+  .toc { padding: 6px 0; }
+}
