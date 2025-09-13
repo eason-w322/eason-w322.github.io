@@ -45,7 +45,7 @@
     with the highest NCC score is chosen as the optimal alignment.
   </p>
   <p>
-    I applied this method to smaller <code>.jpg</code> images such as <em>Cathedral</em>, <em>Monastery</em>, and 
+    I applied this method to smaller <code>.jpg</code> images <em>Cathedral</em>, <em>Monastery</em>, and 
     <em>Tobolsk</em>. The results demonstrate sharp alignment across channels: edges line up well and the colors combine 
     naturally into a coherent RGB image. However, I observed some color fringing around the outer edges of the images. To mitigate 
     this, I introduced a <code>crop_border</code> function that trims the final stacked RGB image slightly, removing most 
