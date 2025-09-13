@@ -218,8 +218,8 @@ figcaption {
 }
 /* Make the sidebar narrow and tucked to the left */
 .container {
-  grid-template-columns: 120px 1fr;  /* was 200px */
-  gap: 16px;                         /* a bit tighter gap */
+  grid-template-columns: 92px 1fr;  /* was 200px */
+  gap: 12px;                         /* a bit tighter gap */
 }
 
 /* Slimmer TOC card */
