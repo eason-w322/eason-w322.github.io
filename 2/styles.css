@@ -210,36 +210,6 @@ figcaption {
 }
 .close:hover { color: var(--accent); }
 
-<section id="results" class="card">
-  <h2>Results</h2>
-  <div class="results-grid">
-    <!-- 1. Emir -->
-    <div class="result-row">
-      <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-1/main/results/emir_rgb.jpg" alt="Emir">
-      <div class="meta">(…)</div>
-      <div class="meta">(…)</div>
-      <div class="meta">...s</div>
-    </div>
-    <!-- 2. Church -->
-    <div class="result-row">
-      <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-1/main/results/church_rgb.jpg" alt="Church">
-      <div class="meta">(…)</div>
-      <div class="meta">(…)</div>
-      <div class="meta">...s</div>
-    </div>
-    <!-- 3. Harvesters -->
-    <div class="result-row">
-      <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-1/main/results/harvesters_rgb.jpg" alt="Harvesters">
-      <div class="meta">(…)</div>
-      <div class="meta">(…)</div>
-      <div class="meta">...s</div>
-    </div>
-    <!-- keep going for all 11 images -->
-  </div>
-</section>
-✅ CSS (add to styles.css)
-css
-Copy code
 .results-grid {
   display: grid;
   grid-template-columns: 1fr 200px 200px 200px; /* big image column + 3 info cols */
