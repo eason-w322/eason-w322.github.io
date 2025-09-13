@@ -38,6 +38,15 @@
     The results demonstrate strong alignment overall, though the outer edges exhibit some color fringing due to border inconsistencies. 
     To address this, I implemented an additional <code>crop_border</code> function, which successfully removes most of the noisy edge artifacts.
       </p>
+      <!-- Formula Section -->
+      <div class="formula">
+        <p><strong>Normalized Cross-Correlation (NCC):</strong></p>
+        \[
+        NCC(I, J) = \frac{\sum_{x,y} (I(x,y) - \bar{I})(J(x,y) - \bar{J})}
+                      {\sqrt{\sum_{x,y} (I(x,y) - \bar{I})^2} \,
+                       \sqrt{\sum_{x,y} (J(x,y) - \bar{J})^2}}
+        \]
+       </div>
     <div class="grid interactive-gallery">
     <figure class="tile clickable">
       <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-1/main/results/cathedral_rgb.jpg">
