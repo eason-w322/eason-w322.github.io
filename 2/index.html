@@ -99,47 +99,50 @@
 
 <h3>Pyramid Approach</h3>
 <p>
-  Single-scale exhaustive search becomes inefficient and expensive for large .tif images, 
-  since it must compare many possible displacements at full resolution. 
-  To address this, I implemented a <strong>coarse-to-fine image pyramid</strong> strategy. 
-  The image is iteratively downsampled by a factor of two, producing multiple pyramid levels 
-  (up to six, depending on image size). I wrote a helper function, <code>pick_levels</code>, 
-  which automatically determines how many levels to use, ensuring that the coarsest resolution 
-  remains above 200 pixels.
+  Single-scale exhaustive search is inefficient for large <code>.tif</code> images because it must try many
+  displacements at full resolution. To address this, I use a <strong>coarse-to-fine image pyramid</strong>:
+  the image is downsampled by a factor of two repeatedly, producing multiple levels (up to six, depending on
+  image size). A helper function, <code>pick_levels</code>, selects the number of levels so the coarsest
+  resolution remains above ~200 pixels.
 </p>
 <p>
-  At the coarsest level, the search window is limited to <strong>±3 pixels</strong>, 
-  which makes alignment very efficient. Once an approximate offset is found, it is doubled 
-  and passed to the next finer level, where the estimate is refined with a larger effective 
-  search range. This process repeats until the finest (original) resolution, 
-  recovering large displacements efficiently while still achieving pixel-level precision. 
-  Using this pyramid approach, my program can align several large Prokudin-Gorskii plates 
-  in seconds, making it both <em>fast</em> and <em>scalable</em>.
+  At the <em>coarsest</em> level I search within a wider window of <strong>±12 pixels</strong> to capture large
+  displacements. The estimated offset is then doubled (to account for upsampling) and, at each finer level,
+  refined within a small <strong>±3 pixel</strong> window around that guess. This coarse-to-fine procedure makes
+  the search efficient while still recovering precise, pixel-level alignment at the finest scale. In practice,
+  it aligns large Prokudin–Gorskii plates in seconds—both <em>fast</em> and <em>scalable</em>.
 </p>
 
 <h3>Problem Encountered: Emir</h3>
 <p>
-  While the pyramid improves speed and accuracy on most images, it fails on <em>emir.tif</em>. 
-  Using raw NCC alone produces severe misalignment, as shown below. 
-  The issue arises because Emir’s robe has highly varied textures and different brightness 
-  across channels. Although NCC normalizes global intensity, these local exposure differences 
-  still cause noisy correlation scores that mislead the alignment.
+  While the pyramid improves speed and accuracy on most images, it fails on <em>emir.tif</em> when using raw
+  intensity NCC. Although ZNCC is robust to <em>global</em> brightness changes, Emir exhibits strong
+  <em>structural</em> differences across channels: the robe dominates Blue but not Red, while skin and walls are
+  stronger in Red. These cross-channel texture/brightness inconsistencies create noisy correlation surfaces and
+  drive the optimizer to a wrong match.
 </p>
-      <section id="emir-failure" class="card">
-      <tr>
-        <td>
-          <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-1/main/results/emirblurry_rgb.jpg" alt="Emir Misaligned with NCC">
-          <div class="img-name">Emir (failed alignment with raw NCC)</div>
-        </td>
-      </tr>
+
+<section id="emir-failure" class="card">
+  <h2>Emir Misalignment (Raw NCC)</h2>
+  <div class="results-grid">
+    <div class="result-row">
+      <img
+        src="https://raw.githubusercontent.com/eason-w322/CS180-Project-1/main/results/emirblurry_rgb.jpg"
+        alt="Emir misaligned with raw NCC"
+      >
+      <div class="img-name">Emir (failed alignment with raw NCC)</div>
+    </div>
+  </div>
 </section>
+
 <p>
-  To fix this, I replaced raw intensity with the <strong>gradient magnitude</strong> at each 
-  pyramid level. Edges — such as the turban outline, robe boundary, and doorway frame — remain 
-  consistent across channels even when brightness varies. By aligning based on these stable 
-  edge features, the algorithm avoids being confused by brightness differences and produces 
-  a much sharper result. Gradient-based NCC is especially powerful for challenging cases 
-  like Emir, where raw NCC alone is insufficient.
+  To fix this, I replace raw intensity with the <strong>gradient magnitude</strong> at each pyramid level and run
+  NCC on those edge maps. Gradients emphasize <em>edges</em> (sharp spatial changes) and suppress low-frequency
+  brightness/shading; mathematically, the derivative removes additive bias and NCC’s normalization cancels
+  multiplicative scale. Edges such as the turban outline, robe boundary, and doorway frame appear in the same
+  locations across channels even when brightness differs, so NCC over gradients yields a sharp, reliable peak and
+  the pyramid converges to the correct alignment. This gradient-based NCC is particularly effective on challenging
+  cases like Emir where raw intensities mislead the search.
 </p>
       <!-- Formula Section -->
       <div class="formula">
