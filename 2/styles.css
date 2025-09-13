@@ -145,3 +145,67 @@ figcaption {
 .formula mjx-container {
   font-size: 1.2rem; /* scale up the formula */
 }
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 0.95rem;
+}
+.results-table th, .results-table td {
+  border: 1px solid var(--border);
+  padding: 10px;
+  text-align: center;
+}
+.results-table th {
+  background: var(--panel);
+  color: var(--accent);
+  font-weight: 600;
+}
+.results-table td img {
+  width: 100px;
+  border-radius: 8px;
+}
+.result-row {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.result-row:hover {
+  background: #1a1f2e;
+}
+.placeholder {
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  padding-top: 60px;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.9);
+}
+.modal-content {
+  display: block;
+  margin: auto;
+  max-width: 80%;
+  border-radius: 12px;
+}
+#modalCaption {
+  margin: 20px auto;
+  text-align: center;
+  color: var(--text);
+}
+.close {
+  position: absolute;
+  top: 20px; right: 35px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close:hover { color: var(--accent); }
