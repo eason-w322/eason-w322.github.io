@@ -30,11 +30,15 @@
 
     <section id="approach" class="card">
       <h2>Single-Scale Alignment</h2>
-      <ul>
-        <li>Split tall plate into B/G/R thirds; crop borders to avoid artifacts.</li>
-        <li>Exhaustive search in a small window via <em>normalized cross-correlation</em> (ZNCC).</li>
-        <li>Shift with <code>np.roll</code>, stack as RGB, clamp and save.</li>
-      </ul>
+      <p>
+        The glass plate is first divided into three equal parts corresponding to the blue, green, and red channels. 
+    To minimize boundary artifacts, I crop the central region with a crop fraction of 0.15. 
+    Within a search window of [-15, +15], I implement normalized cross-correlation (NCC) to determine the optimal displacement (dy, dx) 
+    that maximizes the similarity score. I applied this method to three sample images (shown below). 
+    The results demonstrate strong alignment overall, though the outer edges exhibit some color fringing due to border inconsistencies. 
+    To address this, I implemented an additional <code>crop_border</code> function, which successfully removes most of the noisy edge artifacts.
+      </p>
+      
     </section>
 
     <section id="pyramid" class="card">
