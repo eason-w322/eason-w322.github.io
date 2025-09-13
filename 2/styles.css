@@ -134,3 +134,14 @@ figcaption {
   transform: scale(1.02);
   box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
+.formula {
+  margin: 20px 0;
+  padding: 16px;
+  background: #0e1220;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-align: center;
+}
+.formula mjx-container {
+  font-size: 1.2rem; /* scale up the formula */
+}
