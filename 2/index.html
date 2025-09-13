@@ -125,6 +125,15 @@
   across channels. Although NCC normalizes global intensity, these local exposure differences 
   still cause noisy correlation scores that mislead the alignment.
 </p>
+      <section id="emir-failure" class="card">
+  <h2>Emir Misalignment (Raw NCC)</h2>
+  <div class="results-grid">
+    <div class="result-row">
+      <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-1/main/results/emirblurry_rgb.jpg" alt="Emir Misaligned with NCC">
+      <div class="img-name">Emir (failed alignment with raw NCC)</div>
+    </div>
+  </div>
+</section>
 <p>
   To fix this, I replaced raw intensity with the <strong>gradient magnitude</strong> at each 
   pyramid level. Edges — such as the turban outline, robe boundary, and doorway frame — remain 
