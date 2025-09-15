@@ -389,32 +389,17 @@ html { scroll-behavior: smooth; }
 @media (max-width: 900px) {
   .container { grid-template-columns: 1fr; }
 
-  /* Make TOC an overlay when toggled open */
-  .sidebar-open .toc {
-    position: fixed;
-    left: 12px; right: 12px;
-    top: 14px;
-    width: auto;
-    max-height: 70vh;
-    overflow: auto;
-    padding: 10px;
-    border-radius: 14px;
-    background: rgba(17,19,24,.95);
-    backdrop-filter: blur(4px);
-  }
+ /* Sidebar wide enough to fit text */
+.container {
+  grid-template-columns: 180px 1fr;  /* increase so text fits nicely */
+  gap: 20px;
+}
 
-  /* Toggle button (injected by JS) */
-  .toc-toggle {
-    position: fixed;
-    left: 14px; top: 14px;
-    z-index: 40;
-    border: 1px solid var(--border);
-    background: var(--panel);
-    color: var(--text);
-    border-radius: 10px;
-    padding: 8px 10px;
-    font-size: 0.9rem;
-    box-shadow: 0 6px 18px rgba(0,0,0,.35);
-  }
-  .toc-toggle:active { transform: translateY(1px); }
+/* Sidebar links always fully visible */
+.toc a {
+  font-size: 0.9rem;
+  padding: 8px 12px;
+  white-space: normal;   /* allow wrapping if needed */
+  overflow: visible;     /* no clipping */
+  text-overflow: unset;  /* remove ellipsis */
 }
