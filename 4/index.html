@@ -1,1 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CS180 Project 2 — Filters & Frequencies</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
 
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">F</div>
+      <div class="title-wrap">
+        <div class="title">CS180 — Project 2: Fun with Filters & Frequencies</div>
+        <div class="subtitle">Part 1.1–1.3 • Part 2.1–2.4</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <!-- Left TOC -->
+    <nav class="toc">
+      <h3>Contents</h3>
+      <div class="group">
+        <div class="group-title">Part 1: Filters</div>
+        <ul>
+          <li><a href="#p11">1.1 Convolutions from Scratch</a></li>
+          <li><a href="#p12">1.2 Finite Difference Operator</a></li>
+          <li><a href="#p13">1.3 Derivative of Gaussian</a></li>
+        </ul>
+      </div>
+      <div class="group">
+        <div class="group-title">Part 2: Frequencies</div>
+        <ul>
+          <li><a href="#p21">2.1 Image Sharpening</a></li>
+          <li><a href="#p22">2.2 Hybrid Images</a></li>
+          <li><a href="#p23">2.3 Stacks (Orapple)</a></li>
+          <li><a href="#p24">2.4 Multires Blending (Irregular)</a></li>
+        </ul>
+      </div>
+
+      <div class="group">
+        <div class="group-title">Deliverables</div>
+        <ul>
+          <li><a href="#deliverables">Checklist</a></li>
+          <li><a href="#appendix">Appendix & Notes</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- Right: Main content -->
+    <main>
+
+      <!-- Advisory -->
+      <section class="note" id="advisory">
+        <strong>Important note:</strong> Use medium-size images
+        (<em>&lt; 0.8 MB each</em>) for all results to keep the page snappy and grading easy.
+      </section>
+
+      <!-- PART 1 -->
+      <section id="p11">
+        <div class="badge">Part 1.1</div>
+        <h2>Convolutions from Scratch!</h2>
+        <p class="lead">Four-loop → two-loop convolution with zero padding; compare with <code>scipy.signal.convolve2d</code>. Box filter & finite differences on your own photo.</p>
+
+        <div class="params">
+          <span class="chip">Numpy-only core</span>
+          <span class="chip">Zero padding</span>
+          <span class="chip">9×9 box</span>
+        </div>
+
+        <div class="grid">
+          <figure class="card">
+            <div class="media"><img src="results/part1_1/input.png" alt="input"/></div>
+            <div class="body">
+              <div class="label">Input</div>
+              <div class="caption small">Grayscale selfie (or test image).</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part1_1/box.png" alt="box"/></div>
+            <div class="body">
+              <div class="label">9×9 Box Filter</div>
+              <div class="caption small">Convolution output.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part1_1/compare.png" alt="compare"/></div>
+            <div class="body">
+              <div class="label">Compare</div>
+              <div class="caption small"><code>yours</code> vs <code>convolve2d</code> + boundary notes.</div>
+            </div>
+          </figure>
+        </div>
+
+        <h3>Code Snippet</h3>
+        <pre><code># Show your 4-loop / 2-loop kernels here</code></pre>
+      </section>
+
+      <section id="p12">
+        <div class="badge">Part 1.2</div>
+        <h2>Finite Difference Operator</h2>
+        <p class="lead">Compute ∂x and ∂y, then gradient magnitude and a thresholded edge map.</p>
+
+        <div class="grid">
+          <figure class="card">
+            <div class="media"><img src="results/part1_2/dx.png" alt="dx"/></div>
+            <div class="body">
+              <div class="label">∂x</div>
+              <div class="caption small">Convolve with D<sub>x</sub>.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part1_2/dy.png" alt="dy"/></div>
+            <div class="body">
+              <div class="label">∂y</div>
+              <div class="caption small">Convolve with D<sub>y</sub>.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part1_2/edges.png" alt="edges"/></div>
+            <div class="body">
+              <div class="label">Edges</div>
+              <div class="caption small">Magnitude + threshold.</div>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <section id="p13">
+        <div class="badge">Part 1.3</div>
+        <h2>Derivative of Gaussian (DoG)</h2>
+        <p class="lead">Smooth first with a Gaussian, then differentiate; compare to DoG filters (G * D<sub>x</sub>, G * D<sub>y</sub>) and to Part 1.2.</p>
+
+        <div class="params">
+          <span class="chip">σ = 1.5</span>
+          <span class="chip">Separable kernel</span>
+          <span class="chip">Orientation HSV (B&W)</span>
+        </div>
+
+        <div class="grid">
+          <figure class="card">
+            <div class="media"><img src="results/part1_3/dog_x.png" alt="DoGx"/></div>
+            <div class="body">
+              <div class="label">DoG<sub>x</sub></div>
+              <div class="caption small">Filter visualization.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part1_3/dog_y.png" alt="DoGy"/></div>
+            <div class="body">
+              <div class="label">DoG<sub>y</sub></div>
+              <div class="caption small">Filter visualization.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part1_3/orient.png" alt="orientation"/></div>
+            <div class="body">
+              <div class="label">Orientations</div>
+              <div class="caption small">HSV hue = angle (bells & whistles).</div>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- PART 2 -->
+      <section id="p21">
+        <div class="badge">Part 2.1</div>
+        <h2>Image “Sharpening” (Unsharp Mask)</h2>
+        <p class="lead">High-frequencies added back to the image via unsharp masking.</p>
+
+        <div class="params">
+          <span class="chip">σ = 2.0</span>
+          <span class="chip">α = 1.0</span>
+        </div>
+
+        <div class="grid">
+          <figure class="card">
+            <div class="media"><img src="results/part2_1/taj_blur.png" alt="taj blur"/></div>
+            <div class="body">
+              <div class="label">Blurred</div>
+              <div class="caption small">Gaussian low-pass.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part2_1/taj_high.png" alt="taj high"/></div>
+            <div class="body">
+              <div class="label">High-pass</div>
+              <div class="caption small">Original − blurred.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part2_1/taj_sharp.png" alt="taj sharp"/></div>
+            <div class="body">
+              <div class="label">Sharpened</div>
+              <div class="caption small">I + α·Highpass.</div>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <section id="p22">
+        <div class="badge">Part 2.2</div>
+        <h2>Hybrid Images</h2>
+        <p class="lead">Low-pass of one image + high-pass of another. Show FFT for one full pipeline.</p>
+
+        <div class="grid">
+          <figure class="card">
+            <div class="media"><img src="results/part2_2/derek_nutmeg_hybrid.png" alt="hybrid"/></div>
+            <div class="body">
+              <div class="label">Hybrid</div>
+              <div class="caption small">Perception flips with distance.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part2_2/derek_nutmeg_fft.png" alt="fft"/></div>
+            <div class="body">
+              <div class="label">FFT (log |F|)</div>
+              <div class="caption small">Frequency analysis.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part2_2/custom_hybrid.png" alt="custom"/></div>
+            <div class="body">
+              <div class="label">Custom Hybrids</div>
+              <div class="caption small">Two additional pairs.</div>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <section id="p23">
+        <div class="badge">Part 2.3</div>
+        <h2>Gaussian & Laplacian Stacks (Orapple)</h2>
+        <p class="lead">No downsample stacks. Feathered step mask smooths seams across scales.</p>
+
+        <div class="params">
+          <span class="chip">Levels = 8</span>
+          <span class="chip">σ per level = 6</span>
+          <span class="chip">Ramp frac = 0.35</span>
+        </div>
+
+        <div class="grid">
+          <figure class="card">
+            <div class="media"><img src="results/part2_3/orapple/panel_soft_seam.png" alt="panel"/></div>
+            <div class="body">
+              <div class="label">Panel</div>
+              <div class="caption small">Band-wise contributions.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part2_3/orapple/orapple_blend_soft.png" alt="blend"/></div>
+            <div class="body">
+              <div class="label">Blend</div>
+              <div class="caption small">Final soft-seam result.</div>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <section id="p24">
+        <div class="badge">Part 2.4</div>
+        <h2>Multiresolution Blending (Irregular Mask)</h2>
+        <p class="lead">Localized masks (ellipse/freeform) + Laplacian stacks for seamless composites.</p>
+
+        <div class="params">
+          <span class="chip">Mask: ellipse (white = B)</span>
+          <span class="chip">Levels = 8</span>
+          <span class="chip">σ per level = 6</span>
+        </div>
+
+        <div class="grid">
+          <figure class="card">
+            <div class="media"><img src="results/part2_4/eye_hand/blend.png" alt="eye-hand"/></div>
+            <div class="body">
+              <div class="label">Eye → Hand</div>
+              <div class="caption small">Rot-free ellipse with Gaussian feather.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part2_4/sunset_ocean/blend.png" alt="sunset ocean"/></div>
+            <div class="body">
+              <div class="label">Sunset + Ocean</div>
+              <div class="caption small">Step horizon with wide ramp.</div>
+            </div>
+          </figure>
+          <figure class="card">
+            <div class="media"><img src="results/part2_4/orapple/blend.png" alt="orapple"/></div>
+            <div class="body">
+              <div class="label">Orapple (alt)</div>
+              <div class="caption small">Vertical soft seam.</div>
+            </div>
+          </figure>
+        </div>
+      </section>
+
+      <!-- Deliverables / Spec Sidebar as content block -->
+      <section id="deliverables">
+        <div class="badge">Deliverables</div>
+        <h2>What to Show (Checklist)</h2>
+        <ul class="checklist">
+          <li>1.1: Numpy convolution (4→2 loops), compare to <code>convolve2d</code>, boundary notes.</li>
+          <li>1.2: ∂x, ∂y, gradient magnitude, thresholded edge map.</li>
+          <li>1.3: Gaussian & DoG filters, cameraman results; orientation HSV (B&W).</li>
+          <li>2.1: Unsharp masking on Taj + one more; show blur/high/sharp variants.</li>
+          <li>2.2: Three hybrids (Derek+Nutmeg + 2 custom); full pipeline + FFT for one.</li>
+          <li>2.3: Gaussian/Laplacian stacks; orapple panel like Fig 3.42.</li>
+          <li>2.4: Two custom blends incl. one irregular mask; panel like Fig 10.</li>
+          <li>Reflection: the most important thing you learned.</li>
+        </ul>
+      </section>
+
+      <section id="appendix">
+        <div class="badge">Appendix</div>
+        <h2>Notes & References</h2>
+        <ul>
+          <li>Alignment (2.2): two points per image → scale/rotate/center, crop overlap.</li>
+          <li>Stacks: Gaussian (size-preserving), Laplacian = G<sub>k</sub> − G<sub>k+1</sub>; residual last.</li>
+          <li>Blend rule: L = (1−M)·L<sub>A</sub> + M·L<sub>B</sub>, sum over levels.</li>
+          <li>Masks: step (vertical/horizontal) or local ellipse; white selects B.</li>
+        </ul>
+      </section>
+
+    </main>
+
+    <!-- Right rail: Spec (collapsible on mobile) -->
+    <aside class="spec">
+      <h3>Project Brief</h3>
+      <details open>
+        <summary>Part 1: Fun with Filters</summary>
+        <p>Build intuition about 2D convolutions and filtering. Begin with finite differences.</p>
+        <h4>1.1 Convolutions from Scratch</h4>
+        <p>Implement with loops + zero padding. Compare with <code>scipy.signal.convolve2d</code>. Box filter & finite differences on your own photo.</p>
+        <h4>1.2 Finite Difference Operator</h4>
+        <p>Show ∂x, ∂y, gradient magnitude, and a binarized edge image.</p>
+        <h4>1.3 Derivative of Gaussian</h4>
+        <p>Blur + differentiate; then DoG filters; visualize filters and results; (B&W) gradient orientations via HSV hue.</p>
+      </details>
+
+      <details open>
+        <summary>Part 2: Fun with Frequencies</summary>
+        <h4>2.1 Image Sharpening</h4>
+        <p>Unsharp mask; show blurred/high/sharpened; re-sharpen a synthetically blurred sharp image.</p>
+        <h4>2.2 Hybrid Images</h4>
+        <p>Low-pass + high-pass hybrid; align first; show FFT of one full pipeline; create 2 more hybrids.</p>
+        <h4>2.3 Gaussian & Laplacian Stacks</h4>
+        <p>No downsampling; feathered step mask; reproduce orapple panel.</p>
+        <h4>2.4 Multires Blending</h4>
+        <p>Use mask stacks (step or irregular). Two creative blends; one must be irregular.</p>
+      </details>
+    </aside>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div>© 2025 • CS180 Project 2</div>
+      <div>Built with Gaussian vibes ✨</div>
+    </div>
+  </footer>
+</body>
+</html>
