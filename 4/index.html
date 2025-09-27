@@ -184,6 +184,68 @@
           whereas in the two-step method, smoothing and differentiation are performed sequentially
         </p>
       </article>
+
+      <!-- =========== Part 2.1 =========== -->
+<article id="part2-1">
+  <h3 class="section-title">2.1 Image Sharpening</h3>
+
+  <!-- Results Grid -->
+  <h4 class="section-title">Results (Original, Blurred, High-Pass, and Sharpened)</h4>
+
+  <div class="image-strip wrap" role="list">
+    <!-- Top Row -->
+    <figure role="listitem">
+      <img src="REPLACE_WITH_URL_original1.png" alt="Original Image 1" />
+      <figcaption>Original 1</figcaption>
+    </figure>
+
+    <figure role="listitem">
+      <img src="REPLACE_WITH_URL_blur1.png" alt="Blurred Image 1" />
+      <figcaption>Blurred 1</figcaption>
+    </figure>
+
+    <figure role="listitem">
+      <img src="REPLACE_WITH_URL_highpass1.png" alt="High-Pass Image 1" />
+      <figcaption>High-Pass 1</figcaption>
+    </figure>
+
+    <figure role="listitem">
+      <img src="REPLACE_WITH_URL_sharpened1.png" alt="Sharpened Image 1" />
+      <figcaption>Sharpened 1</figcaption>
+    </figure>
+
+    <!-- Bottom Row -->
+    <figure role="listitem">
+      <img src="REPLACE_WITH_URL_original2.png" alt="Original Image 2" />
+      <figcaption>Original 2</figcaption>
+    </figure>
+
+    <figure role="listitem">
+      <img src="REPLACE_WITH_URL_blur2.png" alt="Blurred Image 2" />
+      <figcaption>Blurred 2</figcaption>
+    </figure>
+
+    <figure role="listitem">
+      <img src="REPLACE_WITH_URL_highpass2.png" alt="High-Pass Image 2" />
+      <figcaption>High-Pass 2</figcaption>
+    </figure>
+
+    <figure role="listitem">
+      <img src="REPLACE_WITH_URL_sharpened2.png" alt="Sharpened Image 2" />
+      <figcaption>Sharpened 2</figcaption>
+    </figure>
+  </div>
+
+  <!-- Explanation -->
+  <p class="explainer-text">
+    In this section, I applied the unsharp masking technique for image sharpening. Each example 
+    shows the original image, its Gaussian-blurred version, the extracted high-pass component, and 
+    the final sharpened result. By adjusting the blending weight of the high frequencies, the 
+    sharpened images appear more crisp while preserving the overall structure. In some cases, 
+    oversharpening can amplify noise, which highlights the importance of choosing filter sizes 
+    and scaling factors carefully.
+  </p>
+</article>
     </section>
   </main>
 
