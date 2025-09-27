@@ -48,14 +48,14 @@
         </div>
 
         <p class="explainer-text">
-  The four nested for-loop implementation of convolution is extremely slow. 
-  Efficiency improves significantly when switching to the two for-loop version, 
-  where I pad the image with zeros using <code>np.pad</code> based on the kernel size. 
-  My self-implemented convolution functions produce the exact same output as the built-in 
-  <code>scipy.signal.convolve2d</code>. Compared to the original grayscale selfie, the box-filtered 
-  result appears blurred. Additionally, convolving the image with D<sub>x</sub> and D<sub>y</sub> 
-  produces the corresponding derivative images shown above.
-</p>
+          The four nested for-loop implementation of convolution is extremely slow. 
+          Efficiency improves significantly when switching to the two for-loop version, 
+          where I pad the image with zeros using <code>np.pad</code> based on the kernel size. 
+          My self-implemented convolution functions produce the exact same output as the built-in 
+          <code>scipy.signal.convolve2d</code>. Compared to the original grayscale selfie, the box-filtered 
+          result appears blurred. Additionally, convolving the image with D<sub>x</sub> and D<sub>y</sub> 
+          produces the corresponding derivative images shown above.
+        </p>
 
         <details class="code-toggle">
           <summary>Show / Hide my convolution code</summary>
@@ -103,7 +103,63 @@
             </figure>
           </div>
         </details>
+      </article>
 
+      <!-- =========== Part 1.2 =========== -->
+      <article id="part1-2">
+        <h3 class="section-title">1.2 Edge Detection with Finite Differences</h3>
+
+        <!-- Results Row -->
+        <h4 class="section-title">Results (Edge Maps &amp; Gradient)</h4>
+
+        <div class="image-strip" role="list">
+          <figure role="listitem">
+            <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/results/part1_2/lx.png" alt="Lx Gradient" />
+            <figcaption>Gradient L<sub>x</sub></figcaption>
+          </figure>
+
+          <figure role="listitem">
+            <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/results/part1_2/ly.png" alt="Ly Gradient" />
+            <figcaption>Gradient L<sub>y</sub></figcaption>
+          </figure>
+
+          <figure role="listitem">
+            <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/results/part1_2/gradient.png" alt="Gradient Magnitude" />
+            <figcaption>Gradient Magnitude</figcaption>
+          </figure>
+
+          <figure role="listitem">
+            <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/results/part1_2/binarize_edges.png" alt="Binarized Edges" />
+            <figcaption>Binarized Edge Map</figcaption>
+          </figure>
+        </div>
+
+        <p class="explainer-text">
+          Using the finite difference operators D<sub>x</sub> and D<sub>y</sub>, I computed the partial
+          derivatives of the image in both the horizontal and vertical directions. Combining these
+          results gives the gradient magnitude map, which highlights edges regardless of orientation.
+          By applying a threshold, the gradient magnitude is converted into a binarized edge map, clearly
+          outlining the major boundaries in the image.
+        </p>
+
+        <details class="code-toggle">
+          <summary>Show / Hide my edge detection code</summary>
+
+          <div class="code-columns">
+            <figure class="code-card">
+              <figcaption class="code-title">Gradient Magnitude</figcaption>
+<pre class="code-block"><code>def compute_gradient_magnitude(lx, ly):
+    return np.sqrt(lx**2 + ly**2)</code></pre>
+            </figure>
+
+            <figure class="code-card">
+              <figcaption class="code-title">Edge Binarization</figcaption>
+<pre class="code-block"><code>def binarize_edges(grad_mag, threshold=0.2):
+    edges = grad_mag > threshold
+    return edges.astype(np.float32)</code></pre>
+            </figure>
+          </div>
+        </details>
       </article>
     </section>
   </main>
