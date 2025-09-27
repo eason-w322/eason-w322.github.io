@@ -40,7 +40,7 @@ body {
 }
 
 .image-strip img {
-  max-width: 160px;  /* slightly smaller */
+  max-width: 190px;  /* slightly smaller */
   height: auto;      /* keep ratio */
   border-radius: 6px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -97,7 +97,7 @@ body {
 
 /* ---------- Explainer text ---------- */
 .explainer-text {
-  max-width: 725px;    /* narrower so less wide lines */
+  max-width: 800px;    /* narrower so less wide lines */
   margin: 12px auto;   /* less vertical margin */
   text-align: justify;
   font-size: 0.95rem;
