@@ -1,106 +1,106 @@
-/* ====== Global Styles ====== */
+/* General page styling */
 body {
-  font-family: system-ui, -apple-system, sans-serif;
   margin: 0;
-  padding: 0;
-  background-color: #0d0d0d;
-  color: #e8e8e8;
-  text-align: center;
+  font-family: Arial, sans-serif;
+  background: #fafafa;
+  color: #222;
+  text-align: center; /* center all text */
 }
 
-/* ====== Headers ====== */
-.page-header h1 {
-  font-size: 2rem;
-  margin: 20px 0 10px;
+.page-header {
+  background: #003366;
+  color: white;
+  padding: 20px 0;
 }
 
+.page-header h1, 
 .page-header h2 {
-  font-size: 1.4rem;
-  font-weight: 400;
-  margin: 0 0 20px;
-  color: #b0b0b0;
+  margin: 5px 0;
 }
 
+/* Section titles */
 .section-title {
-  margin: 30px 0 15px;
-  font-size: 1.6rem;
+  margin: 20px 0 10px;
+  font-weight: bold;
   text-align: center;
 }
 
-/* ====== Image Grid ====== */
-.image-grid {
+/* ---------- Image strip (side-by-side) ---------- */
+.image-strip {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
-  flex-wrap: wrap;
+  flex-wrap: wrap;   /* wrap if too many */
+  gap: 20px;         /* space between images */
   margin: 20px auto;
-  text-align: center;
+  max-width: 1000px;
 }
 
-.image-grid figure {
+.image-strip figure {
   margin: 0;
+  text-align: center;
 }
 
-.image-grid img {
-  max-width: 150px;   /* Shrinks images */
-  height: auto;
+.image-strip img {
+  max-width: 150px;  /* shrink images */
+  height: auto;      /* keep ratio */
   border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
-/* ====== Code Sections ====== */
-.code-grid {
+.image-strip figcaption {
+  margin-top: 6px;
+  font-size: 0.9rem;
+}
+
+/* ---------- Code dropdown styling ---------- */
+.code-toggle summary {
+  cursor: pointer;
+  padding: 10px;
+  font-weight: bold;
+  background: #eee;
+  border-radius: 4px;
+  display: inline-block;
+  margin: 15px auto;
+}
+
+.code-columns {
   display: flex;
   justify-content: center;
   gap: 20px;
+  margin-top: 15px;
   flex-wrap: wrap;
-  margin: 20px auto;
 }
 
 .code-card {
-  background: #1a1a1a;
-  padding: 15px;
+  flex: 1 1 400px;
+  max-width: 450px;
+  background: #f8f8f8;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  max-width: 500px;
+  padding: 10px;
   text-align: left;
 }
 
 .code-title {
   font-weight: bold;
-  margin-bottom: 10px;
-  text-align: center;
+  margin-bottom: 5px;
 }
 
 .code-block {
-  background: #111;
-  color: #d4d4d4;
+  background: #272822;
+  color: #f8f8f2;
+  font-family: monospace;
+  font-size: 0.85rem;
   padding: 10px;
-  border-radius: 6px;
-  font-size: 0.9rem;
+  border-radius: 5px;
   overflow-x: auto;
-  white-space: pre;
 }
 
-/* ====== Details Dropdown (Collapsible Code) ====== */
-details {
-  background: #1a1a1a;
-  border-radius: 6px;
-  padding: 10px 15px;
-  margin: 10px auto;
-  max-width: 500px;
-  text-align: left;
-}
-
-details summary {
-  cursor: pointer;
-  font-weight: bold;
-  color: #57c7ff;
-}
-
-/* ====== Footer ====== */
+/* ---------- Footer ---------- */
 .footer {
-  margin: 40px 0 20px;
-  font-size: 0.9rem;
-  color: #888;
+  margin-top: 40px;
+  padding: 15px;
+  background: #003366;
+  color: white;
+  font-size: 0.85rem;
 }
