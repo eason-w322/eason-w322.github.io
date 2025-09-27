@@ -431,6 +431,59 @@
       <figcaption>Eye in the Hand(Ellipse Mask -- Irregular)</figcaption>
     </figure>
   </div>
+  <section id="ellipse-explanation">
+  <h3 class="section-title">Explanation of Ellipse Mask and Pyramid Blending</h3>
+
+  <p class="explainer-text">
+    The <strong>ellipse mask</strong> is defined on the base image domain \((x, y)\).
+    Let the ellipse be centered at \((c_x, c_y)\) with radii \((r_x, r_y)\). 
+    A binary mask is first constructed as:
+  </p>
+
+  <div class="equation-box">
+    \[
+    M_{\text{hard}}(x, y) =
+      \begin{cases}
+        1, & \frac{(x-c_x)^2}{r_x^2} + \frac{(y-c_y)^2}{r_y^2} \leq 1, \\
+        0, & \text{otherwise}.
+      \end{cases}
+    \]
+  </div>
+
+  <p class="explainer-text">
+    This creates a sharp boundary. To avoid seams, we apply a <strong>Gaussian blur</strong> 
+    with standard deviation \(\sigma\) (chosen as a fraction of the image size) 
+    to obtain a smooth transition:
+  </p>
+
+  <div class="equation-box">
+    \[
+    M(x, y) = G_\sigma * M_{\text{hard}}(x, y),
+    \]
+  </div>
+
+  <p class="explainer-text">
+    where \(G_\sigma\) is a normalized Gaussian kernel and \(*\) denotes convolution.  
+    The resulting \(M(x, y)\) is a soft mask taking values in \([0,1]\), 
+    where 1 selects the inserted image and 0 selects the base image.
+  </p>
+
+  <p class="explainer-text">
+    For blending, the final Laplacian pyramid at each level is constructed as:
+  </p>
+
+  <div class="equation-box">
+    \[
+    L_{\text{blend}}^{(i)} = (1 - M^{(i)}) \cdot L_A^{(i)} + M^{(i)} \cdot L_B^{(i)},
+    \]
+  </div>
+
+  <p class="explainer-text">
+    where \(L_A^{(i)}, L_B^{(i)}\) are Laplacian levels of the base and inserted image, 
+    and \(M^{(i)}\) is the Gaussian pyramid of the mask.  
+    Summing all \(L_{\text{blend}}^{(i)}\) reconstructs the blended image.
+  </p>
+</section>
 
 
 
@@ -457,16 +510,6 @@
     </figure>
   </div>
 
-  <p class="explainer-text">
-    For Part 2.3, I implemented Gaussian and Laplacian stacks to visualize the multiresolution
-    decomposition of the Apple and Orange images. This reproduces the outcomes of Figure 3.42 (a–l),
-    where Gaussian levels progressively blur the images and Laplacian levels highlight band-pass details.
-    <br><br>
-    In Part 2.4, I used these stacks for blending. The Apple and Orange blend demonstrates seamless
-    multiresolution blending. Additionally, I created two custom blends: one with a straight mask
-    and another with an irregular mask. The irregular mask demonstrates the advantage of multiresolution
-    blending by producing smooth transitions without visible seams.
-  </p>
 </article>
     </section>
   </main>
