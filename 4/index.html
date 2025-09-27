@@ -114,12 +114,12 @@
 
         <div class="image-strip" role="list">
           <figure role="listitem">
-            <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/results/part1_2/lx.png" alt="Lx Gradient" />
+            <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/results/part1_2/Ix.png" alt="Lx Gradient" />
             <figcaption>Gradient L<sub>x</sub></figcaption>
           </figure>
 
           <figure role="listitem">
-            <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/results/part1_2/ly.png" alt="Ly Gradient" />
+            <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/results/part1_2/Iy.png" alt="Ly Gradient" />
             <figcaption>Gradient L<sub>y</sub></figcaption>
           </figure>
 
@@ -141,25 +141,6 @@
           By applying a threshold, the gradient magnitude is converted into a binarized edge map, clearly
           outlining the major boundaries in the image.
         </p>
-
-        <details class="code-toggle">
-          <summary>Show / Hide my edge detection code</summary>
-
-          <div class="code-columns">
-            <figure class="code-card">
-              <figcaption class="code-title">Gradient Magnitude</figcaption>
-<pre class="code-block"><code>def compute_gradient_magnitude(lx, ly):
-    return np.sqrt(lx**2 + ly**2)</code></pre>
-            </figure>
-
-            <figure class="code-card">
-              <figcaption class="code-title">Edge Binarization</figcaption>
-<pre class="code-block"><code>def binarize_edges(grad_mag, threshold=0.2):
-    edges = grad_mag > threshold
-    return edges.astype(np.float32)</code></pre>
-            </figure>
-          </div>
-        </details>
       </article>
     </section>
   </main>
