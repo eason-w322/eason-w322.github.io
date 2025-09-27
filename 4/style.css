@@ -1,30 +1,136 @@
-/* --- add these for code blocks --- */
-.code-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+/* Theme */
+:root {
+  --bg: #0e0f12;
+  --panel: #171a21;
+  --text: #e8eaf0;
+  --muted: #a9b0bd;
+  --accent: #86b9ff;
+  --border: #222835;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  line-height: 1.6;
+}
+
+/* Header */
+.page-header {
+  text-align: center;
+  padding: 36px 16px 12px;
+}
+.page-header h1 {
+  margin: 0 0 6px;
+  font-size: 2rem;
+  letter-spacing: 0.3px;
+}
+.page-header h2 {
+  margin: 0;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* Layout container */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Titles centered */
+.section-title {
+  text-align: center;
+  margin: 28px 0 16px;
+}
+
+/* Horizontal image strip */
+.image-strip {
+  display: flex;
   gap: 14px;
-  margin-top: 10px;
+  overflow-x: auto;           /* scroll horizontally on small screens */
+  padding: 16px;
+  border-radius: var(--radius);
+  background: var(--panel);
+  border: 1px solid var(--border);
+}
+.image-strip figure {
+  min-width: 240px;           /* keeps a nice card width when scrolling */
+  max-width: 100%;
+  margin: 0;
+  background: #0f1117;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;         /* center captions */
+}
+.image-strip img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.image-strip figcaption {
+  margin-top: 8px;
+  color: var(--muted);
 }
 
+/* Code toggle (dropdown) */
+.code-toggle {
+  margin: 16px auto 0;
+  max-width: 1100px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.code-toggle > summary {
+  list-style: none;
+  cursor: pointer;
+  text-align: center;
+  padding: 12px 14px;
+  font-weight: 700;
+  color: var(--text);
+  background: #141823;
+  user-select: none;
+}
+.code-toggle > summary:hover {
+  background: #101423;
+}
+.code-toggle[open] > summary {
+  border-bottom: 1px solid var(--border);
+}
+
+/* Two columns for code blocks */
+.code-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 14px;
+}
 @media (max-width: 900px) {
-  .code-grid { grid-template-columns: 1fr; }
+  .code-columns { grid-template-columns: 1fr; }
 }
 
+/* Code cards */
 .code-card {
   margin: 0;
   background: #0f1117;
-  border: 1px solid #222835;
+  border: 1px solid var(--border);
   border-radius: 12px;
   overflow: hidden;
 }
-
 .code-title {
   text-align: center;
   padding: 10px 12px 6px;
   color: var(--muted);
-  font-weight: 600;
+  font-weight: 700;
 }
-
 .code-block {
   margin: 0;
   padding: 12px 14px;
@@ -33,9 +139,22 @@
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.9rem;
   line-height: 1.45;
-  border-top: 1px solid #222835;
+  border-top: 1px solid var(--border);
   overflow: auto;      /* scroll if long */
-  max-height: 420px;   /* keep page tidy */
+  max-height: 480px;   /* keep page tidy */
   tab-size: 2;
   white-space: pre;    /* preserve formatting */
 }
+
+/* Footer */
+.footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 28px 12px 36px;
+  font-size: 0.9rem;
+  border-top: 1px solid #1f2432;
+}
+
+/* Links (if you add any) */
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
