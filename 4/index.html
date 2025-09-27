@@ -51,7 +51,7 @@
         <div class="code-grid">
           <figure class="code-card">
             <figcaption class="code-title">Four-Loop Convolution (no padding)</figcaption>
-            <pre class="code-block"><code>def conv2d_four_forloops(img: np.ndarray, kernel: np.ndarray, pad_value: float = 0.0) -&gt; np.ndarray:
+            <pre class="code-block"><code>def conv2d_four_forloops(img, kernel, pad_value: float = 0.0):
     H, W = img.shape
     kh, kw = kernel.shape
     ch, cw = kh // 2, kw // 2
@@ -76,7 +76,7 @@
 
           <figure class="code-card">
             <figcaption class="code-title">Two-Loop Convolution (zero padding)</figcaption>
-            <pre class="code-block"><code>def conv2d_two_forloops(img: np.ndarray, kernel: np.ndarray, pad_value: float = 0.0) -&gt; np.ndarray:
+            <pre class="code-block"><code>def conv2d_two_forloops(img, kernel, pad_value: float = 0.0):
     H, W = img.shape
     kh, kw = kernel.shape
     k = _flip_kernel(kernel)
