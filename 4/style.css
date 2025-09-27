@@ -62,6 +62,10 @@ article {
   font-size: 0.85rem;
 }
 
+.hybrid-large {
+  max-width: 250px;   /* try 240–300px depending on your layout */
+}
+
 /* ---------- Code dropdown styling ---------- */
 .code-toggle summary {
   cursor: pointer;
