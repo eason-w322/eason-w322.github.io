@@ -95,6 +95,13 @@ body {
   border-radius: 5px;
   overflow-x: auto;
 }
+.explainer-text {
+  max-width: 800px;   /* set narrower width */
+  margin: 20px auto;  /* center it horizontally with auto margins */
+  text-align: justify; /* optional: makes line edges neat */
+  font-size: 1rem;    /* keep it readable */
+  line-height: 1.6;   /* improve spacing between lines */
+}
 
 /* ---------- Footer ---------- */
 .footer {
