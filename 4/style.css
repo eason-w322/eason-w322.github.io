@@ -29,7 +29,7 @@ body {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;   /* wrap if too many */
-  gap: 15px;         /* less space between images */
+  gap: 25px;         /* less space between images */
   margin: 10px auto; /* shrink vertical spacing */
   max-width: 900px;
 }
@@ -40,7 +40,7 @@ body {
 }
 
 .image-strip img {
-  max-width: 140px;  /* slightly smaller */
+  max-width: 160px;  /* slightly smaller */
   height: auto;      /* keep ratio */
   border-radius: 6px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -97,7 +97,7 @@ body {
 
 /* ---------- Explainer text ---------- */
 .explainer-text {
-  max-width: 600px;    /* narrower so less wide lines */
+  max-width: 725px;    /* narrower so less wide lines */
   margin: 12px auto;   /* less vertical margin */
   text-align: justify;
   font-size: 0.95rem;
