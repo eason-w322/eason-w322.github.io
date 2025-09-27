@@ -47,8 +47,15 @@
           </figure>
         </div>
 
-        <!-- Code Snippets (parallel, single dropdown) -->
-        <h4 class="section-title">Core Implementations</h4>
+        <p class="section-title">
+  The four nested for-loop implementation of convolution is extremely slow. 
+  Efficiency improves significantly when switching to the two for-loop version, 
+  where I pad the image with zeros using <code>np.pad</code> based on the kernel size. 
+  My self-implemented convolution functions produce the exact same output as the built-in 
+  <code>scipy.signal.convolve2d</code>. Compared to the original grayscale selfie, 
+  the box-filtered result appears blurred. Additionally, convolving the image with 
+  D<sub>x</sub> and D<sub>y</sub> produces the corresponding derivative images shown above.
+</p>
 
         <details class="code-toggle">
           <summary>Show / Hide my convolution code</summary>
