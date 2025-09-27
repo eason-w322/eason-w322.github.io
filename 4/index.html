@@ -1,117 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CS180/280A – Project 2: Fun with Filters & Frequencies</title>
+  <title>CS180 • Project 2 — Part 1</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
-  <!-- Project Title -->
-  <header class="site-header">
-    <h1>CS180/280A – Project 2</h1>
-    <p class="subtitle">Fun with Filters & Frequencies</p>
+  <header class="page-header">
+    <h1>CS180 — Project 2</h1>
+    <h2>Part 1: Fun with Filters</h2>
   </header>
 
   <main class="container">
-    <!-- Part 1 -->
-    <section id="part-1" class="card">
-      <h2>Part 1 — Fun with Filters</h2>
-      <p class="lead">
-        In this part, we build intuition for 2D convolution and filtering,
-        starting from scratch and moving toward classic derivative filters.
-      </p>
-    </section>
 
-    <!-- Part 1.1 -->
-    <section id="part-1-1" class="card">
-      <h3>Part 1.1 — Convolutions from Scratch</h3>
-      <p class="lead">
-        I implemented convolution two ways and compared against
-        <code>scipy.signal.convolve2d</code>.
-      </p>
+    <!-- ===================== Part 1 ===================== -->
+    <section id="part1">
+      <h2 class="section-title">Part 1</h2>
 
-      <h4 class="mt">Implementation Snippets</h4>
+      <!-- =========== Part 1.1 =========== -->
+      <article id="part1-1">
+        <h3 class="section-title">1.1 Convolutions from Scratch</h3>
 
-      <!-- Four-loop version: explicit bounds checks, no padding -->
-      <details class="code" open>
-        <summary>Four-loop version (no padding; manual bounds checks)</summary>
-<pre><code>def conv2d_four_forloops(img: np.ndarray, kernel: np.ndarray, pad_value: float = 0.0) -&gt; np.ndarray:
-    H, W = img.shape
-    kh, kw = kernel.shape
-    ch, cw = kh // 2, kw // 2
-    k   = _flip_kernel(kernel).astype(np.float32, copy=False)
-    img = img.astype(np.float32, copy=False)
-    out = np.zeros((H, W), dtype=np.float32)
+        <!-- Results Grid -->
+        <h4 class="section-title">Results (Grayscale Selfie &amp; Derivatives)</h4>
+        <div class="image-grid">
+          <figure>
+            <img src="REPLACE_WITH_URL_selfie_gray.png" alt="Original grayscale selfie" />
+            <figcaption>Original (Grayscale)</figcaption>
+          </figure>
 
-    for i in range(H):
-        for j in range(W):
-            s = 0.0
-            for u in range(-ch, ch + 1):
-                for v in range(-cw, cw + 1):
-                    ii = i + u
-                    jj = j + v
-                    ku = ch + u
-                    kv = cw + v
-                    if 0 &lt;= ii &lt; H and 0 &lt;= jj &lt; W:
-                        s += img[ii, jj] * k[ku, kv]
-            out[i, j] = s
-    return out
-</code></pre>
-        <p class="hint">
-          Uses explicit bounds checks at the image edges (effectively “no padding”).
-          Simple but slower; good for understanding convolution mechanics.
-        </p>
-      </details>
+          <figure>
+            <img src="REPLACE_WITH_URL_selfie_box_two.png" alt="Selfie after convolution (box filter)" />
+            <figcaption>After Convolution (Box Filter)</figcaption>
+          </figure>
 
-      <!-- Two-loop version: pads first, then slides a window -->
-      <details class="code">
-        <summary>Two-loop version (pads once; vectorized inner sum)</summary>
-<pre><code>def conv2d_two_forloops(img: np.ndarray, kernel: np.ndarray, pad_value: float = 0.0) -&gt; np.ndarray:
-    H, W = img.shape
-    kh, kw = kernel.shape
-    k = _flip_kernel(kernel)
-    ch, cw = kh // 2, kw // 2
-    out = np.zeros((H, W), dtype=np.float32)
-    padded = np.pad(img, ((ch, ch), (cw, cw)), mode="constant", constant_values=pad_value)
-    for i in range(H):
-        for j in range(W):
-            window = padded[i:i+kh, j:j+kw]
-            out[i, j] = np.sum(window * k, dtype=np.float32)
-    return out
-</code></pre>
-        <p class="hint">
-          Zero-pads once, then slides a window; inner accumulation is
-          vectorized via <code>np.sum(window * k)</code>. This matches the usual definition of
-          convolution with constant (zero) boundary and is much faster.
-        </p>
-      </details>
+          <figure>
+            <img src="REPLACE_WITH_URL_selfie_lx.png" alt="Selfie Lx" />
+            <figcaption>Finite Difference: L<sub>x</sub></figcaption>
+          </figure>
 
-      <h4 class="mt">Notes</h4>
-      <ul>
-        <li><strong>Kernel flip:</strong> both versions call <code>_flip_kernel</code> to perform true convolution (not correlation).</li>
-        <li><strong>Dtypes:</strong> everything is cast to <code>float32</code> to avoid overflow and keep it consistent with SciPy.</li>
-        <li><strong>Padding policy:</strong> the two-loop version uses configurable constant padding (<code>pad_value</code>).</li>
-      </ul>
-
-      <!-- Figures (drop your images later) -->
-      <div class="fig-grid">
-        <figure>
-          <img src="images/p11_box9x9_example.png" alt="9×9 box filter result" />
-          <figcaption>9×9 box filter on my image.</figcaption>
-        </figure>
-        <figure>
-          <img src="images/p11_compare_convolve2d.png" alt="Comparison with convolve2d" />
-          <figcaption>My convolution vs. <code>convolve2d</code>.</figcaption>
-        </figure>
-      </div>
+          <figure>
+            <img src="REPLACE_WITH_URL_selfie_ly.png" alt="Selfie Ly" />
+            <figcaption>Finite Difference: L<sub>y</sub></figcaption>
+          </figure>
+        </div>
+      </article>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <small>© 2025 · Your Name</small>
+  <footer class="footer">
+    <p>© 2025 • CS180/280A • Project 2</p>
   </footer>
-
 </body>
 </html>
