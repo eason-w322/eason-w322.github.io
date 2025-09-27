@@ -142,6 +142,44 @@
           while outlining the major boundaries in the image.
         </p>
       </article>
+
+      <!-- =========== Part 1.3 =========== -->
+      <article id="part1-3">
+        <h3 class="section-title">1.3 Derivative of Gaussian (DoG) Filter</h3>
+
+        <!-- Results Row -->
+        <h4 class="section-title">Results (Gaussian Smoothing &amp; DoG)</h4>
+
+        <div class="image-strip" role="list">
+          <figure role="listitem">
+            <img src="REPLACE_WITH_URL_gaussian_blur.png" alt="Gaussian Blur" />
+            <figcaption>Gaussian Blurred Image</figcaption>
+          </figure>
+
+          <figure role="listitem">
+            <img src="REPLACE_WITH_URL_dog_lx.png" alt="DoG Lx" />
+            <figcaption>DoG Filter: L<sub>x</sub></figcaption>
+          </figure>
+
+          <figure role="listitem">
+            <img src="REPLACE_WITH_URL_dog_ly.png" alt="DoG Ly" />
+            <figcaption>DoG Filter: L<sub>y</sub></figcaption>
+          </figure>
+
+          <figure role="listitem">
+            <img src="REPLACE_WITH_URL_dog_comparison.png" alt="Comparison Result" />
+            <figcaption>Comparison with Finite Difference</figcaption>
+          </figure>
+        </div>
+
+        <p class="explainer-text">
+          Applying finite difference operators directly on the original image often produces noisy edge maps. 
+          By smoothing the image first with a Gaussian filter, noise is reduced and the edges become clearer. 
+          The Derivative of Gaussian (DoG) filters combine smoothing and differentiation into a single operation, 
+          giving results equivalent to applying Gaussian blur followed by D<sub>x</sub> or D<sub>y</sub>. 
+          This produces more stable gradients and reduces artifacts compared to raw finite differences.
+        </p>
+      </article>
     </section>
   </main>
 
