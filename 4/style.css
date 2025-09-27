@@ -1,104 +1,41 @@
-/* Page basics */
-:root {
-  --bg: #0e0f12;
-  --panel: #171a21;
-  --text: #e8eaf0;
-  --muted: #a9b0bd;
-  --accent: #86b9ff;
-  --radius: 16px;
-}
-
-* { box-sizing: border-box; }
-
-html, body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  line-height: 1.6;
-}
-
-/* Header */
-.page-header {
-  text-align: center;
-  padding: 36px 16px 12px;
-}
-
-.page-header h1 {
-  margin: 0 0 6px;
-  font-size: 2rem;
-  letter-spacing: 0.3px;
-}
-
-.page-header h2 {
-  margin: 0;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-/* Layout container */
-.container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-/* Section titles centered */
-.section-title {
-  text-align: center;
-  margin: 28px 0 16px;
-}
-
-/* Image grid */
-.image-grid {
+/* --- add these for code blocks --- */
+.code-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 14px;
-  background: var(--panel);
-  padding: 16px;
-  border-radius: var(--radius);
+  margin-top: 10px;
 }
 
-/* Responsive breakpoints */
-@media (max-width: 1000px) {
-  .image-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 540px) {
-  .image-grid { grid-template-columns: 1fr; }
+@media (max-width: 900px) {
+  .code-grid { grid-template-columns: 1fr; }
 }
 
-figure {
+.code-card {
   margin: 0;
   background: #0f1117;
   border: 1px solid #222835;
   border-radius: 12px;
-  padding: 10px;
+  overflow: hidden;
 }
 
-figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-figcaption {
+.code-title {
   text-align: center;
-  margin-top: 8px;
+  padding: 10px 12px 6px;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-weight: 600;
 }
 
-/* Footer */
-.footer {
-  text-align: center;
-  color: var(--muted);
-  padding: 28px 12px 36px;
+.code-block {
+  margin: 0;
+  padding: 12px 14px;
+  background: #0b0d12;
+  color: #e7e9ee;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 0.9rem;
-  border-top: 1px solid #1f2432;
+  line-height: 1.45;
+  border-top: 1px solid #222835;
+  overflow: auto;      /* scroll if long */
+  max-height: 420px;   /* keep page tidy */
+  tab-size: 2;
+  white-space: pre;    /* preserve formatting */
 }
-
-/* Links (if you add any) */
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
