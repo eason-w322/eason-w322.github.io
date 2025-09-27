@@ -214,12 +214,20 @@
   </div>
 
   <p class="explainer-text">
-    For the Taj Mahal image, unsharp masking enhances the architectural details while keeping the
-    overall structure intact. The blurred version shows the loss of sharp edges, while the
-    high-frequency component isolates fine details. Adding these back to the blurred image
-    recovers a crisp, sharpened result.
-  </p>
+  In this part, I first applied a Gaussian blur to the original Taj image. 
+  Subtracting the blurred result from the original yields the high-frequency component. 
+  This high-frequency detail is then scaled by a factor <em>α</em> and added back to the original image. 
+  The parameter <em>α</em> controls how much detail is reintroduced: higher values produce a crisper 
+  but potentially noisier result. The sharpened Taj image demonstrates enhanced edges and fine details, 
+  resulting in a visually sharper appearance.
+</p>
 
+<div class="equation-box">
+  <p><strong>Sharpening Formula:</strong></p>
+  <p>
+    \( I_{\text{sharp}} \;=\; I \;+\; \alpha \big(I - G_{\sigma} * I \big) \)
+  </p>
+</div>
   <!-- Bottom Row -->
   <h4 class="section-title">Pyramid Example</h4>
   <div class="image-strip" role="list">
