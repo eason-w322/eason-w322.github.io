@@ -63,7 +63,7 @@ figure{
 .image-grid img{
   width:100%;
   height:auto;
-  max-width: 260px;          /* <- cap image width */
+  max-width: 50px;          /* <- cap image width */
   border-radius:12px;
   display:block;
   margin: 0 auto;
