@@ -45,6 +45,51 @@
             <figcaption>Finite Difference: L<sub>y</sub></figcaption>
           </figure>
         </div>
+
+        <!-- Code Snippets -->
+        <h4 class="section-title">Core Implementations</h4>
+        <div class="code-grid">
+          <figure class="code-card">
+            <figcaption class="code-title">Four-Loop Convolution (no padding)</figcaption>
+            <pre class="code-block"><code>def conv2d_four_forloops(img: np.ndarray, kernel: np.ndarray, pad_value: float = 0.0) -&gt; np.ndarray:
+    H, W = img.shape
+    kh, kw = kernel.shape
+    ch, cw = kh // 2, kw // 2
+    k   = _flip_kernel(kernel).astype(np.float32, copy=False)
+    img = img.astype(np.float32, copy=False)
+    out = np.zeros((H, W), dtype=np.float32)
+
+    for i in range(H):
+        for j in range(W):
+            s = 0.0
+            for u in range(-ch, ch + 1):
+                for v in range(-cw, cw + 1):
+                    ii = i + u
+                    jj = j + v
+                    ku = ch + u
+                    kv = cw + v
+                    if 0 &lt;= ii &lt; H and 0 &lt;= jj &lt; W:
+                        s += img[ii, jj] * k[ku, kv]
+            out[i, j] = s
+    return out</code></pre>
+          </figure>
+
+          <figure class="code-card">
+            <figcaption class="code-title">Two-Loop Convolution (zero padding)</figcaption>
+            <pre class="code-block"><code>def conv2d_two_forloops(img: np.ndarray, kernel: np.ndarray, pad_value: float = 0.0) -&gt; np.ndarray:
+    H, W = img.shape
+    kh, kw = kernel.shape
+    k = _flip_kernel(kernel)
+    ch, cw = kh // 2, kw // 2
+    out = np.zeros((H, W), dtype=np.float32)
+    padded = np.pad(img, ((ch, ch), (cw, cw)), mode='constant', constant_values=pad_value)
+    for i in range(H):
+        for j in range(W):
+            window = padded[i:i+kh, j:j+kw]
+            out[i, j] = np.sum(window * k, dtype=np.float32)
+    return out</code></pre>
+          </figure>
+        </div>
       </article>
     </section>
   </main>
