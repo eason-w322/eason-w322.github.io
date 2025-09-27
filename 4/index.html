@@ -378,42 +378,88 @@
 
       </article>
       <!-- =========== Part 2.3 & 2.4 =========== -->
-      <article id="part2-3-4">
-        <h3 class="section-title">2.3 &amp; 2.4 Multiresolution Blending</h3>
+      <!-- =========== Part 2.3 & 2.4 =========== -->
+<article id="part2-3-4">
+  <h3 class="section-title">2.3 &amp; 2.4 Multiresolution Blending</h3>
 
-        <h4 class="section-title">Results (Gaussian/Laplacian Stacks and Custom Blends)</h4>
+  <h4 class="section-title">Results (Gaussian/Laplacian Stacks and Custom Blends)</h4>
 
-        <div class="big-results-grid">
-          <!-- Apple + Orange Stacks -->
-          <figure>
-            <img class="big-result" src="REPLACE_WITH_URL_apple_orange.png" alt="Apple and Orange Stacks" />
-            <figcaption>Gaussian &amp; Laplacian Stacks: Apple + Orange (Recreation of Fig. 3.42)</figcaption>
-          </figure>
+  <div class="blend-group">
+    <!-- Supporting Images Row -->
+    <div class="support-strip">
+      <figure>
+        <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/data/apple.jpeg" alt="Apple Original" />
+        <figcaption>Apple</figcaption>
+      </figure>
+      <figure>
+        <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/data/orange.jpeg" alt="Orange Original" />
+        <figcaption>Orange</figcaption>
+      </figure>
+      <figure>
+        <img src="https://raw.githubusercontent.com/eason-w322/CS180-Project-2/main/part2_3/blend_soft_seam.png" alt="Mask" />
+        <figcaption>Gaussian and Laplacian Stack</figcaption>
+      </figure>
+    </div>
+    <!-- Big Result -->
+    <figure>
+      <img class="big-result" src="REPLACE_URL/apple_orange_stack.png" alt="Apple + Orange Stacks" />
+      <figcaption>Gaussian &amp; Laplacian Stacks — Apple + Orange</figcaption>
+    </figure>
+  </div>
 
-          <!-- Custom Blend 1 -->
-          <figure>
-            <img class="big-result" src="REPLACE_WITH_URL_custom1.png" alt="Custom Blend 1" />
-            <figcaption>Custom Blend 1 — Straight Mask</figcaption>
-          </figure>
+  <div class="blend-group">
+    <div class="support-strip">
+      <figure>
+        <img src="REPLACE_URL/custom1_a.png" alt="Original A" />
+        <figcaption>Original A</figcaption>
+      </figure>
+      <figure>
+        <img src="REPLACE_URL/custom1_b.png" alt="Original B" />
+        <figcaption>Original B</figcaption>
+      </figure>
+      <figure>
+        <img src="REPLACE_URL/custom1_mask.png" alt="Straight Mask" />
+        <figcaption>Straight Mask</figcaption>
+      </figure>
+    </div>
+    <figure>
+      <img class="big-result" src="REPLACE_URL/custom1_blend.png" alt="Custom Blend 1" />
+      <figcaption>Custom Blend 1 — Straight Mask</figcaption>
+    </figure>
+  </div>
 
-          <!-- Custom Blend 2 (Irregular Mask) -->
-          <figure>
-            <img class="big-result" src="REPLACE_WITH_URL_custom2.png" alt="Custom Blend 2 (Irregular Mask)" />
-            <figcaption>Custom Blend 2 — Irregular Mask</figcaption>
-          </figure>
-        </div>
+  <div class="blend-group">
+    <div class="support-strip">
+      <figure>
+        <img src="REPLACE_URL/custom2_a.png" alt="Original C" />
+        <figcaption>Original C</figcaption>
+      </figure>
+      <figure>
+        <img src="REPLACE_URL/custom2_b.png" alt="Original D" />
+        <figcaption>Original D</figcaption>
+      </figure>
+      <figure>
+        <img src="REPLACE_URL/custom2_mask.png" alt="Irregular Mask" />
+        <figcaption>Irregular Mask</figcaption>
+      </figure>
+    </div>
+    <figure>
+      <img class="big-result" src="REPLACE_URL/custom2_blend.png" alt="Custom Blend 2" />
+      <figcaption>Custom Blend 2 — Irregular Mask</figcaption>
+    </figure>
+  </div>
 
-        <p class="explainer-text">
-          For Part 2.3, I implemented Gaussian and Laplacian stacks to visualize the multiresolution
-          decomposition of the Apple and Orange images. This reproduces the outcomes of Figure 3.42 (a–l),
-          where Gaussian levels progressively blur the images and Laplacian levels highlight band-pass details.
-          <br><br>
-          In Part 2.4, I used these stacks for blending. The Apple and Orange blend demonstrates seamless
-          multiresolution blending. Additionally, I created two custom blends: one with a straight mask
-          and another with an irregular mask. The irregular mask demonstrates the advantage of multiresolution
-          blending by producing smooth transitions without visible seams.
-        </p>
-      </article>
+  <p class="explainer-text">
+    For Part 2.3, I implemented Gaussian and Laplacian stacks to visualize the multiresolution
+    decomposition of the Apple and Orange images. This reproduces the outcomes of Figure 3.42 (a–l),
+    where Gaussian levels progressively blur the images and Laplacian levels highlight band-pass details.
+    <br><br>
+    In Part 2.4, I used these stacks for blending. The Apple and Orange blend demonstrates seamless
+    multiresolution blending. Additionally, I created two custom blends: one with a straight mask
+    and another with an irregular mask. The irregular mask demonstrates the advantage of multiresolution
+    blending by producing smooth transitions without visible seams.
+  </p>
+</article>
     </section>
   </main>
 
