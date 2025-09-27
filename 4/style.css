@@ -97,7 +97,7 @@ body {
 
 /* ---------- Explainer text ---------- */
 .explainer-text {
-  max-width: 800px;    /* narrower so less wide lines */
+  max-width: 1000px;    /* narrower so less wide lines */
   margin: 12px auto;   /* less vertical margin */
   text-align: justify;
   font-size: 0.95rem;
