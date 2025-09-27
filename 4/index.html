@@ -173,11 +173,15 @@
         </div>
 
         <p class="explainer-text">
-          Applying finite difference operators directly on the original image often produces noisy edge maps. 
-          By smoothing the image first with a Gaussian filter, noise is reduced and the edges become clearer. 
-          The Derivative of Gaussian (DoG) filters combine smoothing and differentiation into a single operation, 
-          giving results equivalent to applying Gaussian blur followed by D<sub>x</sub> or D<sub>y</sub>. 
-          This produces more stable gradients and reduces artifacts compared to raw finite differences.
+          Applying finite difference operators directly on the original image (as in Part 1.2) often produces noisy edge maps.
+          By first smoothing the image with a Gaussian filter (as in Part 1.3), noise is reduced and edges appear sharper and more coherent. 
+          The Derivative of Gaussian (DoG) filters combine smoothing and differentiation into a single operation, producing results equivalent to 
+          applying Gaussian blur followed by convolution with D<sub>x</sub> or D<sub>y</sub>.
+          
+          Interestingly, while both approaches yield visually identical binarized edge maps at a threshold of 0.2, their gradient magnitudes differ 
+          slightly. The DoG results appear somewhat brighter compared to the Gaussian-blur-then-differentiate approach. This discrepancy is likely due to 
+          subtle differences in numerical precision and the order of operations: in the DoG method, the derivative is embedded in the Gaussian kernel itself, 
+          whereas in the two-step method, smoothing and differentiation are performed sequentially
         </p>
       </article>
     </section>
