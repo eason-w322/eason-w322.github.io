@@ -147,6 +147,11 @@ article {
   font-size: 1.05rem;
   text-align: center;
 }
+.author-name {
+  font-size: 1rem;
+  margin-top: 6px;
+  color: #e0e0e0; /* light gray text */
+}
 /* ---------- Footer ---------- */
 .footer {
   margin-top: 50px;
