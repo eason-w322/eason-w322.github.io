@@ -115,15 +115,6 @@ article {
   line-height: 1.7;
 }
 
-/* ---------- Footer ---------- */
-.footer {
-  margin-top: 50px;
-  padding: 15px;
-  background: #003366;
-  color: white;
-  font-size: 0.85rem;
-}
-
 .equation-box {
   max-width: 600px;
   margin: 20px auto;
@@ -135,3 +126,13 @@ article {
   text-align: center;
   font-family: 'Times New Roman', serif;
 }
+
+/* ---------- Footer ---------- */
+.footer {
+  margin-top: 50px;
+  padding: 15px;
+  background: #003366;
+  color: white;
+  font-size: 0.85rem;
+}
+
