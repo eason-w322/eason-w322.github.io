@@ -97,7 +97,7 @@ body {
 }
 .explainer-text {
   max-width: 500px;   /* set narrower width */
-  margin: 100px auto;  /* center it horizontally with auto margins */
+  margin: 55px auto;  /* center it horizontally with auto margins */
   text-align: justify; /* optional: makes line edges neat */
   font-size: 1rem;    /* keep it readable */
   line-height: 1.6;   /* improve spacing between lines */
