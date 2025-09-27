@@ -377,6 +377,43 @@
         </div>
 
       </article>
+      <!-- =========== Part 2.3 & 2.4 =========== -->
+      <article id="part2-3-4">
+        <h3 class="section-title">2.3 &amp; 2.4 Multiresolution Blending</h3>
+
+        <h4 class="section-title">Results (Gaussian/Laplacian Stacks and Custom Blends)</h4>
+
+        <div class="big-results-grid">
+          <!-- Apple + Orange Stacks -->
+          <figure>
+            <img class="big-result" src="REPLACE_WITH_URL_apple_orange.png" alt="Apple and Orange Stacks" />
+            <figcaption>Gaussian &amp; Laplacian Stacks: Apple + Orange (Recreation of Fig. 3.42)</figcaption>
+          </figure>
+
+          <!-- Custom Blend 1 -->
+          <figure>
+            <img class="big-result" src="REPLACE_WITH_URL_custom1.png" alt="Custom Blend 1" />
+            <figcaption>Custom Blend 1 — Straight Mask</figcaption>
+          </figure>
+
+          <!-- Custom Blend 2 (Irregular Mask) -->
+          <figure>
+            <img class="big-result" src="REPLACE_WITH_URL_custom2.png" alt="Custom Blend 2 (Irregular Mask)" />
+            <figcaption>Custom Blend 2 — Irregular Mask</figcaption>
+          </figure>
+        </div>
+
+        <p class="explainer-text">
+          For Part 2.3, I implemented Gaussian and Laplacian stacks to visualize the multiresolution
+          decomposition of the Apple and Orange images. This reproduces the outcomes of Figure 3.42 (a–l),
+          where Gaussian levels progressively blur the images and Laplacian levels highlight band-pass details.
+          <br><br>
+          In Part 2.4, I used these stacks for blending. The Apple and Orange blend demonstrates seamless
+          multiresolution blending. Additionally, I created two custom blends: one with a straight mask
+          and another with an irregular mask. The irregular mask demonstrates the advantage of multiresolution
+          blending by producing smooth transitions without visible seams.
+        </p>
+      </article>
     </section>
   </main>
 
