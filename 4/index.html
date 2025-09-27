@@ -263,6 +263,133 @@
     final image appear sharper than the blurred version but still noticeably less detailed compared to the original.
   </p>
 </article>
+      <!-- =========== Part 2.2 =========== -->
+      <article id="part2-2">
+        <h3 class="section-title">2.2 Hybrid Images</h3>
+
+        <h4 class="section-title">Hybrid Example 1: Full Process</h4>
+
+        <!-- Originals -->
+        <div class="image-strip" role="list">
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_orig_high.png" alt="Original High Source" />
+            <figcaption>Original 1 (High-Frequency Source)</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_orig_low.png" alt="Original Low Source" />
+            <figcaption>Original 2 (Low-Frequency Source)</figcaption>
+          </figure>
+        </div>
+
+        <!-- FFT of Originals -->
+        <div class="image-strip" role="list">
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_fft_orig_high.png" alt="FFT Original High" />
+            <figcaption>FFT of Original 1</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_fft_orig_low.png" alt="FFT Original Low" />
+            <figcaption>FFT of Original 2</figcaption>
+          </figure>
+        </div>
+
+        <!-- Filtered -->
+        <div class="image-strip" role="list">
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_highpass_vis.png" alt="High-Pass Filtered" />
+            <figcaption>High-Pass (from Original 1)</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_lowpass.png" alt="Low-Pass Filtered" />
+            <figcaption>Low-Pass (from Original 2)</figcaption>
+          </figure>
+        </div>
+
+        <!-- FFTs -->
+        <div class="image-strip" role="list">
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_fft_lowpass.png" alt="FFT Low-Pass" />
+            <figcaption>FFT of Low-Pass</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_fft_highpass.png" alt="FFT High-Pass" />
+            <figcaption>FFT of High-Pass</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_fft_hybrid.png" alt="FFT Hybrid" />
+            <figcaption>FFT of Hybrid</figcaption>
+          </figure>
+        </div>
+
+        <!-- Final Hybrid -->
+        <div class="image-strip" role="list">
+          <figure role="listitem">
+            <img src="results/part2_2/batman_joker/batman_joker_hybrid.png" alt="Hybrid Final" />
+            <figcaption>Final Hybrid (Batman + Joker)</figcaption>
+            <p class="cutoff-note">Cutoff Frequency: ______</p>
+          </figure>
+        </div>
+
+        <!-- Equation -->
+        <div class="equation-box">
+          <p>The hybrid image is computed as:</p>
+          <p>
+            \[
+            H(x,y) \;=\; \beta \, L(I_\text{low})(x,y) \;+\; \alpha \, H(I_\text{high})(x,y)
+            \]
+          </p>
+        </div>
+
+        <p class="explainer-text">
+          This example demonstrates the full hybrid pipeline. The high-frequency content (Batman) was extracted 
+          using a Gaussian high-pass filter, while the low-frequency content (Joker) was preserved with a Gaussian 
+          low-pass filter. Their Fourier transforms confirm that the high-pass emphasizes edges and fine details, 
+          while the low-pass smooths broader structures. When combined, the resulting hybrid blends the two images, 
+          revealing Batman when viewed up close and Joker when viewed from a distance.
+        </p>
+
+        <h4 class="section-title">Hybrid Example 2 & 3: Final Results</h4>
+
+        <!-- Hybrid Example 2 -->
+        <div class="image-strip" role="list">
+          <figure role="listitem">
+            <img src="results/part2_2/hybrid2/original3.png" alt="Original 3" />
+            <figcaption>Original 3</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="results/part2_2/hybrid2/original4.png" alt="Original 4" />
+            <figcaption>Original 4</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="results/part2_2/hybrid2/hybrid.png" alt="Hybrid 2" />
+            <figcaption>Hybrid Result</figcaption>
+            <p class="cutoff-note">Cutoff Frequency: ______</p>
+          </figure>
+        </div>
+
+        <!-- Hybrid Example 3 -->
+        <div class="image-strip" role="list">
+          <figure role="listitem">
+            <img src="results/part2_2/hybrid3/original5.png" alt="Original 5" />
+            <figcaption>Original 5</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="results/part2_2/hybrid3/original6.png" alt="Original 6" />
+            <figcaption>Original 6</figcaption>
+          </figure>
+          <figure role="listitem">
+            <img src="results/part2_2/hybrid3/hybrid.png" alt="Hybrid 3" />
+            <figcaption>Hybrid Result</figcaption>
+            <p class="cutoff-note">Cutoff Frequency: ______</p>
+          </figure>
+        </div>
+
+        <p class="explainer-text">
+          For the additional hybrid pairs, only the original images and final results are shown. As with Example 1, 
+          each hybrid was built by combining the low-frequency structure of one image with the high-frequency detail 
+          of another, producing visuals that depend on viewing distance.
+        </p>
+      </article>
     </section>
   </main>
 
