@@ -96,7 +96,7 @@ body {
   overflow-x: auto;
 }
 .explainer-text {
-  max-width: 800px;   /* set narrower width */
+  max-width: 500px;   /* set narrower width */
   margin: 20px auto;  /* center it horizontally with auto margins */
   text-align: justify; /* optional: makes line edges neat */
   font-size: 1rem;    /* keep it readable */
