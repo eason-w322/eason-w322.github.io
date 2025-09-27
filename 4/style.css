@@ -1,145 +1,106 @@
-/* ---- Page shell ---- */
-:root{
-  --bg:#0f1115;
-  --card:#171a21;
-  --text:#e9edf1;
-  --muted:#a6b0bf;
-  --accent:#7aa2ff;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-  --radius:16px;
-  --maxw: 1100px;
+/* ====== Global Styles ====== */
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #0d0d0d;
+  color: #e8e8e8;
+  text-align: center;
 }
 
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);}
-
-.page-header{
-  text-align:center;
-  padding:28px 16px 10px;
-}
-.page-header h1{
-  margin:0 0 4px;
-  font-size: clamp(28px, 4vw, 38px);
-  letter-spacing:.5px;
-}
-.page-header h2{
-  margin:0;
-  font-weight:500;
-  color:var(--muted);
+/* ====== Headers ====== */
+.page-header h1 {
+  font-size: 2rem;
+  margin: 20px 0 10px;
 }
 
-.container{
-  width:100%;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 18px 80px;
+.page-header h2 {
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin: 0 0 20px;
+  color: #b0b0b0;
 }
 
-/* ---- Section titles centered ---- */
-.section-title{
-  text-align:center;
-  margin: 26px 0 12px;
-  font-size: clamp(20px, 2.6vw, 26px);
+.section-title {
+  margin: 30px 0 15px;
+  font-size: 1.6rem;
+  text-align: center;
 }
 
-/* ---- Image grid: 4 across on wide, wraps on small ---- */
-.image-grid{
-  display:grid;
-  grid-template-columns: repeat(4, minmax(180px,1fr));
-  gap: 16px;
-  justify-items:center;      /* center each figure */
-  align-items:start;
-  margin: 6px auto 24px;
-}
-figure{
-  margin:0;
-  text-align:center;
-  background:var(--card);
-  border-radius: var(--radius);
-  padding:12px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.35);
-  width:100%;
-}
-.image-grid img{
-  width:100%;
-  height:auto;
-  max-width: 50px;          /* <- cap image width */
-  border-radius:12px;
-  display:block;
-  margin: 0 auto;
-}
-figcaption{
-  margin-top:8px;
-  color:var(--muted);
-  font-size:.95rem;
+/* ====== Image Grid ====== */
+.image-grid {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px auto;
+  text-align: center;
 }
 
-/* ---- Code grid (two columns) ---- */
-.code-grid{
-  display:grid;
-  grid-template-columns: repeat(2, minmax(260px,1fr));
-  gap:18px;
-  margin: 8px auto 28px;
-  max-width: 980px;
-}
-.code-card{
-  background:var(--card);
-  border-radius: var(--radius);
-  overflow:hidden;
-  box-shadow: 0 8px 24px rgba(0,0,0,.35);
+.image-grid figure {
+  margin: 0;
 }
 
-.code-title{
-  margin:0;
-  padding:12px 14px;
-  background: linear-gradient(180deg, #1b2030, #161a24);
-  border-bottom:1px solid #222a39;
-  text-align:center;         /* center title on code cards */
+.image-grid img {
+  max-width: 150px;   /* Shrinks images */
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
-/* Collapsible summary/button */
-details{
-  border-top:1px solid #222a39;
-}
-summary{
-  list-style:none;
-  cursor:pointer;
-  padding:12px 14px;
-  color:var(--accent);
-  font-weight:600;
-  user-select:none;
-  text-align:center;         /* center the toggle */
-}
-summary::-webkit-details-marker{display:none;}
-summary:focus{outline:2px solid #2e5cff; outline-offset:4px; border-radius:8px;}
-
-.code-block{
-  margin:0;
-  padding:14px;
-  background:#0b0e14;
-  color:#cdd9e5;
-  font-family: var(--mono);
-  font-size: 13.5px;
-  line-height:1.5;
-  overflow:auto;
-  border-top:1px solid #222a39;
+/* ====== Code Sections ====== */
+.code-grid {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px auto;
 }
 
-/* ---- Footer ---- */
-.footer{
-  text-align:center;
-  color:var(--muted);
-  padding:28px 10px 40px;
+.code-card {
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 8px;
+  max-width: 500px;
+  text-align: left;
 }
 
-/* ---- Responsive tweaks ---- */
-@media (max-width: 980px){
-  .image-grid{ grid-template-columns: repeat(2, minmax(180px,1fr)); }
-  .code-grid{ grid-template-columns: 1fr; }
-  .image-grid img{ max-width: 300px; } /* can allow a bit wider on small screens */
+.code-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
-@media (max-width: 560px){
-  .image-grid{ grid-template-columns: 1fr; }
-  .image-grid img{ max-width: 90vw; }
+.code-block {
+  background: #111;
+  color: #d4d4d4;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+/* ====== Details Dropdown (Collapsible Code) ====== */
+details {
+  background: #1a1a1a;
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin: 10px auto;
+  max-width: 500px;
+  text-align: left;
+}
+
+details summary {
+  cursor: pointer;
+  font-weight: bold;
+  color: #57c7ff;
+}
+
+/* ====== Footer ====== */
+.footer {
+  margin: 40px 0 20px;
+  font-size: 0.9rem;
+  color: #888;
 }
