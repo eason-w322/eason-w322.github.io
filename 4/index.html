@@ -28,9 +28,72 @@
     <section id="part-1-1" class="card">
       <h3>Part 1.1 — Convolutions from Scratch</h3>
       <p class="lead">
-        Implement convolution with four loops, then two loops with padding,
-        and compare with <code>scipy.signal.convolve2d</code>.
+        I implemented convolution two ways and compared against
+        <code>scipy.signal.convolve2d</code>.
       </p>
+
+      <h4 class="mt">Implementation Snippets</h4>
+
+      <!-- Four-loop version: explicit bounds checks, no padding -->
+      <details class="code" open>
+        <summary>Four-loop version (no padding; manual bounds checks)</summary>
+<pre><code>def conv2d_four_forloops(img: np.ndarray, kernel: np.ndarray, pad_value: float = 0.0) -&gt; np.ndarray:
+    H, W = img.shape
+    kh, kw = kernel.shape
+    ch, cw = kh // 2, kw // 2
+    k   = _flip_kernel(kernel).astype(np.float32, copy=False)
+    img = img.astype(np.float32, copy=False)
+    out = np.zeros((H, W), dtype=np.float32)
+
+    for i in range(H):
+        for j in range(W):
+            s = 0.0
+            for u in range(-ch, ch + 1):
+                for v in range(-cw, cw + 1):
+                    ii = i + u
+                    jj = j + v
+                    ku = ch + u
+                    kv = cw + v
+                    if 0 &lt;= ii &lt; H and 0 &lt;= jj &lt; W:
+                        s += img[ii, jj] * k[ku, kv]
+            out[i, j] = s
+    return out
+</code></pre>
+        <p class="hint">
+          Uses explicit bounds checks at the image edges (effectively “no padding”).
+          Simple but slower; good for understanding convolution mechanics.
+        </p>
+      </details>
+
+      <!-- Two-loop version: pads first, then slides a window -->
+      <details class="code">
+        <summary>Two-loop version (pads once; vectorized inner sum)</summary>
+<pre><code>def conv2d_two_forloops(img: np.ndarray, kernel: np.ndarray, pad_value: float = 0.0) -&gt; np.ndarray:
+    H, W = img.shape
+    kh, kw = kernel.shape
+    k = _flip_kernel(kernel)
+    ch, cw = kh // 2, kw // 2
+    out = np.zeros((H, W), dtype=np.float32)
+    padded = np.pad(img, ((ch, ch), (cw, cw)), mode="constant", constant_values=pad_value)
+    for i in range(H):
+        for j in range(W):
+            window = padded[i:i+kh, j:j+kw]
+            out[i, j] = np.sum(window * k, dtype=np.float32)
+    return out
+</code></pre>
+        <p class="hint">
+          Zero-pads once, then slides a window; inner accumulation is
+          vectorized via <code>np.sum(window * k)</code>. This matches the usual definition of
+          convolution with constant (zero) boundary and is much faster.
+        </p>
+      </details>
+
+      <h4 class="mt">Notes</h4>
+      <ul>
+        <li><strong>Kernel flip:</strong> both versions call <code>_flip_kernel</code> to perform true convolution (not correlation).</li>
+        <li><strong>Dtypes:</strong> everything is cast to <code>float32</code> to avoid overflow and keep it consistent with SciPy.</li>
+        <li><strong>Padding policy:</strong> the two-loop version uses configurable constant padding (<code>pad_value</code>).</li>
+      </ul>
 
       <!-- Figures (drop your images later) -->
       <div class="fig-grid">
@@ -43,13 +106,6 @@
           <figcaption>My convolution vs. <code>convolve2d</code>.</figcaption>
         </figure>
       </div>
-
-      <!-- Optional code block -->
-      <details class="code">
-        <summary>Show code snippet (two-loop convolution)</summary>
-<pre><code># paste your concise two-loop implementation here
-</code></pre>
-      </details>
     </section>
   </main>
 
