@@ -256,10 +256,11 @@
   </div>
 
   <p class="explainer-text">
-    In the Pyramid example, the sharpening process clearly emphasizes the stone textures. The
-    blurred image loses edge definition, but the extracted high-pass details restore the fine
-    structure once added back. This demonstrates how unsharp masking can effectively recover
-    clarity even after deliberate blurring.
+    In the pyramid example, the resharpened image cannot be fully restored to its original quality because the high-frequency 
+    details were already lost during the initial Gaussian blur. When applying the unsharp mask, we blur the image again to compute the 
+    high-frequency component. However, since this is done on an already blurred image, many fine details are irretrievably lost. 
+    As a result, the resharpening process only adds back a limited portion of the high-frequency content, making the 
+    final image appear sharper than the blurred version but still noticeably less detailed compared to the original.
   </p>
 </article>
     </section>
