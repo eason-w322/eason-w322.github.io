@@ -6,64 +6,79 @@
   <title>CS180 Project 3: Image Warping and Mosaicing</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+  <!-- ===== HEADER ===== -->
   <header class="site-header">
     <h1>Project 3: Image Warping and Mosaicing</h1>
     <p class="subtitle">Eason Wei | CS 180 / 280A – Fall 2025</p>
   </header>
 
+  <!-- ===== SIDEBAR NAVIGATION ===== -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="#partA1">A.1 – Shoot and Digitize Pictures</a></li>
+      <li><a href="#partA2">A.2 – Recover Homographies</a></li>
+      <li><a href="#partA3">A.3 – Warp the Images</a></li>
+      <li><a href="#partA4">A.4 – Blend into a Mosaic</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== MAIN CONTENT ===== -->
   <main class="container">
+
+    <!-- ===== Overview Section ===== -->
     <section id="intro" class="card">
-  <h2>Overview</h2>
-  <p>
-    In this project, I explore <b>image warping</b> and <b>mosaicing</b> to create seamless panoramas
-    from multiple photographs. The goal is to recover homographies between images, warp them using
-    nearest-neighbor and bilinear interpolation, and blend them into smooth mosaics.
-  </p>
-</section>
+      <h2>Overview</h2>
+      <p>
+        In this project, I explore <b>image warping</b> and <b>mosaicing</b> to create seamless panoramas
+        from multiple photographs. The goal is to recover homographies between images, warp them using
+        nearest-neighbor and bilinear interpolation, and blend them into smooth mosaics.
+      </p>
+    </section>
 
-<!-- Sidebar Navigation -->
-<nav class="sidebar">
-  <ul>
-    <li><a href="#partA1">A.1 – Shoot and Digitize Pictures</a></li>
-    <li><a href="#partA2">A.2 – Recover Homographies</a></li>
-    <li><a href="#partA3">A.3 – Warp the Images</a></li>
-    <li><a href="#partA4">A.4 – Blend into a Mosaic</a></li>
-  </ul>
-</nav>
-
+    <!-- ===== Part A.1 Section ===== -->
     <section id="partA1" class="card">
-  <h2>A.1 – Shoot and Digitize Pictures</h2>
-  <p>
-    I captured multiple photo sets by rotating the camera about a fixed center of projection
-    to create projective transformations suitable for mosaicing. Each image overlaps the next
-    by about 50–60% to ensure reliable feature matching and homography estimation. 
-  </p>
+      <h2>A.1 – Shoot and Digitize Pictures</h2>
+      <p>
+        I captured multiple photo sets by rotating the camera about a fixed center of projection
+        to create projective transformations suitable for mosaicing. Each image overlaps the next
+        by about 50–60% to ensure reliable feature matching and homography estimation.
+      </p>
 
-  <h3>Set 1 – Projective Rotation (Panorama)</h3>
-  <div class="image-row">
-    <figure>
-      <img src="set1_projective_images.png" alt="Set 1 - Piano With Projective Transformation">
-      <figcaption>Image 1</figcaption>
-    </figure>
-    <figure>
-      <img src="set2_projective_images.png" alt="Set 2 - View with Projective Transformation">
-      <figcaption>Image 2</figcaption>
-    </figure>
-    <figure>
-      <img src="images/set1_img3.jpg" alt="Set 1 - Image 3">
-      <figcaption>Image 3</figcaption>
-    </figure>
-  </div>
+      <h3>Set 1 – Projective Rotation (Panorama)</h3>
 
-  <p class="notes">
-    The sequence above illustrates a panorama obtained by rotating the camera horizontally
-    about its optical center. The images show consistent perspective and lighting,
-    which helps in computing a smooth homography and blending in later steps.
-  </p>
-</section>
+      <div class="image-row">
+        <figure>
+          <img src="set1_projective_images.png" alt="Set 1 - Piano With Projective Transformation">
+          <figcaption>Image 1</figcaption>
+        </figure>
+
+        <figure>
+          <img src="set2_projective_images.png" alt="Set 2 - View with Projective Transformation">
+          <figcaption>Image 2</figcaption>
+        </figure>
+
+        <figure>
+          <img src="images/set1_img3.jpg" alt="Set 1 - Image 3">
+          <figcaption>Image 3</figcaption>
+        </figure>
+      </div>
+
+      <p class="notes">
+        The sequence above illustrates a panorama obtained by rotating the camera horizontally
+        about its optical center. The images show consistent perspective and lighting,
+        which helps in computing a smooth homography and blending in later steps.
+      </p>
+    </section>
+
+    <!-- Placeholders for next parts -->
+    <section id="partA2" class="card"><h2>A.2 – Recover Homographies</h2></section>
+    <section id="partA3" class="card"><h2>A.3 – Warp the Images</h2></section>
+    <section id="partA4" class="card"><h2>A.4 – Blend into a Mosaic</h2></section>
   </main>
 
+  <!-- ===== FOOTER ===== -->
   <footer>
     <p>© 2025 Eason Wei | UC Berkeley CS180 – Image Mosaicing</p>
   </footer>
