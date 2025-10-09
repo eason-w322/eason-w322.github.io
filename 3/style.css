@@ -81,6 +81,32 @@ figcaption {
   color: var(--muted);
   font-style: italic;
 }
+.image-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.image-row figure {
+  flex: 1 1 30%;
+  max-width: 30%;
+  text-align: center;
+}
+
+.image-row img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.image-row figcaption {
+  margin-top: 6px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
 
 footer {
   text-align: center;
@@ -88,3 +114,4 @@ footer {
   padding: 24px 0;
   font-size: 0.85rem;
 }
+
