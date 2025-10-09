@@ -218,43 +218,60 @@ window.MathJax = {
     </section>
     <section id="partA3" class="card"><h2>A.3 – Warp the Images</h2>
       <p>
-    With the homography matrix \(H\) recovered, the next step is to <b>warp each image</b> toward
-    the reference frame. The process maps every pixel in the target image to its corresponding
-    location in the source image through <b>inverse warping</b>, ensuring no holes appear in the result.
+    Using the recovered homography matrix \(H\), I warped each image into the reference frame 
+    through <b>inverse warping</b>. This approach maps every pixel in the target image to 
+    its corresponding coordinate in the source image, preventing holes in the output.
   </p>
 
   <!-- ========================= -->
   <!-- A.3.1 Image Warping -->
   <!-- ========================= -->
   <h3>A.3.1 – Image Warping</h3>
+
   <p>
-    I implemented two warping functions from scratch:
-    <code>warpImageNearestNeighbor(im, H)</code> and
-    <code>warpImageBilinear(im, H)</code>.
-    Both use inverse warping but differ in how they estimate pixel values:
+    Two interpolation methods were implemented from scratch:
   </p>
 
   <ul>
-    <li><b>Nearest Neighbor:</b> rounds mapped coordinates to the closest integer pixel.</li>
-    <li><b>Bilinear:</b> computes a weighted average of the four surrounding pixels
-        (interpolating along x first, then y).</li>
+    <li><b>Nearest Neighbor:</b> rounds source coordinates to the nearest integer pixel.</li>
+    <li><b>Bilinear:</b> interpolates along the <i>x</i>-axis first, then the <i>y</i>-axis 
+        using a weighted average of four neighbors.</li>
   </ul>
 
-  <p>Below are representative excerpts illustrating their key difference:</p>
+  <p>
+    Both use inverse mapping defined by:
+  </p>
 
-  <pre><code class="language-python"># Nearest Neighbor
+  <p class="math-block">
+    \[
+    \begin{bmatrix}x \\ y \\ 1\end{bmatrix}
+    = H^{-1}
+    \begin{bmatrix}x' \\ y' \\ 1\end{bmatrix}
+    \]
+  </p>
+
+  <div style="display: flex; flex-direction: column; gap: 20px;">
+    <div>
+      <p><b>Nearest Neighbor Sampling:</b></p>
+      <pre><code class="language-python">
 x_nn, y_nn = int(round(x)), int(round(y))
-if 0 &lt;= x_nn &lt; w and 0 &lt;= y_nn &lt; h:
+if 0 <= x_nn < w and 0 <= y_nn < h:
     warped[y_out, x_out] = im[y_nn, x_nn]
-  </code></pre>
+      </code></pre>
+    </div>
 
-  <pre><code class="language-python"># Bilinear Interpolation
+    <div>
+      <p><b>Bilinear Interpolation:</b></p>
+      <pre><code class="language-python">
 x0, y0 = int(np.floor(x)), int(np.floor(y))
 dx, dy = x - x0, y - y0
+
 I_top = (1-dx)*im[y0, x0] + dx*im[y0, x0+1]
 I_bottom = (1-dx)*im[y0+1, x0] + dx*im[y0+1, x0+1]
 warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
-  </code></pre>
+      </code></pre>
+    </div>
+  </div>
 
   <figure style="text-align:center; margin:24px 0;">
     <img src="piano_middle_to_piano_right.png"
@@ -262,35 +279,30 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
          style="max-width:90%; border-radius:10px; border:1px solid var(--border);
                 box-shadow:0 0 10px rgba(0,0,0,0.4);">
     <figcaption style="color:var(--muted); margin-top:8px;">
-      Comparison of Nearest Neighbor (12.26 s) vs Bilinear (24.61 s)
+      Comparison of Nearest Neighbor (12.26 s) and Bilinear (24.61 s) Warps
     </figcaption>
   </figure>
 
   <p>
-    The Nearest Neighbor method runs roughly twice as fast but produces
-    visibly jagged edges and aliasing artifacts. Bilinear interpolation
-    smooths the image substantially at the cost of computation time.
-    This trade-off between <b>speed</b> and <b>visual quality</b>
-    becomes more pronounced at high resolutions.
+    The Nearest Neighbor method executes faster but introduces blocky edges and aliasing. 
+    Bilinear interpolation, though roughly twice as slow, yields smoother and more realistic results.
   </p>
 
   <!-- ========================= -->
   <!-- A.3.2 Rectification -->
   <!-- ========================= -->
   <h3>A.3.2 – Image Rectification</h3>
+
   <p>
-    To verify the correctness of my warping pipeline, I performed
-    <b>rectification</b> — mapping an oblique planar surface back to a
-    fronto-parallel rectangle. For each test, I manually clicked four
-    corner points of a slanted rectangular object in the image
-    (<code>im1_pts</code>) and mapped them to a perfect square
-    (<code>im2_pts = [[0,0],[0,1],[1,0],[1,1]]</code>).
+    To validate the homography and warping pipeline, I performed <b>rectification</b> — 
+    mapping slanted rectangular planes into a fronto-parallel view. For each case, 
+    I clicked the four corner points of an oblique rectangle (<code>im1_pts</code>) and 
+    mapped them to a square grid (<code>im2_pts = [[0,0],[0,1],[1,0],[1,1]]</code>).
   </p>
 
   <p>
-    Applying the computed homography warps the perspective so that
-    the object appears rectangular again, confirming the accuracy of
-    the inverse warping and interpolation logic.
+    The resulting homography straightens the perspective, confirming correct inverse 
+    warping and interpolation behavior.
   </p>
 
   <figure style="text-align:center; margin:20px 0;">
@@ -303,21 +315,16 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
          style="max-width:85%; border-radius:10px; border:1px solid var(--border);
                 box-shadow:0 0 10px rgba(0,0,0,0.4);">
     <figcaption style="color:var(--muted); margin-top:8px;">
-      Rectification results – slanted rectangles restored to a frontal view.
+      Rectification results — transforming a tilted rectangle into a true front-facing view.
     </figcaption>
   </figure>
 
   <div class="notes">
-    These rectification tests verify that the warping functions correctly
-    model projective transformations. Bilinear interpolation yields
-    smoother, more photorealistic results, while Nearest Neighbor offers
-    a quicker but less refined approximation.
+    The rectification step confirms that both interpolation methods handle projective 
+    transformations correctly. Bilinear produces smoother intensity transitions, while 
+    Nearest Neighbor prioritizes computational speed.
   </div>
 </section>
-    
-    
-    
-    </section>
     <section id="partA4" class="card"><h2>A.4 – Blend into a Mosaic</h2></section>
   </main>
 
