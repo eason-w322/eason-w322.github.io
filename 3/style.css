@@ -146,7 +146,7 @@ p {
 }
 
 .image-stack figure {
-  width: 70%;
+  width: 80%;
   background: rgba(20, 25, 35, 0.8);
   padding: 12px;
   border-radius: 12px;
@@ -173,6 +173,12 @@ p {
   opacity: 0;
   transform: translateY(20px);
   animation: fadeUp 0.8s ease forwards;
+}
+
+.math-block {
+  text-align: center;
+  margin: 18px 0;
+  font-size: 1.05rem;
 }
 
 @keyframes fadeUp {
