@@ -7,7 +7,17 @@
   --border: #22283a;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Global Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
 
 body {
   background: linear-gradient(180deg, var(--bg), #0d1020 60%);
@@ -15,99 +25,24 @@ body {
   font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* Header */
 .site-header {
   padding: 40px 20px 10px;
   text-align: center;
 }
+
 .site-header h1 {
   font-size: 2rem;
-  letter-spacing: .3px;
+  letter-spacing: 0.3px;
 }
+
 .subtitle {
   color: var(--muted);
-  margin-top: .25rem;
+  margin-top: 0.25rem;
   font-size: 1rem;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  gap: 24px;
-}
-
-.card {
-  background: var(--panel);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  max-width: 900px;
-  padding: 24px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.3);
-}
-
-h2 {
-  color: var(--accent);
-  margin-bottom: 12px;
-}
-
-p { margin-bottom: 12px; }
-
-.image-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-figure {
-  background: #0f1118;
-  padding: 6px;
-  border-radius: 8px;
-  text-align: center;
-}
-figure img {
-  width: 100%;
-  border-radius: 6px;
-}
-figcaption {
-  color: var(--muted);
-  font-size: 0.9rem;
-  margin-top: 4px;
-}
-
-.notes {
-  font-size: 0.95rem;
-  color: var(--muted);
-  font-style: italic;
-}
-.image-row {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-bottom: 16px;
-}
-
-.image-row figure {
-  flex: 1 1 30%;
-  max-width: 30%;
-  text-align: center;
-}
-
-.image-row img {
-  width: 100%;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-}
-
-.image-row figcaption {
-  margin-top: 6px;
-  font-size: 0.9rem;
-  color: var(--muted);
-}
-
+/* Sidebar Navigation */
 .sidebar {
   position: fixed;
   top: 120px;
@@ -117,14 +52,13 @@ figcaption {
   border-radius: 12px;
   padding: 16px 20px;
   width: 230px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.3);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px); /* Safari support */
 }
 
 .sidebar ul {
   list-style: none;
-  margin: 0;
-  padding: 0;
 }
 
 .sidebar li {
@@ -143,17 +77,82 @@ figcaption {
   text-decoration: underline;
 }
 
-/* Adjust main content spacing so it's not hidden behind sidebar */
+/* Main Layout */
 .container {
-  margin-left: 280px; /* space for sidebar */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
   padding: 20px;
+  margin-left: 280px; /* Leaves room for sidebar */
 }
 
-/* Smooth scrolling for anchor links */
-html {
-  scroll-behavior: smooth;
+/* Card Sections */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  max-width: 900px;
+  padding: 24px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Typography */
+h2 {
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+p {
+  margin-bottom: 12px;
+}
+
+.notes {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Image Layouts */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.image-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.image-row figure,
+.image-grid figure {
+  flex: 1 1 30%;
+  text-align: center;
+  background: #0f1118;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.image-row img,
+.image-grid img {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+figcaption {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* Footer */
 footer {
   text-align: center;
   color: var(--muted);
@@ -161,3 +160,18 @@ footer {
   font-size: 0.85rem;
 }
 
+/* Responsive: Sidebar collapses on small screens */
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    border-radius: 0;
+    background: rgba(20, 24, 35, 0.95);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .container {
+    margin-left: 0;
+  }
+}
