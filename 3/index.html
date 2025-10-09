@@ -28,41 +28,35 @@
     </section>
 
     <section id="partA1" class="card">
-      <h2>A.1 – Shoot and Digitize Pictures</h2>
-      <p>
-        I captured multiple photo sets by rotating the camera about a fixed center of projection.
-        Each set maintains 40–70 % field-of-view overlap to ensure reliable homography estimation.
-        Scenes include architectural interiors and outdoor panoramas.
-      </p>
+  <h2>A.1 – Shoot and Digitize Pictures</h2>
+  <p>
+    I captured multiple photo sets by rotating the camera about a fixed center of projection
+    to create projective transformations suitable for mosaicing. Each image overlaps the next
+    by about 50–60% to ensure reliable feature matching and homography estimation. 
+  </p>
 
-      <div class="image-grid">
-        <figure>
-          <img src="images/set1_left.jpg" alt="Left image of first panorama">
-          <figcaption>Set 1 – Left view</figcaption>
-        </figure>
-        <figure>
-          <img src="images/set1_right.jpg" alt="Right image of first panorama">
-          <figcaption>Set 1 – Right view</figcaption>
-        </figure>
-      </div>
+  <h3>Set 1 – Projective Rotation (Panorama)</h3>
+  <div class="image-row">
+    <figure>
+      <img src="images/set1_img1.jpg" alt="Set 1 - Image 1">
+      <figcaption>Image 1</figcaption>
+    </figure>
+    <figure>
+      <img src="images/set1_img2.jpg" alt="Set 1 - Image 2">
+      <figcaption>Image 2</figcaption>
+    </figure>
+    <figure>
+      <img src="images/set1_img3.jpg" alt="Set 1 - Image 3">
+      <figcaption>Image 3</figcaption>
+    </figure>
+  </div>
 
-      <div class="image-grid">
-        <figure>
-          <img src="images/set2_left.jpg" alt="Left image of second panorama">
-          <figcaption>Set 2 – Left view</figcaption>
-        </figure>
-        <figure>
-          <img src="images/set2_right.jpg" alt="Right image of second panorama">
-          <figcaption>Set 2 – Right view</figcaption>
-        </figure>
-      </div>
-
-      <p class="notes">
-        These images demonstrate projective transformations caused by in-plane rotation of the camera.
-        The overlapping details (e.g., walls, trees, and buildings) will later be used for point
-        correspondences and homography recovery.
-      </p>
-    </section>
+  <p class="notes">
+    The sequence above illustrates a panorama obtained by rotating the camera horizontally
+    about its optical center. The images show consistent perspective and lighting,
+    which helps in computing a smooth homography and blending in later steps.
+  </p>
+</section>
   </main>
 
   <footer>
