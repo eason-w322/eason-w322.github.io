@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS180 Project 3: Image Warping and Mosaicing</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>Project 3: Image Warping and Mosaicing</h1>
+    <p class="subtitle">Eason Wei | CS 180 / 280A – Fall 2025</p>
+  </header>
 
+  <main class="container">
+    <section id="intro" class="card">
+      <h2>Overview</h2>
+      <p>
+        In this project, I explore <b>image warping</b> and <b>mosaicing</b> to create seamless panoramas
+        from multiple photographs. The goal is to recover homographies between images, warp them
+        using nearest-neighbor and bilinear interpolation, and blend them into smooth mosaics.
+      </p>
+      <p>
+        The project consists of four main parts:
+        (A.1) Shooting pictures, (A.2) Recovering homographies,
+        (A.3) Warping images, and (A.4) Blending them into mosaics.
+      </p>
+    </section>
+
+    <section id="partA1" class="card">
+      <h2>A.1 – Shoot and Digitize Pictures</h2>
+      <p>
+        I captured multiple photo sets by rotating the camera about a fixed center of projection.
+        Each set maintains 40–70 % field-of-view overlap to ensure reliable homography estimation.
+        Scenes include architectural interiors and outdoor panoramas.
+      </p>
+
+      <div class="image-grid">
+        <figure>
+          <img src="images/set1_left.jpg" alt="Left image of first panorama">
+          <figcaption>Set 1 – Left view</figcaption>
+        </figure>
+        <figure>
+          <img src="images/set1_right.jpg" alt="Right image of first panorama">
+          <figcaption>Set 1 – Right view</figcaption>
+        </figure>
+      </div>
+
+      <div class="image-grid">
+        <figure>
+          <img src="images/set2_left.jpg" alt="Left image of second panorama">
+          <figcaption>Set 2 – Left view</figcaption>
+        </figure>
+        <figure>
+          <img src="images/set2_right.jpg" alt="Right image of second panorama">
+          <figcaption>Set 2 – Right view</figcaption>
+        </figure>
+      </div>
+
+      <p class="notes">
+        These images demonstrate projective transformations caused by in-plane rotation of the camera.
+        The overlapping details (e.g., walls, trees, and buildings) will later be used for point
+        correspondences and homography recovery.
+      </p>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 Eason Wei | UC Berkeley CS180 – Image Mosaicing</p>
+  </footer>
+</body>
+</html>
