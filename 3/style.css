@@ -123,27 +123,24 @@ p {
 
 .image-row {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 14px;
-  margin-bottom: 16px;
+  flex-direction: column;  /* stack vertically */
+  align-items: center;     /* center images horizontally */
+  gap: 24px;               /* add more vertical space between images */
+  margin-bottom: 24px;
 }
 
-.image-row figure,
-.image-grid figure {
-  flex: 1 1 30%;
+.image-row figure {
+  width: 90%;              /* make each image take up most of the container */
+  max-width: 900px;        /* prevent it from becoming too wide */
   text-align: center;
-  background: #0f1118;
-  padding: 6px;
-  border-radius: 8px;
 }
 
-.image-row img,
-.image-grid img {
-  width: 100%;
-  border-radius: 6px;
+.image-row img {
+  width: 100%;             /* image scales with container */
+  height: auto;
+  border-radius: 12px;
   border: 1px solid var(--border);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
 }
 
 figcaption {
