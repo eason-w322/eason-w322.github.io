@@ -174,17 +174,39 @@
 
   <h3>3. Visualizing Point Correspondences</h3>
   <p>
-    To confirm the accuracy of the selected correspondences, I plotted both images side by side 
-    and connected matching feature points with <b>red lines</b>. I manually chose 
-    <b>eight pairs</b> of distinctive points such as piano edges, window corners, and structural intersections. 
-    The resulting visualization clearly shows consistent geometric alignment between the two images, 
-    ensuring that the computed homography captures the correct perspective transformation.
+    To verify the quality of the selected correspondences, I plotted both images side by side and 
+    connected matching feature points using <b>red lines</b>. I manually chose 
+    <b>eight pairs</b> of distinctive features such as piano corners, window edges, and structural intersections. 
+    The visualization clearly demonstrates consistent geometry between the two images, confirming that the 
+    computed homography accurately models the perspective transformation.
+  </p>
+
+  <figure style="text-align: center; margin: 20px 0;">
+    <img src="piano1_to_piano2_correspondences_ls.png" alt="piano1 to piano2 correspondences" style="max-width: 90%; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 0 10px rgba(0,0,0,0.4);">
+    <figcaption style="color: var(--muted); margin-top: 8px;">
+      piano1 → piano2 Correspondences (Least-Squares)
+    </figcaption>
+  </figure>
+
+  <h3>4. Recovered Homography Matrix</h3>
+  <p>
+    The estimated homography matrix \(H\) for the piano1 → piano2 transformation is:
+  </p>
+
+  <p class="math-block">
+    \[
+    H =
+    \begin{bmatrix}
+    1.9173 & 0.0029 & -1088.9868 \\[4pt]
+    0.3469 & 1.5827 & -380.8842 \\[4pt]
+    0.0005 & -0.000005 & 1.0000
+    \end{bmatrix}
+    \]
   </p>
 
   <div class="notes">
-    Overall, this procedure establishes the mathematical foundation for projective alignment. 
-    The recovered homography matrix \(H\) accurately transforms coordinates between two overlapping images, 
-    enabling seamless warping and blending in later stages.
+    Overall, this process establishes a precise geometric mapping between the two overlapping 
+    piano images, forming the mathematical foundation for warping and blending in later stages.
   </div>
 </section>
 
