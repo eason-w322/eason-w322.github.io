@@ -1,1 +1,177 @@
+:root {
+  --bg: #0b0c10;
+  --panel: #151924;
+  --text: #e8eef6;
+  --muted: #a6b0c0;
+  --accent: #57c7ff;
+  --border: #22283a;
+}
 
+/* Global Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Base Styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: linear-gradient(180deg, var(--bg), #0d1020 60%);
+  color: var(--text);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Header */
+.site-header {
+  padding: 40px 20px 10px;
+  text-align: center;
+}
+
+.site-header h1 {
+  font-size: 2rem;
+  letter-spacing: 0.3px;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 0.25rem;
+  font-size: 1rem;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  position: fixed;
+  top: 120px;
+  left: 30px;
+  background: rgba(20, 24, 35, 0.85);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  width: 230px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px); /* Safari support */
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+.sidebar a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.sidebar a:hover {
+  color: #a9d8ff;
+  text-decoration: underline;
+}
+
+/* Main Layout */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 20px;
+  margin-left: 280px; /* Leaves room for sidebar */
+}
+
+/* Card Sections */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  max-width: 900px;
+  padding: 24px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Typography */
+h2 {
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+p {
+  margin-bottom: 12px;
+}
+
+.notes {
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Image Layouts */
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.image-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.image-row figure,
+.image-grid figure {
+  flex: 1 1 30%;
+  text-align: center;
+  background: #0f1118;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.image-row img,
+.image-grid img {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+figcaption {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px 0;
+  font-size: 0.85rem;
+}
+
+/* Responsive: Sidebar collapses on small screens */
+@media (max-width: 900px) {
+  .sidebar {
+    position: static;
+    width: 100%;
+    border-radius: 0;
+    background: rgba(20, 24, 35, 0.95);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .container {
+    margin-left: 0;
+  }
+}
