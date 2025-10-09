@@ -65,7 +65,140 @@
     </section>
 
     <!-- Placeholders for next parts -->
-    <section id="partA2" class="card"><h2>A.2 – Recover Homographies</h2></section>
+    <section id="partA2" class="card"><h2>A.2 – Recover Homographies</h2>
+      <p>
+    Before warping the images into alignment, I first need to recover the parameters of the 
+    <b>projective transformation</b> (homography) that maps points from one image to another. 
+    The goal is to find a 3×3 matrix <b>H</b> such that \( p' = H p \), where \(p = [x, y, 1]^T\) 
+    and \(p' = [u, v, 1]^T\).
+  </p>
+
+  <h3>1. Homography Definition</h3>
+  <p>
+    Since the last entry can be fixed to 1, the matrix has eight unknowns:
+  </p>
+  <p class="math-block">
+    \[
+    H =
+    \begin{bmatrix}
+    h_1 & h_2 & h_3 \\
+    h_4 & h_5 & h_6 \\
+    h_7 & h_8 & 1
+    \end{bmatrix}
+    \]
+  </p>
+
+  <p>
+    Expanding the homogeneous relation \(p' = H p\) yields:
+  </p>
+
+  <p class="math-block">
+    \[
+    \begin{cases}
+    u = \frac{h_1 x + h_2 y + h_3}{h_7 x + h_8 y + 1}, \\[6pt]
+    v = \frac{h_4 x + h_5 y + h_6}{h_7 x + h_8 y + 1}.
+    \end{cases}
+    \]
+  </p>
+
+  <p>
+    Multiplying through by the denominators gives two linear equations per correspondence:
+  </p>
+
+  <p class="math-block">
+    \[
+    \begin{cases}
+    x h_1 + y h_2 + h_3 - u x h_7 - u y h_8 = u,\\[6pt]
+    x h_4 + y h_5 + h_6 - v x h_7 - v y h_8 = v.
+    \end{cases}
+    \]
+  </p>
+
+  <h3>2. Constructing the Linear System</h3>
+  <p>
+    Each correspondence contributes two rows to a matrix <b>A</b> and a right-hand side vector <b>b</b>:
+  </p>
+
+  <p class="math-block">
+    \[
+    A_i =
+    \begin{bmatrix}
+    x_i & y_i & 1 & 0 & 0 & 0 & -u_i x_i & -u_i y_i\\
+    0 & 0 & 0 & x_i & y_i & 1 & -v_i x_i & -v_i y_i
+    \end{bmatrix},\quad
+    b_i =
+    \begin{bmatrix}
+    u_i \\ v_i
+    \end{bmatrix}
+    \]
+  </p>
+
+  <p>
+    Stacking all n point correspondences, we form the full system:
+  </p>
+
+  <p class="math-block">
+    \[
+    A\,h = b,\quad
+    A \in \mathbb{R}^{2n \times 8},\;
+    h = [h_1,h_2,h_3,h_4,h_5,h_6,h_7,h_8]^T.
+    \]
+  </p>
+
+  <p>
+    For four points, the system can be solved exactly, but for stability and robustness, 
+    I use <b>more than four correspondences</b> and solve the overdetermined system using 
+    the least-squares solution:
+  </p>
+
+  <p class="math-block">
+    \[
+    h = (A^T A)^{-1} A^T b.
+    \]
+  </p>
+
+  <p>
+    Finally, the solution vector \(h\) is reshaped into the 3×3 matrix \(H\) by appending the bottom row \([0,0,1]\):
+  </p>
+
+  <p class="math-block">
+    \[
+    H =
+    \begin{bmatrix}
+    h_1 & h_2 & h_3\\
+    h_4 & h_5 & h_6\\
+    h_7 & h_8 & 1
+    \end{bmatrix}.
+    \]
+  </p>
+
+  <h3>3. Visualizing Point Correspondences</h3>
+  <p>
+    To confirm the accuracy of the selected correspondences, I plotted both images side by side 
+    and connected matching feature points with <b>red lines</b>. I manually chose 
+    <b>eight pairs</b> of distinctive points such as piano edges, window corners, and structural intersections. 
+    The resulting visualization clearly shows consistent geometric alignment between the two images, 
+    ensuring that the computed homography captures the correct perspective transformation.
+  </p>
+
+  <div class="notes">
+    Overall, this procedure establishes the mathematical foundation for projective alignment. 
+    The recovered homography matrix \(H\) accurately transforms coordinates between two overlapping images, 
+    enabling seamless warping and blending in later stages.
+  </div>
+</section>
+
+<!-- MathJax for LaTeX equations -->
+<script>
+window.MathJax = {
+  tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+  svg: {fontCache: 'global'}
+};
+</script>
+<script id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+    </section>
     <section id="partA3" class="card"><h2>A.3 – Warp the Images</h2></section>
     <section id="partA4" class="card"><h2>A.4 – Blend into a Mosaic</h2></section>
   </main>
