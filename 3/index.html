@@ -297,7 +297,7 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
     To validate the homography and warping pipeline, I performed <b>rectification</b> — 
     mapping slanted rectangular planes into a fronto-parallel view. For each case, 
     I clicked the four corner points of an oblique rectangle (<code>im1_pts</code>) and 
-    mapped them to a square grid (<code>im2_pts = [[0,0],[0,1],[1,0],[1,1]]</code>).
+    mapped them to a rectangular grid.
   </p>
 
   <p>
@@ -306,24 +306,19 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
   </p>
 
   <figure style="text-align:center; margin:20px 0;">
-    <img src="rectification_before.png"
-         alt="Rectification before"
+    <img src="tv_rectified_bilinear.png"
+         alt="Rectification before_and_after"
          style="max-width:85%; border-radius:10px; border:1px solid var(--border);
                 box-shadow:0 0 10px rgba(0,0,0,0.4); margin-bottom:10px;">
-    <img src="rectification_after.png"
-         alt="Rectification after"
+  
+    <img src="box_rectified_bilinear.png"
+         alt="Rectification before_and_after"
          style="max-width:85%; border-radius:10px; border:1px solid var(--border);
                 box-shadow:0 0 10px rgba(0,0,0,0.4);">
     <figcaption style="color:var(--muted); margin-top:8px;">
       Rectification results — transforming a tilted rectangle into a true front-facing view.
     </figcaption>
   </figure>
-
-  <div class="notes">
-    The rectification step confirms that both interpolation methods handle projective 
-    transformations correctly. Bilinear produces smoother intensity transitions, while 
-    Nearest Neighbor prioritizes computational speed.
-  </div>
 </section>
     <section id="partA4" class="card"><h2>A.4 – Blend into a Mosaic</h2></section>
   </main>
