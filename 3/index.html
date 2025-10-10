@@ -296,7 +296,7 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
   <p>
     To validate the homography and warping pipeline, I performed <b>rectification</b> — 
     mapping slanted rectangular planes into a fronto-parallel view. For each case, 
-    I clicked the four corner points of an oblique rectangle (<code>im1_pts</code>) and 
+    I clicked the four corner points of an oblique rectangle and 
     mapped them to a rectangular grid.
   </p>
 
@@ -315,9 +315,6 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
          alt="Rectification before_and_after"
          style="max-width:85%; border-radius:10px; border:1px solid var(--border);
                 box-shadow:0 0 10px rgba(0,0,0,0.4);">
-    <figcaption style="color:var(--muted); margin-top:8px;">
-      Rectification results — transforming a tilted rectangle into a true front-facing view.
-    </figcaption>
   </figure>
 </section>
     <section id="partA4" class="card"><h2>A.4 – Blend into a Mosaic</h2></section>
