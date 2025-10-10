@@ -317,7 +317,63 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
                 box-shadow:0 0 10px rgba(0,0,0,0.4);">
   </figure>
 </section>
-    <section id="partA4" class="card"><h2>A.4 – Blend into a Mosaic</h2></section>
+    <section id="partA4" class="card"><h2>A.4 – Blend into a Mosaic</h2>
+      <p>
+    In <b>Part A.4</b>, the blending process creates a seamless mosaic by first warping all three 
+    piano images — left, middle, and right — into a <b>common coordinate system</b> defined by 
+    the middle image. Using the precomputed homographies 
+    \(H_{left \rightarrow mid}\) and \(H_{right \rightarrow mid}\), 
+    each image (and its binary mask) is projected onto a large 
+    <b>global canvas</b> using my <code>warpImageBilinear(im, H)</code> function.
+  </p>
+
+  <p>
+    Once all warped images share the same size \((H, W)\), each mask is converted into a 
+    <b>soft alpha mask</b> using a distance transform and Gaussian blur to create smooth 
+    fall-offs along the edges. This prevents visible seams and ensures gradual transitions 
+    between overlapping regions.
+  </p>
+
+  <p>
+    These smoothed masks are normalized and used as pixel-wise blending weights in the formula:
+  </p>
+
+  <p class="math-block">
+    \[
+    \text{blend}(x,y) = 
+    \frac{\sum_i I_i(x,y)\,\alpha_i(x,y)}{\sum_i \alpha_i(x,y)}
+    \]
+  </p>
+
+  <p>
+    This weighted blending ensures that overlapping regions are <b>averaged proportionally</b> 
+    rather than overwritten. Finally, the resulting mosaic is <b>auto-cropped</b> to remove 
+    black borders, producing a clean, naturally blended panorama that combines all three views 
+    into one continuous image.
+  </p>
+
+  <!-- ========================= -->
+  <!-- Mosaic Results -->
+  <!-- ========================= -->
+  <figure style="text-align:center; margin:24px 0;">
+    <img src="mosaic_left_mid.png"
+         alt="Left and Middle Mosaic"
+         style="max-width:90%; border-radius:10px; border:1px solid var(--border);
+                box-shadow:0 0 10px rgba(0,0,0,0.4); margin-bottom:16px;">
+    <img src="mosaic_right_mid.png"
+         alt="Right and Middle Mosaic"
+         style="max-width:90%; border-radius:10px; border:1px solid var(--border);
+                box-shadow:0 0 10px rgba(0,0,0,0.4); margin-bottom:16px;">
+    <img src="mosaic_final.png"
+         alt="Final Blended Mosaic"
+         style="max-width:90%; border-radius:10px; border:1px solid var(--border);
+                box-shadow:0 0 10px rgba(0,0,0,0.4);">
+    <figcaption style="color:var(--muted); margin-top:8px;">
+      Final blended results — smooth transition across left, middle, and right piano images.
+    </figcaption>
+  </figure>
+    
+    </section>
   </main>
 
   <!-- ===== FOOTER ===== -->
