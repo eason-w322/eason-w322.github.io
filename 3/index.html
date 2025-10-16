@@ -556,6 +556,30 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
     </figure>
   </div>
 
+      <h3>Manual vs. Automatic Stitching — Observations</h3>
+  <p>
+    Overall, the <b>automatic (features + RANSAC)</b> pipeline produced cleaner alignment on my
+    <b>view</b> and <b>piano</b> sets. With plenty of textured edges and repeated corners, the
+    descriptor matches were distinctive, RANSAC found a large inlier set, and the final homographies
+    aligned lines and surfaces with fewer ghosting artifacts than my manual picks.
+  </p>
+  <p>
+    On the <b>Soda</b> set, however, my <b>manual</b> correspondences performed slightly better.
+    This scene has more repetitive/reflective regions and lower local texture, so the feature
+    descriptors produced more ambiguous matches. As a result, the automatic pipeline retained fewer
+    reliable inliers and the estimated homography left small misalignments along edges. Carefully
+    placed manual points on stable structures (e.g., distinct corners/edges at different depths)
+    yielded a more consistent alignment here.
+  </p>
+  <ul>
+    <li><b>Auto better (View, Piano):</b> abundant texture &amp; strong corners → distinctive matches → robust RANSAC fit.</li>
+    <li><b>Manual better (Soda):</b> repetitive patterns/lighting changes → ambiguous matches → fewer inliers, slight drift.</li>
+  </ul>
+  <p class="notes">
+    Takeaway: automatic stitching excels with rich, distinctive features; manual selection can still
+    win in scenes with repetitive texture, specular highlights, or sparse features.
+  </p>
+
   <p class="notes">
     Deliverables: implement 4-point RANSAC, compare manual vs automatic stitching; show ≥3 automatic mosaics.
   </p>
