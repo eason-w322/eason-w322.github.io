@@ -312,3 +312,32 @@ footer {
   gap: 8px;
   font-variant-numeric: tabular-nums;
 }
+/* --- Part B.3 image normalization --- */
+#partB3 .image-grid {
+  grid-template-columns: 1fr 1fr; /* force a true two-up layout on wide screens */
+  gap: 16px;
+}
+
+#partB3 .b3-figure {
+  background: rgba(20, 25, 35, 0.8);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 12px rgba(0,0,0,0.4);
+}
+
+#partB3 .b3-img {
+  width: 100%;
+  height: 260px;          /* same visual height for both */
+  object-fit: contain;    /* keep aspect ratio; letterbox if needed */
+  background: #0b0e13;    /* nice matte behind letterboxed areas */
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  display: block;
+}
+
+/* Make it flexible on small screens */
+@media (max-width: 900px) {
+  #partB3 .image-grid { grid-template-columns: 1fr; }
+  #partB3 .b3-img { height: 220px; }
+}
