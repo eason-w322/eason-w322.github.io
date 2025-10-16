@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CS180 Project 3: Image Warping and Mosaicing</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
 </head>
 
 <body>
@@ -21,6 +21,11 @@
       <li><a href="#partA2">A.2 – Recover Homographies</a></li>
       <li><a href="#partA3">A.3 – Warp the Images</a></li>
       <li><a href="#partA4">A.4 – Blend into a Mosaic</a></li>
+      <!-- Part B links -->
+      <li><a href="#partB1">B.1 – Harris & ANMS</a></li>
+      <li><a href="#partB2">B.2 – Descriptors</a></li>
+      <li><a href="#partB3">B.3 – Feature Matching</a></li>
+      <li><a href="#partB4">B.4 – RANSAC & Mosaics</a></li>
     </ul>
   </nav>
 
@@ -64,318 +69,380 @@
       </div>
     </section>
 
-    <!-- Placeholders for next parts -->
-    <section id="partA2" class="card"><h2>A.2 – Recover Homographies</h2>
+    <!-- ===== Part A.2 Section ===== -->
+    <section id="partA2" class="card">
+      <h2>A.2 – Recover Homographies</h2>
       <p>
-    Before warping the images into alignment, I first need to recover the parameters of the 
-    <b>projective transformation</b> (homography) that maps points from one image to another. 
-    The goal is to find a 3×3 matrix <b>H</b> such that \( p' = H p \), where \(p = [x, y, 1]^T\) 
-    and \(p' = [u, v, 1]^T\).
-  </p>
+        Before warping the images into alignment, I first need to recover the parameters of the 
+        <b>projective transformation</b> (homography) that maps points from one image to another. 
+        The goal is to find a 3×3 matrix <b>H</b> such that \( p' = H p \), where \(p = [x, y, 1]^T\) 
+        and \(p' = [u, v, 1]^T\).
+      </p>
 
-  <h3>1. Homography Definition</h3>
-  <p>
-    Since the last entry can be fixed to 1, the matrix has eight unknowns:
-  </p>
-  <p class="math-block">
-    \[
-    H =
-    \begin{bmatrix}
-    h_1 & h_2 & h_3 \\
-    h_4 & h_5 & h_6 \\
-    h_7 & h_8 & 1
-    \end{bmatrix}
-    \]
-  </p>
+      <h3>1. Homography Definition</h3>
+      <p>
+        Since the last entry can be fixed to 1, the matrix has eight unknowns:
+      </p>
 
-  <p>
-    Expanding the homogeneous relation \(p' = H p\) yields:
-  </p>
+      <p class="math-block">
+        \[
+        H =
+        \begin{bmatrix}
+        h_1 & h_2 & h_3 \\
+        h_4 & h_5 & h_6 \\
+        h_7 & h_8 & 1
+        \end{bmatrix}
+        \]
+      </p>
 
-  <p class="math-block">
-    \[
-    \begin{cases}
-    u = \frac{h_1 x + h_2 y + h_3}{h_7 x + h_8 y + 1}, \\[6pt]
-    v = \frac{h_4 x + h_5 y + h_6}{h_7 x + h_8 y + 1}.
-    \end{cases}
-    \]
-  </p>
+      <p>
+        Expanding the homogeneous relation \(p' = H p\) yields:
+      </p>
 
-  <p>
-    Multiplying through by the denominators gives two linear equations per correspondence:
-  </p>
+      <p class="math-block">
+        \[
+        \begin{cases}
+        u = \frac{h_1 x + h_2 y + h_3}{h_7 x + h_8 y + 1}, \\[6pt]
+        v = \frac{h_4 x + h_5 y + h_6}{h_7 x + h_8 y + 1}.
+        \end{cases}
+        \]
+      </p>
 
-  <p class="math-block">
-    \[
-    \begin{cases}
-    x h_1 + y h_2 + h_3 - u x h_7 - u y h_8 = u,\\[6pt]
-    x h_4 + y h_5 + h_6 - v x h_7 - v y h_8 = v.
-    \end{cases}
-    \]
-  </p>
+      <p>
+        Multiplying through by the denominators gives two linear equations per correspondence:
+      </p>
 
-  <h3>2. Constructing the Linear System</h3>
-  <p>
-    Each correspondence contributes two rows to a matrix <b>A</b> and a right-hand side vector <b>b</b>:
-  </p>
+      <p class="math-block">
+        \[
+        \begin{cases}
+        x h_1 + y h_2 + h_3 - u x h_7 - u y h_8 = u,\\[6pt]
+        x h_4 + y h_5 + h_6 - v x h_7 - v y h_8 = v.
+        \end{cases}
+        \]
+      </p>
 
-  <p class="math-block">
-    \[
-    A_i =
-    \begin{bmatrix}
-    x_i & y_i & 1 & 0 & 0 & 0 & -u_i x_i & -u_i y_i\\
-    0 & 0 & 0 & x_i & y_i & 1 & -v_i x_i & -v_i y_i
-    \end{bmatrix},\quad
-    b_i =
-    \begin{bmatrix}
-    u_i \\ v_i
-    \end{bmatrix}
-    \]
-  </p>
+      <h3>2. Constructing the Linear System</h3>
+      <p>
+        Each correspondence contributes two rows to a matrix <b>A</b> and a right-hand side vector <b>b</b>:
+      </p>
 
-  <p>
-    Stacking all n point correspondences, we form the full system:
-  </p>
+      <p class="math-block">
+        \[
+        A_i =
+        \begin{bmatrix}
+        x_i & y_i & 1 & 0 & 0 & 0 & -u_i x_i & -u_i y_i\\
+        0 & 0 & 0 & x_i & y_i & 1 & -v_i x_i & -v_i y_i
+        \end{bmatrix},\quad
+        b_i =
+        \begin{bmatrix}
+        u_i \\ v_i
+        \end{bmatrix}
+        \]
+      </p>
 
-  <p class="math-block">
-    \[
-    A\,h = b,\quad
-    A \in \mathbb{R}^{2n \times 8},\;
-    h = [h_1,h_2,h_3,h_4,h_5,h_6,h_7,h_8]^T.
-    \]
-  </p>
+      <p>
+        Stacking all n point correspondences, we form the full system:
+      </p>
 
-  <p>
-    For four points, the system can be solved exactly, but for stability and robustness, 
-    I use <b>more than four correspondences</b> and solve the overdetermined system using 
-    the least-squares solution:
-  </p>
+      <p class="math-block">
+        \[
+        A\,h = b,\quad
+        A \in \mathbb{R}^{2n \times 8},\;
+        h = [h_1,h_2,h_3,h_4,h_5,h_6,h_7,h_8]^T.
+        \]
+      </p>
 
-  <p class="math-block">
-    \[
-    h = (A^T A)^{-1} A^T b.
-    \]
-  </p>
+      <p>
+        For four points, the system can be solved exactly, but for stability and robustness, 
+        I use <b>more than four correspondences</b> and solve the overdetermined system using 
+        the least-squares solution:
+      </p>
 
-  <p>
-    Finally, the solution vector \(h\) is reshaped into the 3×3 matrix \(H\) by appending the bottom row \([0,0,1]\):
-  </p>
+      <p class="math-block">
+        \[
+        h = (A^T A)^{-1} A^T b.
+        \]
+      </p>
 
-  <p class="math-block">
-    \[
-    H =
-    \begin{bmatrix}
-    h_1 & h_2 & h_3\\
-    h_4 & h_5 & h_6\\
-    h_7 & h_8 & 1
-    \end{bmatrix}.
-    \]
-  </p>
+      <p>
+        Finally, the solution vector \(h\) is reshaped into the 3×3 matrix \(H\) by appending the bottom row \([0,0,1]\):
+      </p>
 
-  <h3>3. Visualizing Point Correspondences</h3>
-  <p>
-    To verify the quality of the selected correspondences, I plotted both images side by side and 
-    connected matching feature points using <b>red lines</b>. I manually chose 
-    <b>eight pairs</b> of distinctive features such as piano corners, window edges, and structural intersections. 
-    The visualization clearly demonstrates consistent geometry between the two images, confirming that the 
-    computed homography accurately models the perspective transformation.
-  </p>
+      <p class="math-block">
+        \[
+        H =
+        \begin{bmatrix}
+        h_1 & h_2 & h_3\\
+        h_4 & h_5 & h_6\\
+        h_7 & h_8 & 1
+        \end{bmatrix}.
+        \]
+      </p>
 
-  <figure style="text-align: center; margin: 20px 0;">
-    <img src="piano1_to_piano2_correspondences_ls.png" alt="piano1 to piano2 correspondences" style="max-width: 90%; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 0 10px rgba(0,0,0,0.4);">
-    <figcaption style="color: var(--muted); margin-top: 8px;">
-      piano1 → piano2 Correspondences 
-    </figcaption>
-  </figure>
+      <h3>3. Visualizing Point Correspondences</h3>
+      <p>
+        To verify the quality of the selected correspondences, I plotted both images side by side and 
+        connected matching feature points using <b>red lines</b>. I manually chose 
+        <b>eight pairs</b> of distinctive features such as piano corners, window edges, and structural intersections. 
+        The visualization clearly demonstrates consistent geometry between the two images, confirming that the 
+        computed homography accurately models the perspective transformation.
+      </p>
 
-  <h3>4. Recovered Homography Matrix</h3>
-  <p>
-    The estimated homography matrix \(H\) for the piano1 → piano2 transformation is:
-  </p>
+      <figure style="text-align: center; margin: 20px 0;">
+        <img src="piano1_to_piano2_correspondences_ls.png" alt="piano1 to piano2 correspondences" style="max-width: 90%; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 0 10px rgba(0,0,0,0.4);">
+        <figcaption style="color: var(--muted); margin-top: 8px;">
+          piano1 → piano2 Correspondences 
+        </figcaption>
+      </figure>
 
-  <p class="math-block">
-    \[
-    H =
-    \begin{bmatrix}
-    1.9173 & 0.0029 & -1088.9868 \\[4pt]
-    0.3469 & 1.5827 & -380.8842 \\[4pt]
-    0.0005 & -0.000005 & 1.0000
-    \end{bmatrix}
-    \]
-  </p>
-</section>
+      <h3>4. Recovered Homography Matrix</h3>
+      <p>
+        The estimated homography matrix \(H\) for the piano1 → piano2 transformation is:
+      </p>
 
-<!-- MathJax for LaTeX equations -->
-<script>
-window.MathJax = {
-  tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
-  svg: {fontCache: 'global'}
-};
-</script>
-<script id="MathJax-script" async
-  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
+      <p class="math-block">
+        \[
+        H =
+        \begin{bmatrix}
+        1.9173 & 0.0029 & -1088.9868 \\[4pt]
+        0.3469 & 1.5827 & -380.8842 \\[4pt]
+        0.0005 & -0.000005 & 1.0000
+        \end{bmatrix}
+        \]
+      </p>
+
+      <!-- MathJax for LaTeX equations -->
+      <script>
+        window.MathJax = {
+          tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+          svg: {fontCache: 'global'}
+        };
+      </script>
+      <script id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+      </script>
     </section>
-    <section id="partA3" class="card"><h2>A.3 – Warp the Images</h2>
+
+    <!-- ===== Part A.3 Section ===== -->
+    <section id="partA3" class="card">
+      <h2>A.3 – Warp the Images</h2>
       <p>
-    Using the recovered homography matrix \(H\), I warped each image into the reference frame 
-    through <b>inverse warping</b>. This approach maps every pixel in the target image to 
-    its corresponding coordinate in the source image, preventing holes in the output.
-  </p>
+        Using the recovered homography matrix \(H\), I warped each image into the reference frame 
+        through <b>inverse warping</b>. This approach maps every pixel in the target image to 
+        its corresponding coordinate in the source image, preventing holes in the output.
+      </p>
 
-  <!-- ========================= -->
-  <!-- A.3.1 Image Warping -->
-  <!-- ========================= -->
-  <h3>A.3.1 – Image Warping</h3>
+      <!-- ========================= -->
+      <!-- A.3.1 Image Warping -->
+      <!-- ========================= -->
+      <h3>A.3.1 – Image Warping</h3>
 
-  <p>
-    Two interpolation methods were implemented from scratch:
-  </p>
+      <p>
+        Two interpolation methods were implemented from scratch:
+      </p>
 
-  <ul>
-    <li><b>Nearest Neighbor:</b> rounds source coordinates to the nearest integer pixel.</li>
-    <li><b>Bilinear:</b> interpolates along the <i>x</i>-axis first, then the <i>y</i>-axis 
-        using a weighted average of four neighbors.</li>
-  </ul>
+      <ul>
+        <li><b>Nearest Neighbor:</b> rounds source coordinates to the nearest integer pixel.</li>
+        <li><b>Bilinear:</b> interpolates along the <i>x</i>-axis first, then the <i>y</i>-axis 
+            using a weighted average of four neighbors.</li>
+      </ul>
 
-  <p>
-    Both use inverse mapping defined by:
-  </p>
+      <p>
+        Both use inverse mapping defined by:
+      </p>
 
-  <p class="math-block">
-    \[
-    \begin{bmatrix}x \\ y \\ 1\end{bmatrix}
-    = H^{-1}
-    \begin{bmatrix}x' \\ y' \\ 1\end{bmatrix}
-    \]
-  </p>
+      <p class="math-block">
+        \[
+        \begin{bmatrix}x \\ y \\ 1\end{bmatrix}
+        = H^{-1}
+        \begin{bmatrix}x' \\ y' \\ 1\end{bmatrix}
+        \]
+      </p>
 
-  <div style="display: flex; flex-direction: column; gap: 20px;">
-    <div>
-      <p><b>Nearest Neighbor Sampling:</b></p>
-      <pre><code class="language-python">
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div>
+          <p><b>Nearest Neighbor Sampling:</b></p>
+          <pre><code class="language-python">
 x_nn, y_nn = int(round(x)), int(round(y))
 if 0 <= x_nn < w and 0 <= y_nn < h:
     warped[y_out, x_out] = im[y_nn, x_nn]
-      </code></pre>
-    </div>
+          </code></pre>
+        </div>
 
-    <div>
-      <p><b>Bilinear Interpolation:</b></p>
-      <pre><code class="language-python">
+        <div>
+          <p><b>Bilinear Interpolation:</b></p>
+          <pre><code class="language-python">
 x0, y0 = int(np.floor(x)), int(np.floor(y))
 dx, dy = x - x0, y - y0
 
 I_top = (1-dx)*im[y0, x0] + dx*im[y0, x0+1]
 I_bottom = (1-dx)*im[y0+1, x0] + dx*im[y0+1, x0+1]
 warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
-      </code></pre>
-    </div>
-  </div>
+          </code></pre>
+        </div>
+      </div>
 
-  <figure style="text-align:center; margin:24px 0;">
-    <img src="piano_middle_to_piano_right.png"
-         alt="Warp result Nearest Neighbor vs Bilinear"
-         style="max-width:90%; border-radius:10px; border:1px solid var(--border);
-                box-shadow:0 0 10px rgba(0,0,0,0.4);">
-    <figcaption style="color:var(--muted); margin-top:8px;">
-      Comparison of Nearest Neighbor (12.26 s) and Bilinear (24.61 s) Warps
-    </figcaption>
-  </figure>
+      <figure style="text-align:center; margin:24px 0;">
+        <img src="piano_middle_to_piano_right.png"
+             alt="Warp result Nearest Neighbor vs Bilinear"
+             style="max-width:90%; border-radius:10px; border:1px solid var(--border);
+                    box-shadow:0 0 10px rgba(0,0,0,0.4);">
+        <figcaption style="color:var(--muted); margin-top:8px;">
+          Comparison of Nearest Neighbor (12.26 s) and Bilinear (24.61 s) Warps
+        </figcaption>
+      </figure>
 
-  <p>
-    The Nearest Neighbor method executes faster but introduces blocky edges and aliasing. 
-    Bilinear interpolation, though roughly twice as slow, yields smoother and more realistic results.
-  </p>
-
-  <!-- ========================= -->
-  <!-- A.3.2 Rectification -->
-  <!-- ========================= -->
-  <h3>A.3.2 – Image Rectification</h3>
-
-  <p>
-    To validate the homography and warping pipeline, I performed <b>rectification</b> — 
-    mapping slanted rectangular planes into a fronto-parallel view. For each case, 
-    I clicked the four corner points of an oblique rectangle and 
-    mapped them to a rectangular grid.
-  </p>
-
-  <p>
-    The resulting homography straightens the perspective, confirming correct inverse 
-    warping and interpolation behavior.
-  </p>
-
-  <figure style="text-align:center; margin:20px 0;">
-    <img src="tv_rectified_bilinear.png"
-         alt="Rectification before_and_after"
-         style="max-width:85%; border-radius:10px; border:1px solid var(--border);
-                box-shadow:0 0 10px rgba(0,0,0,0.4); margin-bottom:10px;">
-  
-    <img src="box_rectified_bilinear.png"
-         alt="Rectification before_and_after"
-         style="max-width:85%; border-radius:10px; border:1px solid var(--border);
-                box-shadow:0 0 10px rgba(0,0,0,0.4);">
-  </figure>
-</section>
-    <section id="partA4" class="card"><h2>A.4 – Blend into a Mosaic</h2>
       <p>
-    In <b>Part A.4</b>, the blending process creates a seamless mosaic by first warping all three
-    piano images—left, middle, and right—into a <b>common coordinate system</b> defined by
-    the middle image. Using the precomputed homographies
-    \(H_{left \rightarrow mid}\) and \(H_{right \rightarrow mid}\),
-    each image (and its binary mask) is projected onto a large
-    <b>global canvas</b> using my <code>warpImageBilinear(im, H)</code> function.
-  </p>
+        The Nearest Neighbor method executes faster but introduces blocky edges and aliasing. 
+        Bilinear interpolation, though roughly twice as slow, yields smoother and more realistic results.
+      </p>
 
-  <p>
-    Once all warped images share the same size \((H, W)\), each mask is converted into a
-    <b>soft alpha mask</b> using a distance transform and Gaussian blur to create smooth
-    fall-offs along edges. This prevents visible seams and ensures gradual transitions
-    between overlapping regions.
-  </p>
+      <!-- ========================= -->
+      <!-- A.3.2 Rectification -->
+      <!-- ========================= -->
+      <h3>A.3.2 – Image Rectification</h3>
 
-  <p>
-    These smoothed masks are normalized and used as pixel-wise blending weights in the formula:
-  </p>
+      <p>
+        To validate the homography and warping pipeline, I performed <b>rectification</b> — 
+        mapping slanted rectangular planes into a fronto-parallel view. For each case, 
+        I clicked the four corner points of an oblique rectangle and 
+        mapped them to a rectangular grid.
+      </p>
 
-  <p class="math-block" style="text-align:center; margin:24px 0;">
-    \[
-    \text{blend}(x,y) =
-    \frac{\sum_i I_i(x,y)\,\alpha_i(x,y)}{\sum_i \alpha_i(x,y)}
-    \]
-  </p>
+      <p>
+        The resulting homography straightens the perspective, confirming correct inverse 
+        warping and interpolation behavior.
+      </p>
 
-  <p>
-    This weighted blending ensures that overlapping regions are <b>averaged proportionally</b>
-    rather than overwritten. Finally, the resulting mosaic is <b>auto-cropped</b> to remove
-    black borders, producing a clean, naturally blended panorama that combines all three views
-    into one continuous image.
-  </p>
-
-  <!-- ========================= -->
-  <!-- Mosaic Results -->
-  <!-- ========================= -->
-  <div class="image-stack">
-    <figure>
-      <img src="piano_mosaic.png"
-           alt="Mosaic1">
-      <figcaption>Piano Mosaic</figcaption>
-    </figure>
-
-    <figure>
-      <img src="view_mosaic.png"
-           alt="Mosaic2">
-      <figcaption>View Mosaic</figcaption>
-    </figure>
-
-    <figure>
-      <img src="berkeley_mosaic.png"
-           alt="Mosaic3">
-      <figcaption>Berkeley Mosaic</figcaption>
-    </figure>
-  </div>
-    
+      <figure style="text-align:center; margin:20px 0;">
+        <img src="tv_rectified_bilinear.png"
+             alt="Rectification before_and_after"
+             style="max-width:85%; border-radius:10px; border:1px solid var(--border);
+                    box-shadow:0 0 10px rgba(0,0,0,0.4); margin-bottom:10px;">
+      
+        <img src="box_rectified_bilinear.png"
+             alt="Rectification before_and_after"
+             style="max-width:85%; border-radius:10px; border:1px solid var(--border);
+                    box-shadow:0 0 10px rgba(0,0,0,0.4);">
+      </figure>
     </section>
+
+    <!-- ===== Part A.4 Section ===== -->
+    <section id="partA4" class="card">
+      <h2>A.4 – Blend into a Mosaic</h2>
+      <p>
+        In <b>Part A.4</b>, the blending process creates a seamless mosaic by first warping all three
+        piano images—left, middle, and right—into a <b>common coordinate system</b> defined by
+        the middle image. Using the precomputed homographies
+        \(H_{left \rightarrow mid}\) and \(H_{right \rightarrow mid}\),
+        each image (and its binary mask) is projected onto a large
+        <b>global canvas</b> using my <code>warpImageBilinear(im, H)</code> function.
+      </p>
+
+      <p>
+        Once all warped images share the same size \((H, W)\), each mask is converted into a
+        <b>soft alpha mask</b> using a distance transform and Gaussian blur to create smooth
+        fall-offs along edges. This prevents visible seams and ensures gradual transitions
+        between overlapping regions.
+      </p>
+
+      <p>
+        These smoothed masks are normalized and used as pixel-wise blending weights in the formula:
+      </p>
+
+      <p class="math-block" style="text-align:center; margin:24px 0;">
+        \[
+        \text{blend}(x,y) =
+        \frac{\sum_i I_i(x,y)\,\alpha_i(x,y)}{\sum_i \alpha_i(x,y)}
+        \]
+      </p>
+
+      <p>
+        This weighted blending ensures that overlapping regions are <b>averaged proportionally</b>
+        rather than overwritten. Finally, the resulting mosaic is <b>auto-cropped</b> to remove
+        black borders, producing a clean, naturally blended panorama that combines all three views
+        into one continuous image.
+      </p>
+
+      <!-- ========================= -->
+      <!-- Mosaic Results -->
+      <!-- ========================= -->
+      <div class="image-stack">
+        <figure>
+          <img src="piano_mosaic.png" alt="Mosaic1">
+          <figcaption>Piano Mosaic</figcaption>
+        </figure>
+
+        <figure>
+          <img src="view_mosaic.png" alt="Mosaic2">
+          <figcaption>View Mosaic</figcaption>
+        </figure>
+
+        <figure>
+          <img src="berkeley_mosaic.png" alt="Mosaic3">
+          <figcaption>Berkeley Mosaic</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===== Part B.1 – Harris & ANMS ===== -->
+    <section id="partB1" class="card">
+      <h2>B.1 – Harris Corner Detection & Adaptive Non-Maximal Suppression (ANMS)</h2>
+      <p class="subtitle">
+        Following Brown et al., <em>“Multi-Image Matching using Multi-Scale Oriented Patches,”</em>
+        I detect single-scale Harris interest points (no sub-pixel refinement), overlay them on the image,
+        then apply ANMS to obtain a spatially well-distributed subset.
+      </p>
+      <div class="callout"><b>Deliverables:</b> Detected corners overlaid on the image, with and without ANMS.</div>
+
+      <div class="b1-grid">
+        <!-- Left column: Harris only -->
+        <div class="b1-col">
+          <h3>Before ANMS (Harris only)</h3>
+
+          <figure class="b1-figure">
+            <img src="assets/b1/harris_overlay_1.png" alt="Harris corners overlay — Image 1">
+            <figcaption><span>Image 1 — Harris</span><span>σ=1, k=0.04, thr=0.02</span></figcaption>
+          </figure>
+
+          <figure class="b1-figure">
+            <img src="assets/b1/harris_overlay_2.png" alt="Harris corners overlay — Image 2">
+            <figcaption><span>Image 2 — Harris</span><span>σ=1, k=0.04, thr=0.02</span></figcaption>
+          </figure>
+
+          <figure class="b1-figure">
+            <img src="assets/b1/harris_overlay_3.png" alt="Harris corners overlay — Image 3">
+            <figcaption><span>Image 3 — Harris</span><span>σ=1, k=0.04, thr=0.02</span></figcaption>
+          </figure>
+        </div>
+
+        <!-- Right column: After ANMS -->
+        <div class="b1-col">
+          <h3>After ANMS (selected corners)</h3>
+
+          <figure class="b1-figure">
+            <img src="assets/b1/anms_overlay_1.png" alt="ANMS-selected corners — Image 1">
+            <figcaption><span>Image 1 — ANMS</span><span>N≈<i>tuned</i>, r<sub>min</sub>≈<i>tuned</i></span></figcaption>
+          </figure>
+
+          <figure class="b1-figure">
+            <img src="assets/b1/anms_overlay_2.png" alt="ANMS-selected corners — Image 2">
+            <figcaption><span>Image 2 — ANMS</span><span>N≈<i>tuned</i>, r<sub>min</sub>≈<i>tuned</i></span></figcaption>
+          </figure>
+
+          <figure class="b1-figure">
+            <img src="assets/b1/anms_overlay_3.png" alt="ANMS-selected corners — Image 3">
+            <figcaption><span>Image 3 — ANMS</span><span>N≈<i>tuned</i>, r<sub>min</sub>≈<i>tuned</i></span></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- Optional placeholders for B.2–B.4 (to be filled next) -->
+    <section id="partB2" class="card" style="display:none;"><h2>B.2 – Descriptors</h2></section>
+    <section id="partB3" class="card" style="display:none;"><h2>B.3 – Feature Matching</h2></section>
+    <section id="partB4" class="card" style="display:none;"><h2>B.4 – RANSAC & Mosaics</h2></section>
+
   </main>
 
   <!-- ===== FOOTER ===== -->
