@@ -474,10 +474,6 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
   <h2>B.3 – Feature Matching</h2>
 
   <p class="subtitle">
-    I match features by comparing each descriptor from <b>Image 1</b> to all descriptors in <b>Image 2</b>
-    using Euclidean (L2) distance.
-  </p>
-
   <p>
     For a descriptor \( \mathbf{f} \) in Image&nbsp;1, I find its nearest neighbor distance \(d_1\) and
     second-nearest \(d_2\) among Image&nbsp;2 descriptors. I accept a match if the
