@@ -389,9 +389,15 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
     <section id="partB1" class="card">
       <h2>B.1 – Harris Corner Detection & Adaptive Non-Maximal Suppression (ANMS)</h2>
       <p class="subtitle">
-        Following Brown et al., <em>“Multi-Image Matching using Multi-Scale Oriented Patches,”</em>
-        I detect single-scale Harris interest points (no sub-pixel refinement), overlay them on the image,
-        then apply ANMS to obtain a spatially well-distributed subset.
+        <p>
+  I detect single-scale Harris corners using <code>harris.py</code>. To reduce clutter from densely clustered responses,
+  I increase <code>min_distance</code> from <code>1</code> to <code>5</code> so nearby peaks don’t all get selected.
+  Next, I implement <b>Adaptive Non-Maximal Suppression (ANMS)</b>. For each corner \(i\) with response \(R_i\),
+  I compute its suppression radius \(r_i\) as the smallest distance to any neighboring corner \(j\) whose response is
+  at least \(0.9\,R_i\). Distances are computed with the provided <code>dist2</code> helper.
+  I then sort corners by \(r_i\) in descending order and keep the top set, yielding a spatially well-distributed subset.
+  The figures below show overlays <b>before</b> and <b>after</b> ANMS.
+</p>
       </p>
       <div class="callout"><b>Deliverables:</b> Detected corners overlaid on the image, with and without ANMS.</div>
 
