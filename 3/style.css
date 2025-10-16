@@ -256,3 +256,59 @@ footer {
     width: 100%;
   }
 }
+
+/* ---- Part B.1 layout ---- */
+#partB1 .subtitle { color: var(--muted); }
+#partB1 .callout {
+  margin: 10px 0 16px;
+  padding: 10px 14px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: rgba(20, 25, 35, 0.5);
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.b1-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+@media (min-width: 900px) {
+  .b1-grid { grid-template-columns: 1fr 1fr; }
+}
+.b1-col {
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+.b1-col h3 {
+  color: var(--text);
+  font-size: 1.05rem;
+  margin-bottom: 2px;
+}
+
+/* Reuse card look for figures */
+.b1-figure {
+  background: rgba(20, 25, 35, 0.8);
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+.b1-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  display: block;
+}
+.b1-figure figcaption {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
