@@ -500,7 +500,66 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
   </div>
 
 </section>
-    <section id="partB4" class="card" style="display:none;"><h2>B.4 – RANSAC & Mosaics</h2></section>
+    <section id="partB4" class="card">
+  <h2>B.4 – RANSAC for Robust Homography</h2>
+
+  <p class="subtitle">
+    I estimate a robust homography with <b>4-point RANSAC</b> and then reuse my Part A pipeline
+    (bilinear inverse warping + blending) to build mosaics.
+  </p>
+
+  <p>
+    In each iteration, I randomly sample <b>4</b> matches from <code>match_features</code>, compute a candidate
+    homography \(\hat H\) (DLT), and count inliers: correspondences whose transfer error in Image&nbsp;2
+    is below a small pixel threshold \(\epsilon\).
+    After <b>2000</b> iterations I keep the model with the most inliers and
+    <b>re-estimate</b> the final \(H\) by least squares on all inliers. Finally, I warp with bilinear
+    interpolation and stitch the images to produce the panorama.
+  </p>
+
+  <ol>
+    <li>Repeat 2000×: sample 4 matches → compute \(\hat H\) → count inliers (error &lt; \(\epsilon\)).</li>
+    <li>Keep \(\hat H^*\) with the <b>max inliers</b>.</li>
+    <li>Refit <b>final</b> \(H\) on those inliers and mosaic with the Part A code.</li>
+  </ol>
+
+  <!-- Six very-wide panoramas stacked (each set: manual vs automatic) -->
+  <div class="image-stack">
+    <!-- Set 1 -->
+    <figure>
+      <img src="assets/b4/set1_manual.png" alt="Set 1 — Manual stitching (non-auto)">
+      <figcaption>Set 1 — Manual stitching (non-auto)</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/b4/set1_auto.png" alt="Set 1 — Automatic stitching (RANSAC + features)">
+      <figcaption>Set 1 — Automatic stitching (RANSAC + features)</figcaption>
+    </figure>
+
+    <!-- Set 2 -->
+    <figure>
+      <img src="assets/b4/set2_manual.png" alt="Set 2 — Manual stitching (non-auto)">
+      <figcaption>Set 2 — Manual stitching (non-auto)</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/b4/set2_auto.png" alt="Set 2 — Automatic stitching (RANSAC + features)">
+      <figcaption>Set 2 — Automatic stitching (RANSAC + features)</figcaption>
+    </figure>
+
+    <!-- Set 3 -->
+    <figure>
+      <img src="assets/b4/set3_manual.png" alt="Set 3 — Manual stitching (non-auto)">
+      <figcaption>Set 3 — Manual stitching (non-auto)</figcaption>
+    </figure>
+    <figure>
+      <img src="assets/b4/set3_auto.png" alt="Set 3 — Automatic stitching (RANSAC + features)">
+      <figcaption>Set 3 — Automatic stitching (RANSAC + features)</figcaption>
+    </figure>
+  </div>
+
+  <p class="notes">
+    Deliverables: implement 4-point RANSAC, compare manual vs automatic stitching; show ≥3 automatic mosaics.
+  </p>
+</section>
 
   </main>
 
