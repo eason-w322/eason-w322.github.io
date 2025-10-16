@@ -470,7 +470,43 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
   </div>
 
 </section>
-    <section id="partB3" class="card" style="display:none;"><h2>B.3 – Feature Matching</h2></section>
+    <section id="partB3" class="card">
+  <h2>B.3 – Feature Matching</h2>
+
+  <p class="subtitle">
+    I match features by comparing each descriptor from <b>Image 1</b> to all descriptors in <b>Image 2</b>
+    using Euclidean (L2) distance.
+  </p>
+
+  <p>
+    For a descriptor \( \mathbf{f} \) in Image&nbsp;1, I find its nearest neighbor distance \(d_1\) and
+    second-nearest \(d_2\) among Image&nbsp;2 descriptors. I accept a match if the
+    <b>Lowe ratio</b> \(d_1/d_2 < 0.52\). This favors distinctive matches and rejects ambiguous ones.
+    (Descriptors are mean/variance normalized, so L2 is a meaningful similarity measure.)
+  </p>
+
+  <ol>
+    <li>Compute all L2 distances from each Image&nbsp;1 descriptor to Image&nbsp;2 descriptors.</li>
+    <li>Record the best (\(d_1\)) and second-best (\(d_2\)) distances.</li>
+    <li>Apply ratio test: keep matches with \(d_1/d_2 < 0.52\).</li>
+  </ol>
+
+  <div class="image-grid">
+    <figure class="b1-figure">
+      <img src="assets/b3/matches_example_1.png" alt="Matched features between image pair — example 1">
+      <figcaption><span>Matched features — Pair 1</span><span>ratio&nbsp;&lt;&nbsp;0.52</span></figcaption>
+    </figure>
+
+    <figure class="b1-figure">
+      <img src="assets/b3/matches_example_2.png" alt="Matched features between image pair — example 2">
+      <figcaption><span>Matched features — Pair 2</span><span>ratio&nbsp;&lt;&nbsp;0.52</span></figcaption>
+    </figure>
+  </div>
+
+  <p class="notes">
+    Deliverable: show matched features between image pairs (after ratio test).
+  </p>
+</section>
     <section id="partB4" class="card" style="display:none;"><h2>B.4 – RANSAC & Mosaics</h2></section>
 
   </main>
