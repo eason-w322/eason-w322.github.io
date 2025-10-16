@@ -487,15 +487,18 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
     <li>Apply ratio test: keep matches with \(d_1/d_2 < 0.52\).</li>
   </ol>
 
-  <div class="image-grid">
-    <figure class="b3-figure">
-      <img src="descriptor_pair_gallery.png" alt="Matched features between image pair — example 1">
-    </figure>
-
-    <figure class="b3-figure">
-      <img src="colored_feature_matches.png" alt="Matched features between image pair — example 2">
+  <div class="image-stack">
+    <figure>
+      <img src="descriptor_pair_gallery.png" alt="Descriptor example: 40×40 window → blurred → 8×8 normalized patch">
     </figure>
   </div>
+
+      <div class="image-stack">
+    <figure>
+      <img src="colored_feature_matches.png" alt="Descriptor example: 40×40 window → blurred → 8×8 normalized patch">
+    </figure>
+  </div>
+
 </section>
     <section id="partB4" class="card" style="display:none;"><h2>B.4 – RANSAC & Mosaics</h2></section>
 
