@@ -407,17 +407,14 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
 
           <figure class="b1-figure">
             <img src="soda1_harris_before_anms.png" alt="Harris corners overlay — Image 1">
-            <figcaption><span>Image 1 — Harris</span><span>σ=1, k=0.04, thr=0.02</span></figcaption>
           </figure>
 
           <figure class="b1-figure">
             <img src="soda2_harris_before_anms.png" alt="Harris corners overlay — Image 2">
-            <figcaption><span>Image 2 — Harris</span><span>σ=1, k=0.04, thr=0.02</span></figcaption>
           </figure>
 
           <figure class="b1-figure">
             <img src="soda3_harris_before_anms.png" alt="Harris corners overlay — Image 3">
-            <figcaption><span>Image 3 — Harris</span><span>σ=1, k=0.04, thr=0.02</span></figcaption>
           </figure>
         </div>
 
@@ -427,24 +424,58 @@ warped[y_out, x_out] = (1-dy)*I_top + dy*I_bottom
 
           <figure class="b1-figure">
             <img src="soda1_harris_after_anms.png" alt="ANMS-selected corners — Image 1">
-            <figcaption><span>Image 1 — ANMS</span><span>N≈<i>tuned</i>, r<sub>min</sub>≈<i>tuned</i></span></figcaption>
           </figure>
 
           <figure class="b1-figure">
             <img src="soda2_harris_after_anms.png" alt="ANMS-selected corners — Image 2">
-            <figcaption><span>Image 2 — ANMS</span><span>N≈<i>tuned</i>, r<sub>min</sub>≈<i>tuned</i></span></figcaption>
           </figure>
 
           <figure class="b1-figure">
             <img src="soda3_harris_after_anms.png" alt="ANMS-selected corners — Image 3">
-            <figcaption><span>Image 3 — ANMS</span><span>N≈<i>tuned</i>, r<sub>min</sub>≈<i>tuned</i></span></figcaption>
           </figure>
         </div>
       </div>
     </section>
 
     <!-- Optional placeholders for B.2–B.4 (to be filled next) -->
-    <section id="partB2" class="card" style="display:none;"><h2>B.2 – Descriptors</h2></section>
+    <section id="partB2" class="card">
+  <h2>B.2 – Feature Descriptor Extraction</h2>
+
+  <p class="subtitle">
+
+  <p>
+    I first crop a 40×40 window around the corner and apply a Gaussian blur (low-pass filter).
+    This <em>suppresses noise</em> and small misalignments, so when I later downsample the window,
+    the descriptor is smoother and more robust (anti-aliasing).
+  </p>
+
+  <p>
+    I downsample the blurred 40×40 window to <b>8×8</b>, then <em>subtract the mean</em>
+    (removes brightness offset) and <em>divide by the standard deviation</em>
+    (normalizes contrast), which makes descriptors comparable across lighting changes and
+    stabilizes distance metrics.
+  </p>
+
+  <ol>
+    <li>Crop 40×40 window around each corner.</li>
+    <li>Apply Gaussian blur (e.g., σ≈2).</li>
+    <li>Downsample to 8×8.</li>
+    <li>Bias/gain normalize: <code>(patch - mean) / (std + ε)</code>.</li>
+  </ol>
+
+  <div class="image-stack">
+    <figure>
+      <img src="assets/b2/descriptor_example.png" alt="Descriptor example: 40×40 window → blurred → 8×8 normalized patch">
+      <figcaption>
+        Example descriptor pipeline: 40×40 window → Gaussian blur → 8×8 normalized patch.
+      </figcaption>
+    </figure>
+  </div>
+
+  <p class="notes">
+    Deliverable: Extract normalized 8×8 descriptors and display several examples.
+  </p>
+</section>
     <section id="partB3" class="card" style="display:none;"><h2>B.3 – Feature Matching</h2></section>
     <section id="partB4" class="card" style="display:none;"><h2>B.4 – RANSAC & Mosaics</h2></section>
 
