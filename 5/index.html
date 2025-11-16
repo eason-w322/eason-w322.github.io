@@ -392,11 +392,102 @@
   </p>
 
   <!-- ===== Part 2.4 ===== -->
-  <h3>2.4 — Neural Radiance Field (MLP)</h3>
+  <section id="part2_4" class="card">
+  <h2>Part 2.4 — Neural Radiance Field (NeRF)</h2>
+
   <p>
-    Placeholder content — positional encoding, MLP width/depth, sigma/color heads,
-    and activation selection.
+    I implement a full NeRF model whose goal is to learn a volumetric scene representation that maps 
+    3D world coordinates and viewing directions into <b>density</b> and <b>RGB color</b>. 
+    The model follows the original NeRF architecture: positional encoding on both 
+    spatial coordinates and directions, an 8-layer MLP with a skip connection, and separate 
+    heads for density and color prediction.
   </p>
+
+  <!-- ------------------------ -->
+  <!-- Architecture Summary Box -->
+  <!-- ------------------------ -->
+  <div class="textbox">
+    <h3>NeRF Architecture (My Implementation)</h3>
+    <ul>
+      <li><b>Positional Encoding:</b>  
+        xyz → 3 + 2×3×L<sub>xyz</sub> (with L<sub>xyz</sub> = 10)  
+        dir → 3 + 2×3×L<sub>dir</sub> (with L<sub>dir</sub> = 4)
+      </li>
+
+      <li><b>MLP Depth:</b> 8 fully connected layers</li>
+      <li><b>Hidden Width:</b> 256</li>
+      <li><b>Skip Connection:</b> after layer 4 (concatenate xyz-encoding)</li>
+      <li><b>Outputs:</b>
+        <ul>
+          <li>Density σ(x) ∈ ℝ (ReLU)</li>
+          <li>Color c(x,d) ∈ [0,1]³ (Sigmoid)</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <h3>Positional Encoding</h3>
+  <p>
+    For both 3D location \(x \in \mathbb{R}^3\) and viewing direction \(d \in \mathbb{S}^2\),
+    NeRF applies multi-frequency sinusoidal encoding:
+  </p>
+
+  <p class="math-block">
+    \[
+    \gamma(x)
+    = 
+    \big[
+      x,\;
+      \sin(2^0\pi x),\cos(2^0\pi x),\;
+      \dots,\;
+      \sin(2^{L-1}\pi x),\cos(2^{L-1}\pi x)
+    \big].
+    \]
+  </p>
+
+  <h3>MLP with Skip Connection</h3>
+  <p>
+    The encoded position \(\gamma(x)\) flows through the first 4 layers. 
+    After layer 4, NeRF concatenates the original \(\gamma(x)\) to form a controlled 
+    skip connection that preserves high-frequency geometry:
+  </p>
+
+  <p class="math-block">
+    \[
+    h_4 = F_4(\gamma(x)), \qquad 
+    h_{\text{skip}} = [h_4,\, \gamma(x)].
+    \]
+  </p>
+
+  <p>
+    The following layers compute a feature vector \(f\), then predict:
+  </p>
+
+  <p class="math-block">
+    \[
+    \sigma = \text{ReLU}(W_\sigma h_{\text{skip}}),
+    \qquad
+    f = W_f h_{\text{skip}}.
+    \]
+  </p>
+
+  <p>
+    Directional encoding \(\gamma(d)\) is concatenated with features to produce RGB:
+  </p>
+
+  <p class="math-block">
+    \[
+    c = \text{Sigmoid}(W_c [f,\, \gamma(d)]).
+    \]
+  </p>
+
+  <h3>Output</h3>
+  <p>
+    Given many 3D sample points along a ray, NeRF predicts both
+    <b>volume density</b> and <b>view-dependent color</b>. These outputs feed into 
+    the volume rendering equation in Part&nbsp;2.5 to synthesize pixel colors.
+  </p>
+</section>
 
   <!-- ===== Part 2.5 ===== -->
   <h3>2.5 — Volume Rendering</h3>
