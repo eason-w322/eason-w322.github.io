@@ -354,11 +354,35 @@
 </section>
 
   <!-- ===== Part 2.2 ===== -->
-  <h3>2.2 — Sampling</h3>
+  <section id="part2_2" class="card">
+  <h2>Part 2.2 — Sampling Points Along Rays</h2>
+
   <p>
-    Placeholder content — stratified sampling along rays, near/far bounds,
-    perturbation, hierarchical sampling, and coarse-to-fine sample distributions.
+    After generating camera rays, the next step is to sample 3D points along each ray so the NeRF 
+    MLP can predict color and density at those positions. I first randomly select an image, then 
+    randomly choose pixel indices and convert them into ray origins \(\mathbf{o}\) and directions 
+    \(\mathbf{d}\). This produces a batch of rays and their corresponding ground-truth RGB values.
   </p>
+
+  <p>
+    For each ray, I sample <b>64 points</b> between a near and far bound (2.0 → 6.0). 
+    I use <b>stratified sampling</b>, which jitters each interval to produce unbiased Monte-Carlo samples 
+    and reduce aliasing. This is the standard NeRF sampling approach.
+  </p>
+
+  <p class="math-block">
+    \[
+    t_i \sim \text{Uniform}(t_{i,\text{lower}},\, t_{i,\text{upper}}), \qquad
+    \mathbf{x}_i = \mathbf{o} + t_i\,\mathbf{d}.
+    \]
+  </p>
+
+  <p>
+    The result is a tensor of sampled 3D points of shape \((N, 64, 3)\), and corresponding distances 
+    \(t_i\). These samples are later fed into the NeRF network and volume renderer. I also confirm the 
+    implementation by printing example rays, directions, and their first few sampled 3D points.
+  </p>
+</section>
 
   <!-- ===== Part 2.3 ===== -->
   <h3>2.3 — Putting the Dataloading All Together</h3>
