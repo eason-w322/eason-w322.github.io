@@ -61,5 +61,11 @@ color: #bbb;
 text-decoration: none;
 font-size: 0.95rem;
 }
+.img-container img {
+  width: 300px;      /* adjust to desired size */
+  height: auto;
+  border-radius: 6px;
+  margin: 8px;
+}
 .sidebar a:hover {
 }
