@@ -1,0 +1,96 @@
+:root {
+--bg: #fafafa;
+--fg: #222;
+--card-bg: #fff;
+--border: #ddd;
+--muted: #666;
+--accent: #0055aa;
+}
+
+
+body {
+font-family: Arial, sans-serif;
+background: var(--bg);
+color: var(--fg);
+margin: 0;
+padding: 0;
+}
+
+
+/* ===== HEADER ===== */
+.site-header {
+background: #111;
+color: white;
+padding: 25px;
+text-align: center;
+border-bottom: 4px solid #333;
+}
+.site-header h1 {
+margin: 0;
+font-size: 2.2rem;
+font-weight: 700;
+}
+.site-header .subtitle {
+margin-top: 8px;
+font-size: 1.05rem;
+color: #ccc;
+}
+
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+position: fixed;
+top: 0;
+left: 0;
+height: 100%;
+width: 240px;
+background: #181818;
+padding-top: 140px;
+overflow-y: auto;
+border-right: 2px solid #222;
+}
+.sidebar ul {
+list-style: none;
+padding: 0 20px;
+}
+.sidebar li {
+margin-bottom: 12px;
+}
+.sidebar a {
+color: #bbb;
+text-decoration: none;
+font-size: 0.95rem;
+}
+.sidebar a:hover {
+color: white;
+}
+
+
+/* ===== MAIN CONTENT ===== */
+.container {
+margin-left: 270px;
+padding: 40px;
+max-width: 1200px;
+}
+
+
+/* ===== CARD SECTIONS ===== */
+.card {
+background: var(--card-bg);
+padding: 28px;
+margin-bottom: 45px;
+border-radius: 10px;
+border: 1px solid var(--border);
+box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+.card h2 {
+margin-top: 0;
+border-left: 5px solid var(--accent);
+padding-left: 10px;
+}
+
+
+/* ===== IMAGES ===== */
+.image-stack {
+display: flex;
+flex-wrap: wrap;
