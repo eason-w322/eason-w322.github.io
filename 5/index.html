@@ -328,16 +328,30 @@
     <!-- ====================================================== -->
 <!-- ===================== PART 2 ========================= -->
 <!-- ====================================================== -->
-<section id="part2" class="card">
-  <h2>Part 2 — Fit a Neural Radiance Field from Multi-view Images</h2>
+  <section id="part2_1" class="card">
+  <h2>Part 2.1 — Create Rays from Cameras</h2>
 
-  <!-- ===== Part 2.1 ===== -->
-  <h3>2.1 — Create Rays from Cameras</h3>
   <p>
-    Placeholder content — constructing per-pixel rays using intrinsic matrix <code>K</code>,
-    converting camera-to-world poses into origins and directions, and generating
-    the full training ray bundle.
+    In this step, I convert each pixel in an image into a <b>3D camera ray</b> that NeRF can train on.
+    For every pixel coordinate \((u, v)\), I first back-project it through the intrinsic matrix 
+    <code>K</code> to obtain a point at unit depth in <i>camera coordinates</i>. I then transform this 
+    point into <i>world coordinates</i> using the camera-to-world matrix <code>c2w</code>, which gives 
+    me the ray origin (the camera center) and a normalized ray direction. This produces one ray per pixel — 
+    the fundamental input representation for NeRF.
   </p>
+
+  <p class="math-block">
+    \[
+    \mathbf{r}(t) = \mathbf{o} + t\,\mathbf{d}
+    \]
+  </p>
+
+  <p>
+    I verify the implementation by round-tripping a test point through <code>c2w</code> and its inverse,
+    and I also visualize a small pixel grid's ray directions to ensure they are consistent with the image 
+    geometry. These checks confirm that my camera-to-ray conversion is correct.
+  </p>
+</section>
 
   <!-- ===== Part 2.2 ===== -->
   <h3>2.2 — Sampling</h3>
