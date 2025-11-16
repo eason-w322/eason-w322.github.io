@@ -9,12 +9,28 @@
 
 <body>
 
-<header>
+<!-- ===== HEADER ===== -->
+<header class="site-header">
   <h1>Project 4: Neural Radiance Fields (NeRF)</h1>
-  <h2>Eason Wei — CS180 / Fall 2025</h2>
+  <p class="subtitle">Eason Wei — CS180 / Fall 2025</p>
 </header>
 
-<!-- ===== Introduction ===== -->
+<!-- ===== SIDEBAR NAV ===== -->
+<nav class="sidebar">
+  <ul>
+    <li><a href="#intro">Introduction</a></li>
+    <li><a href="#part0">Part 0 — Calibration & Scanning</a></li>
+    <li><a href="#c01">0.1 Camera Calibration</a></li>
+    <li><a href="#c02">0.2 Object Capture</a></li>
+    <li><a href="#c03">0.3 Pose Estimation</a></li>
+    <li><a href="#c04">0.4 Dataset Packaging</a></li>
+  </ul>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="container">
+
+<!-- ===== INTRODUCTION ===== -->
 <section id="intro" class="card">
   <h2>Introduction</h2>
   <p>
@@ -27,123 +43,144 @@
   </p>
 </section>
 
-<!-- ===== Part 0 ===== -->
-<section id="part0">
+<!-- ===== PART 0 WRAPPER ===== -->
+<section id="part0" class="card">
   <h2>Part 0 — Camera Calibration & 3D Object Scanning</h2>
+</section>
 
-  <!-- ===== 0.1 Camera Calibration ===== -->
-  <h3>0.1 Camera Calibration</h3>
+<!-- ===== 0.1 CAMERA CALIBRATION ===== -->
+<section id="c01" class="card">
+  <h2>0.1 Camera Calibration</h2>
   <p>
-    In this section, I printed a 6-tag ArUco grid and captured 50 images of it. Since the originals were 
-    in <code>.heic</code> format and very large, I converted them to <code>.jpg</code> using a Python script. 
-    I measured each printed tag to be 0.57 units wide and used this measurement to define the 3D coordinates 
-    of all tag corners. Using <code>cv2.aruco.detectMarkers</code>, I extracted the 2D corner locations and 
-    applied a mask to correctly index all six tags. Finally, I computed the intrinsic matrix <b>K</b> and 
-    distortion coefficients using <code>cv2.calibrateCamera</code>.
+    I printed a 6-tag ArUco grid and captured 50 images of it. Because the originals were in 
+    <code>.heic</code> format and very large, I converted them to <code>.jpg</code> using a Python script. 
+    Each printed tag measured 0.57 units wide, which I used to define the 3D coordinates of all ArUco corners.
+    Using <code>cv2.aruco.detectMarkers</code>, I extracted 2D corner locations and applied a mask to correctly 
+    index all tags. Finally, I computed the intrinsic matrix <b>K</b> and distortion coefficients using 
+    <code>cv2.calibrateCamera</code>.
+  </p>
+</section>
+
+<!-- ===== 0.2 OBJECT CAPTURE ===== -->
+<section id="c02" class="card">
+  <h2>0.2 Object Capture</h2>
+  <p>
+    For my NeRF subject, I selected a Labubu figure and placed it beside a single printed ArUco tag on a flat 
+    tabletop. I captured around 50 images from diverse viewpoints while keeping camera settings and distance 
+    consistent (roughly 10–20 cm so Labubu fills about half the frame). I avoided exposure changes, minimized 
+    motion blur, and varied the angles both horizontally and vertically while maintaining a stable radius around 
+    the object to ensure high-quality NeRF training.
+  </p>
+</section>
+
+<!-- ===== 0.3 POSE ESTIMATION ===== -->
+<section id="c03" class="card">
+  <h2>0.3 Pose Estimation (PnP)</h2>
+
+  <p>
+    To estimate the camera pose for each Labubu image, I detect the ArUco tag and compute a full 
+    <b>camera-to-world</b> transformation. After resizing images and scaling the intrinsic matrix 
+    <code>K</code>, I use <code>cv2.solvePnP</code> to recover the rotation and translation that map the tag’s 
+    known 3D geometry onto its detected 2D corners.
   </p>
 
-  <!-- ===== 0.2 Object Capture ===== -->
-  <h3>0.2 Object Capture</h3>
   <p>
-  For my object, I selected a Labubu figure and placed it beside a single printed ArUco tag on a flat tabletop. 
-  I captured another 50 images from different viewpoints while keeping the camera settings and distance 
-  consistent (approximately 10–20 cm away so the object fills about half of the frame). To ensure good NeRF 
-  training quality, I avoided exposure changes, minimized motion blur, and varied the viewing angle both 
-  horizontally and vertically while maintaining a uniform radius around the object.
+    Given 3D object points \( X_i \in \mathbb{R}^3 \) and their detected pixel locations 
+    \( x_i \in \mathbb{R}^2 \), the projection model is
   </p>
 
-  <!-- ===== 0.3 Pose Estimation ===== -->
-  <h3>0.3 Pose Estimation (PnP)</h3>
+  <p class="math-block">
+  \[
+  x_i \sim K \, [R \mid t]
+  \begin{bmatrix} X_i \\ 1 \end{bmatrix}.
+  \]
+  </p>
 
-<p>
-  To estimate the camera pose for each Labubu image, I detect the ArUco tag and compute a full 
-  <b>camera-to-world</b> transformation matrix. After resizing the images and scaling the intrinsic 
-  matrix <code>K</code>, I use <code>cv2.solvePnP</code> to recover the rotation and translation that map 
-  the tag's known 3D geometry onto the observed 2D corner locations.
-</p>
+  <p>
+    <code>solvePnP</code> yields an axis–angle rotation vector \( \mathbf{r} \) and translation \( \mathbf{t} \).
+    Converting using Rodrigues:
+  </p>
 
-<p>
-  Given 3D object points \( X_i \in \mathbb{R}^3 \) and their detected pixel coordinates 
-  \( x_i \in \mathbb{R}^2 \), <code>solvePnP</code> estimates the camera pose by solving
-</p>
+  <p class="math-block">
+  \[
+  R = \mathrm{Rodrigues}(\mathbf{r}).
+  \]
+  </p>
 
-<p class="math-block">
-\[
-x_i \sim K \, [R \mid t] \, 
-\begin{bmatrix} X_i \\ 1 \end{bmatrix}.
-\]
-</p>
+  <p>
+    World-to-camera:
+  </p>
 
-<p>
-  The function returns an axis–angle rotation vector \( \mathbf{r} \) and a translation vector 
-  \( \mathbf{t} \). I convert the rotation vector to a rotation matrix using
-</p>
+  <p class="math-block">
+  \[
+  \mathrm{w2c} =
+  \begin{bmatrix}
+  R & \mathbf{t} \\
+  \mathbf{0}^\mathsf{T} & 1
+  \end{bmatrix}.
+  \]
+  </p>
 
-<p class="math-block">
-\[
-R = \mathrm{Rodrigues}(\mathbf{r}).
-\]
-</p>
+  <p>
+    Camera-to-world (closed-form inverse):
+  </p>
 
-<p>
-  From this, I first construct the <b>world-to-camera</b> matrix:
-</p>
+  <p class="math-block">
+  \[
+  \mathrm{c2w} =
+  \begin{bmatrix}
+  R^\top & -R^\top \mathbf{t} \\
+  \mathbf{0}^\mathsf{T} & 1
+  \end{bmatrix}.
+  \]
+  </p>
 
-<p class="math-block">
-\[
-\mathrm{w2c} = 
-\begin{bmatrix}
-R & \mathbf{t} \\
-\mathbf{0}^\mathsf{T} & 1
-\end{bmatrix}.
-\]
-</p>
+  <p>
+    NeRF uses a different coordinate convention, so I apply the flip matrix
+  </p>
 
-<p>
-  The <b>camera-to-world</b> matrix is its inverse, which has a closed-form expression:
-</p>
+  <p class="math-block">
+  \[
+  D = \mathrm{diag}(1,-1,-1),
+  \qquad
+  R_{\text{nerf}} = D R^\top,
+  \qquad
+  \mathbf{t}_{\text{nerf}} = D(-R^\top \mathbf{t}).
+  \]
+  </p>
 
-<p class="math-block">
-\[
-\mathrm{c2w} = 
-\begin{bmatrix}
-R^\top & -R^\top \mathbf{t} \\
-\mathbf{0}^\mathsf{T} & 1
-\end{bmatrix}.
-\]
-</p>
+  <p>
+    Each resulting pose is a full \(4\times 4\) c2w matrix suitable for volume rendering. I store all valid 
+    poses and resized images in an <code>.npz</code> file and visualize them using <b>Viser</b>.
+  </p>
 
-<p>
-  Since NeRF uses a different coordinate convention from OpenCV, I transform all poses with 
-  a diagonal flip matrix
-</p>
-
-<p class="math-block">
-\[
-D = \mathrm{diag}(1,\,-1,\,-1),
-\qquad
-R_{\text{nerf}} = D R^\top, 
-\qquad
-\mathbf{t}_{\text{nerf}} = D(-R^\top \mathbf{t}).
-\]
-</p>
-
-<p>
-  Each final pose is a full \(4 \times 4\) camera-to-world matrix compatible with volume rendering
-  in NeRF. All valid poses and resized images are saved into an 
-  <code>.npz</code> dataset and visualized using <b>Viser</b>.
-</p>
-  <p>Insert Viser camera frustum plots here.</p>
-  <div class="img-container">
+  <div class="image-stack">
     <img src="images/viser_cam_plot1.png" alt="Viser Camera Plot 1" />
     <img src="images/viser_cam_plot2.png" alt="Viser Camera Plot 2" />
   </div>
-
-  <!-- ===== 0.4 Dataset Packaging ===== -->
-  <h3>0.4 Dataset Packaging</h3>
-  <p>Insert explanation + final dataset statistics.</p>
-
 </section>
+
+<!-- ===== 0.4 DATASET PACKAGING ===== -->
+<section id="c04" class="card">
+  <h2>0.4 Dataset Packaging</h2>
+  <p>Insert explanation + final dataset statistics.</p>
+</section>
+
+</main>
+
+<!-- ===== MATHJAX ===== -->
+<script>
+  window.MathJax = {
+    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+    svg: {fontCache: 'global'}
+  };
+</script>
+<script id="MathJax-script" async 
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+</body>
+</html>
 
 </body>
 </html>
