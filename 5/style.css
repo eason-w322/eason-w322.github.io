@@ -93,7 +93,7 @@ h3 {
 }
 
 .img-container img {
-  width: 300px;       /* adjust this to make images smaller/larger */
+  width: 100px;       /* adjust this to make images smaller/larger */
   height: auto;
   border-radius: 6px;
   border: 1px solid var(--border);
