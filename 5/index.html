@@ -222,9 +222,93 @@
     <!-- PLACEHOLDER SECTIONS -->
     <!-- ========================= -->
     <section id="part1" class="card">
-      <h2>Part 1 — 2D Neural Field</h2>
-      <p>Placeholder content — to be filled with positional encoding, MLP, PSNR curves, etc.</p>
-    </section>
+  <h2>Part 1 — Neural Field for 2D Image Reconstruction</h2>
+
+  <p>
+    In this part, I train a coordinate-based neural network to reconstruct a 2D image. 
+    The model learns a continuous mapping
+  </p>
+
+  <p class="math-block">
+    \[
+      F_{\theta}(x, y) \rightarrow \text{RGB},
+    \]
+  </p>
+
+  <p>
+    where each pixel is represented by normalized \((x, y)\) coordinates in \([0,1]^2\).
+    With positional encoding and a small MLP, the network gradually learns to reproduce 
+    the full-resolution image.
+  </p>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <!-- Concise Architecture Box -->
+  <!-- ─────────────────────────────────────────────── -->
+  <div style="
+    background: rgba(20,25,35,0.8);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 0.93rem;
+  ">
+    <h3 style="color: var(--accent); margin-bottom: 8px;">Neural Field Architecture</h3>
+
+    <p><b>Input:</b> 2D pixel coordinate \((x, y)\)</p>
+
+    <p><b>Positional Encoding:</b> 10 frequency bands  
+       <span style="color: var(--muted);">(also compared with 2)</span>
+    </p>
+
+    <p><b>MLP:</b></p>
+    <ul style="margin-left: 18px;">
+      <li>Hidden width: 256 
+        <span style="color: var(--muted);">(also tested 64)</span>
+      </li>
+      <li>Two Linear + ReLU layers</li>
+      <li>Final Linear → Sigmoid (RGB)</li>
+    </ul>
+
+    <p><b>Loss:</b> MSE <b>Optimizer:</b> Adam (lr = 1e−2)</p>
+  </div>
+
+  <p>
+    Below are examples of the reconstruction quality at different training iterations.
+    Lower-frequency / narrower-width networks (e.g., freq=2, width=64) struggle with high-frequency
+    details, while the full model (freq=10, width=256) captures the image much more accurately.
+  </p>
+
+  <!-- ─────────────────────────────────────────────── -->
+  <!-- Five-image placeholder gallery -->
+  <!-- ─────────────────────────────────────────────── -->
+  <div class="image-grid">
+    <figure>
+      <img src="images/p1_original.png" alt="Original">
+      <figcaption class="notes">Original image</figcaption>
+    </figure>
+
+    <figure>
+      <img src="images/p1_iter50.png" alt="Iter 50">
+      <figcaption class="notes">Reconstruction at 50 iterations</figcaption>
+    </figure>
+
+    <figure>
+      <img src="images/p1_iter250.png" alt="Iter 250">
+      <figcaption class="notes">Reconstruction at 250 iterations</figcaption>
+    </figure>
+
+    <figure>
+      <img src="images/p1_iter1000.png" alt="Iter 1000">
+      <figcaption class="notes">Reconstruction at 1000 iterations</figcaption>
+    </figure>
+
+    <figure>
+      <img src="images/p1_final.png" alt="Final Reconstruction">
+      <figcaption class="notes">Final reconstruction (3000 iterations)</figcaption>
+    </figure>
+  </div>
+
+</section>
 
     <section id="part2" class="card">
       <h2>Part 2 — Ray Sampling</h2>
