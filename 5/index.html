@@ -37,7 +37,7 @@
   <p>
     In this section, I printed a 6-tag ArUco grid and captured 50 images of it. Since the originals were 
     in <code>.heic</code> format and very large, I first converted them to <code>.jpg</code> using a Python script. 
-    I measured each printed tag to be 0.57 units wide and used this to define the 3D coordinates of all tag 
+    I measured each printed tag to be 57mm wide and used the top left tag to define the 3D coordinates of all tag 
     corners. Using <code>cv2.aruco.detectMarkers</code>, I extracted the 2D corner locations and applied a mask to 
     correctly index all six tags. Finally, I computed the intrinsic matrix <b>K</b> and distortion coefficients 
     using <code>cv2.calibrateCamera</code>.
