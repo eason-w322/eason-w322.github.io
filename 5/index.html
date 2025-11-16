@@ -195,20 +195,23 @@
     <!-- ========================= -->
     <section id="part04" class="card">
       <h2>0.4 — Dataset Packaging</h2>
-
       <p>
-        All valid resized images, their matched camera-to-world matrices, and the scaled intrinsic
-        matrix \(K\) are saved into a compact <code>.npz</code> file:
-      </p>
+  In this step, I load the 50 resized Labubu images and their camera poses from Part&nbsp;0.3, then
+  undistort each image using the scaled intrinsic matrix \(K\) and the distortion coefficients from
+  the original calibration. This produces a clean, distortion-free set of inputs for NeRF.
+</p>
 
-      <pre><code>
-np.savez(
-    "data/poses_and_images.npz",
-    c2ws=c2ws,
-    images=valid_imgs,
-    K=K
-)
-      </code></pre>
+<p>
+  I then split the 50 images into <b>train/val/test</b> sets using a 70/15/15 ratio. The split is
+  done over image indices with a fixed random seed, and each subset contains both the undistorted
+  RGB images and their corresponding camera-to-world matrices.
+</p>
+
+<p>
+  The focal length is computed from the resized intrinsics as
+  \( f = (K_{00} + K_{11}) / 2 \), and all data—images, poses, intrinsics, and focal—is packaged
+  into <code>my_data.npz</code> for NeRF training.
+</p>
 
       <p>
         This single file is used for every remaining stage of the NeRF pipeline.
