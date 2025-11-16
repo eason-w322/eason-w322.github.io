@@ -325,36 +325,63 @@
 
 </section>
 
-    <section id="part2" class="card">
-      <h2>Part 2 — Ray Sampling</h2>
-      <p>Placeholder content — stratified sampling, hierarchical sampling, etc.</p>
-    </section>
+    <!-- ====================================================== -->
+<!-- ===================== PART 2 ========================= -->
+<!-- ====================================================== -->
+<section id="part2" class="card">
+  <h2>Part 2 — Fit a Neural Radiance Field from Multi-view Images</h2>
 
-    <section id="part3" class="card">
-      <h2>Part 3 — NeRF Training</h2>
-      <p>Placeholder content — MLP architecture, loss, training curves.</p>
-    </section>
+  <!-- ===== Part 2.1 ===== -->
+  <h3>2.1 — Create Rays from Cameras</h3>
+  <p>
+    Placeholder content — constructing per-pixel rays using intrinsic matrix <code>K</code>,
+    converting camera-to-world poses into origins and directions, and generating
+    the full training ray bundle.
+  </p>
 
-    <section id="part4" class="card">
-      <h2>Part 4 — Novel View Synthesis</h2>
-      <p>Placeholder content — renderings, orbit GIFs, spherical GIFs.</p>
-    </section>
+  <!-- ===== Part 2.2 ===== -->
+  <h3>2.2 — Sampling</h3>
+  <p>
+    Placeholder content — stratified sampling along rays, near/far bounds,
+    perturbation, hierarchical sampling, and coarse-to-fine sample distributions.
+  </p>
 
-    <section id="results" class="card">
-      <h2>Results & GIFs</h2>
-      <p>Placeholder content — final GIFs and comparisons.</p>
-    </section>
+  <!-- ===== Part 2.3 ===== -->
+  <h3>2.3 — Putting the Dataloading All Together</h3>
+  <p>
+    Placeholder content — packaging rays, RGB targets, batching, shuffling,
+    and preparing the dataset for training.
+  </p>
 
-    <section id="conclusion" class="card">
-      <h2>Conclusion</h2>
-      <p>Placeholder content — reflections and analysis.</p>
-    </section>
+  <!-- ===== Part 2.4 ===== -->
+  <h3>2.4 — Neural Radiance Field (MLP)</h3>
+  <p>
+    Placeholder content — positional encoding, MLP width/depth, sigma/color heads,
+    and activation selection.
+  </p>
 
-  </main>
+  <!-- ===== Part 2.5 ===== -->
+  <h3>2.5 — Volume Rendering</h3>
+  <p>
+    Placeholder content — converting sampled densities into alpha weights,
+    computing transmittance, integrating color along rays, and producing
+    differentiable RGB predictions.
+  </p>
 
-  <!-- ===== FOOTER ===== -->
-  <footer>
-    <p>© 2025 Eason Wei | UC Berkeley CS180 – Neural Radiance Fields</p>
-  </footer>
+  <!-- ===== Part 2.6 ===== -->
+  <h3>2.6 — Training with Your Own Data</h3>
+  <p>
+    Placeholder content — training loop, batching strategy, PSNR curves,
+    and convergence behavior on your Labubu dataset.
+  </p>
+</section>
+
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p>© 2025 Eason Wei | UC Berkeley CS180 – Neural Radiance Fields</p>
+</footer>
 </body>
 </html>
