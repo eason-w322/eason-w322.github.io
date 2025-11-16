@@ -1,167 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CS180 Project 4: Neural Radiance Fields (NeRF)</title>
+  <link rel="stylesheet" href="style.css"/>
 
-<title>Project 4: NeRF — Part 0</title>
-<link rel="stylesheet" href="style.css" />
+  <!-- MathJax -->
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+      svg: { fontCache: 'global' }
+    };
+  </script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
 </head>
 
 <body>
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <h1>Project 4: Neural Radiance Fields (NeRF)</h1>
+    <p class="subtitle">Eason Wei | CS 180 / 280A – Fall 2025</p>
+  </header>
 
-<!-- ===== HEADER ===== -->
-<header class="site-header">
-  <h1>Project 4: Neural Radiance Fields (NeRF)</h1>
-  <p class="subtitle">Eason Wei — CS180 / Fall 2025</p>
-</header>
+  <!-- ===== SIDEBAR NAVIGATION ===== -->
+  <nav class="sidebar">
+    <ul>
+      <li><a href="#intro">Introduction</a></li>
 
-<!-- ===== MAIN CONTENT ===== -->
-<main class="container">
+      <!-- Part 0 -->
+      <li><a href="#part0">Part 0 — Data Capture & Calibration</a></li>
+      <li><a href="#part01">0.1 — Camera Calibration</a></li>
+      <li><a href="#part02">0.2 — Object Capture</a></li>
+      <li><a href="#part03">0.3 — Pose Estimation</a></li>
+      <li><a href="#part04">0.4 — Dataset Packaging</a></li>
 
-<!-- ===== Introduction ===== -->
-<section id="intro" class="card">
-  <h2>Introduction</h2>
-  <p>
-    In this project, I implement a full pipeline for reconstructing a 3D scene using
-    <b>Neural Radiance Fields (NeRF)</b>. The workflow begins with <b>camera calibration</b> using
-    ArUco markers to recover intrinsics and poses. I then train a <b>2D neural field</b> to study
-    positional encoding and MLP representations. Finally, I build a full <b>3D NeRF</b> that
-    generates rays, samples points, performs volume rendering, and produces novel-view images
-    and GIFs of my captured object.
-  </p>
-</section>
+      <!-- Future Parts -->
+      <li><a href="#part1">Part 1 — 2D Neural Field</a></li>
+      <li><a href="#part2">Part 2 — Ray Sampling</a></li>
+      <li><a href="#part3">Part 3 — NeRF Training</a></li>
+      <li><a href="#part4">Part 4 — Novel View Synthesis</a></li>
+      <li><a href="#results">Results & GIFs</a></li>
+      <li><a href="#conclusion">Conclusion</a></li>
+    </ul>
+  </nav>
 
-<!-- ===== Part 0 ===== -->
-<section id="part0" class="card">
-  <h2>Part 0 — Camera Calibration & 3D Object Scanning</h2>
+  <!-- ===== MAIN CONTENT ===== -->
+  <main class="container">
 
-  <!-- 0.1 -->
-  <h3>0.1 Camera Calibration</h3>
-  <p>
-    I printed a 6-tag ArUco grid and captured 50 images of it. Because the raw photos were
-    large <code>.heic</code> files, I converted them to <code>.jpg</code>. Each printed tag was
-    measured to be 0.57 units wide, which I used to construct the 3D corner coordinates.
-    Using <code>cv2.aruco.detectMarkers</code>, I extracted the 2D corners and applied a mask to
-    index the 6 tags consistently. Finally, I computed the intrinsic matrix <b>K</b> and
-    distortion coefficients with <code>cv2.calibrateCamera</code>.
-  </p>
+    <!-- ========================= -->
+    <!-- INTRODUCTION -->
+    <!-- ========================= -->
+    <section id="intro" class="card">
+      <h2>Introduction</h2>
+      <p>
+        In this project, I implement a full NeRF pipeline—from capturing a real object with a phone,
+        to calibrating the camera, estimating poses, training a 2D neural field, and finally training
+        a complete 3D Neural Radiance Field capable of synthesizing novel views.
+      </p>
+      <p>
+        This assignment covers geometry (PnP pose estimation, intrinsics scaling), graphics (ray
+        marching, volume rendering), and neural networks (positional encoding, MLPs, hierarchical
+        sampling). My final model produces smooth multi-view reconstructions and GIFs of my Labubu figure.
+      </p>
+    </section>
 
-  <!-- 0.2 -->
-  <h3>0.2 Object Capture</h3>
-  <p>
-    For my object, I selected a Labubu figure and placed it beside a single printed ArUco tag
-    on a tabletop. I captured around 50 images from different viewpoints while maintaining
-    consistent distance (10–20 cm) and stable camera settings. To ensure good NeRF training,
-    I avoided exposure changes, minimized motion blur, and varied the viewing angle both
-    horizontally and vertically while keeping a uniform radius around the object.
-  </p>
+    <!-- ========================= -->
+    <!-- PART 0 OVERVIEW -->
+    <!-- ========================= -->
+    <section id="part0" class="card">
+      <h2>Part 0 — Camera Calibration & 3D Scanning Pipeline</h2>
+      <p>
+        I begin by printing a 6-tag ArUco grid, capturing 50 calibration images, and running
+        <code>cv2.calibrateCamera</code> to recover the intrinsic matrix \(K\). I then capture 50
+        images of my Labubu figure, detect an ArUco tag in each frame, and estimate all camera-to-world
+        poses using the PnP algorithm.
+      </p>
+    </section>
 
-  <!-- 0.3 -->
-  <h3>0.3 Pose Estimation (PnP)</h3>
+    <!-- ========================= -->
+    <!-- 0.1 CAMERA CALIBRATION -->
+    <!-- ========================= -->
+    <section id="part01" class="card">
+      <h2>0.1 — Camera Calibration</h2>
 
-  <p>
-    For each Labubu image, I detect the ArUco tag and estimate the camera pose by solving the
-    Perspective-n-Point (PnP) problem. Given 3D tag coordinates and their detected 2D projections,
-    <code>cv2.solvePnP</code> estimates rotation and translation satisfying:
-  </p>
+      <p>
+        I printed a 6-tag ArUco grid and captured 50 high-resolution images. Since they were originally
+        in <code>.heic</code> format, I batch-converted them into <code>.jpg</code> for processing. Each
+        printed marker measured 0.57 units wide, which I used to define the 3D coordinates of all tag
+        corners.
+      </p>
 
-  <p class="math-block">
-  \[
-  x_i \sim K \, [R \mid t] \,
-  \begin{bmatrix} X_i \\ 1 \end{bmatrix}.
-  \]
-  </p>
+      <p>
+        Using <code>cv2.aruco.detectMarkers</code>, I detected all visible markers and applied a mask to
+        ensure consistent indexing across frames. Finally, I used <code>cv2.calibrateCamera</code> to
+        recover the camera’s intrinsic matrix \(K\) and distortion coefficients.
+      </p>
+    </section>
 
-  <p>
-    The rotation vector \( \mathbf{r} \) is converted to a matrix using Rodrigues:
-  </p>
+    <!-- ========================= -->
+    <!-- 0.2 OBJECT CAPTURE -->
+    <!-- ========================= -->
+    <section id="part02" class="card">
+      <h2>0.2 — Object Capture</h2>
 
-  <p class="math-block">
-  \[
-  R = \mathrm{Rodrigues}(\mathbf{r}).
-  \]
-  </p>
+      <p>
+        I captured ~50 images of my Labubu figure beside a single ArUco tag. The camera remained
+        10–20 cm away, ensuring the object filled roughly half the frame. I kept exposure
+        consistent, avoided motion blur, and varied the angle around a circular path to maximize
+        multi-view coverage.
+      </p>
+    </section>
 
-  <p>
-    I construct the world-to-camera matrix:
-  </p>
+    <!-- ========================= -->
+    <!-- 0.3 POSE ESTIMATION -->
+    <!-- ========================= -->
+    <section id="part03" class="card">
+      <h2>0.3 — Pose Estimation (PnP)</h2>
 
-  <p class="math-block">
-  \[
-  \mathrm{w2c} =
-  \begin{bmatrix}
-  R & \mathbf{t} \\
-  \mathbf{0}^\mathsf{T} & 1
-  \end{bmatrix}.
-  \]
-  </p>
+      <p>
+        For each image, I detect the tag, extract its 2D corners, and solve for camera extrinsics
+        using <code>cv2.solvePnP</code>. The projection model follows:
+      </p>
 
-  <p>
-    Its inverse gives the camera-to-world matrix:
-  </p>
+      <p class="math-block">
+        \[
+        x_i \sim K [R|t] 
+        \begin{bmatrix} X_i \\ 1 \end{bmatrix}
+        \]
+      </p>
 
-  <p class="math-block">
-  \[
-  \mathrm{c2w} =
-  \begin{bmatrix}
-  R^\top & -R^\top \mathbf{t} \\
-  \mathbf{0}^\mathsf{T} & 1
-  \end{bmatrix}.
-  \]
-  </p>
+      <p>
+        The rotation vector is converted using Rodrigues:
+      </p>
 
-  <p>
-    Since NeRF uses a different axis convention than OpenCV, I apply the flip matrix:
-  </p>
+      <p class="math-block">
+        \[
+        R = \mathrm{Rodrigues}(\mathbf{r})
+        \]
+      </p>
 
-  <p class="math-block">
-  \[
-  D = \mathrm{diag}(1, -1, -1),
-  \qquad
-  R_{\text{nerf}} = D R^\top,
-  \qquad
-  \mathbf{t}_{\text{nerf}} = D(-R^\top \mathbf{t}).
-  \]
-  </p>
+      <p>
+        World-to-camera:
+      </p>
 
-  <p>
-    Each final pose is a full \(4 \times 4\) camera-to-world matrix used for NeRF rendering. All
-    valid poses and resized images are saved into an <code>.npz</code> file and visualized using Viser.
-  </p>
+      <p class="math-block">
+        \[
+        \mathrm{w2c} =
+        \begin{bmatrix}
+        R & t\\ 0 & 1
+        \end{bmatrix}
+        \]
+      </p>
 
-  <div class="img-container">
-    <img src="viser1.png" alt="Viser Camera Plot 1" />
-    <img src="viser2.png" alt="Viser Camera Plot 2" />
-  </div>
-  <p>
-  The recovered camera poses form a smooth, dome-like distribution around the
-  Labubu figure. Each frustum corresponds to a successfully estimated
-  camera-to-world matrix, and together they show that the capture sweep
-  effectively covers a wide range of viewing angles — including low angles,
-  oblique side views, and higher overhead perspectives.
-  </p>
+      <p>
+        And camera-to-world:
+      </p>
 
-  <!-- 0.4 -->
-  <h3>0.4 Dataset Packaging</h3>
-  <p>
-    Insert explanation + dataset statistics here.
-  </p>
+      <p class="math-block">
+        \[
+        \mathrm{c2w} =
+        \begin{bmatrix}
+        R^\top & -R^\top t \\ 0 & 1
+        \end{bmatrix}
+        \]
+      </p>
 
-</section>
+      <p>
+        Because NeRF uses a different coordinate convention, I apply a diagonal flip:
+      </p>
 
-</main>
+      <p class="math-block">
+        \[
+        D = \mathrm{diag}(1,-1,-1)
+        \]
+      </p>
 
-<!-- ===== MathJax ===== -->
-<script>
-  window.MathJax = {
-    tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
-    svg: {fontCache: 'global'}
-  };
-</script>
-<script id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-</script>
+      <p>
+        Below are the Viser-rendered camera frustums:
+      </p>
 
+      <div class="image-stack">
+        <figure>
+          <img src="images/viser_cam_plot1.png" alt="Viser Plot 1">
+          <figcaption>Dome-like coverage — dense sampling of azimuth angles.</figcaption>
+        </figure>
+
+        <figure>
+          <img src="images/viser_cam_plot2.png" alt="Viser Plot 2">
+          <figcaption>Full 360° pose sweep ensures strong multi-view parallax.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- 0.4 DATASET PACKAGING -->
+    <!-- ========================= -->
+    <section id="part04" class="card">
+      <h2>0.4 — Dataset Packaging</h2>
+
+      <p>
+        All valid resized images, their matched camera-to-world matrices, and the scaled intrinsic
+        matrix \(K\) are saved into a compact <code>.npz</code> file:
+      </p>
+
+      <pre><code>
+np.savez(
+    "data/poses_and_images.npz",
+    c2ws=c2ws,
+    images=valid_imgs,
+    K=K
+)
+      </code></pre>
+
+      <p>
+        This single file is used for every remaining stage of the NeRF pipeline.
+      </p>
+    </section>
+
+    <!-- ========================= -->
+    <!-- PLACEHOLDER SECTIONS -->
+    <!-- ========================= -->
+    <section id="part1" class="card">
+      <h2>Part 1 — 2D Neural Field</h2>
+      <p>Placeholder content — to be filled with positional encoding, MLP, PSNR curves, etc.</p>
+    </section>
+
+    <section id="part2" class="card">
+      <h2>Part 2 — Ray Sampling</h2>
+      <p>Placeholder content — stratified sampling, hierarchical sampling, etc.</p>
+    </section>
+
+    <section id="part3" class="card">
+      <h2>Part 3 — NeRF Training</h2>
+      <p>Placeholder content — MLP architecture, loss, training curves.</p>
+    </section>
+
+    <section id="part4" class="card">
+      <h2>Part 4 — Novel View Synthesis</h2>
+      <p>Placeholder content — renderings, orbit GIFs, spherical GIFs.</p>
+    </section>
+
+    <section id="results" class="card">
+      <h2>Results & GIFs</h2>
+      <p>Placeholder content — final GIFs and comparisons.</p>
+    </section>
+
+    <section id="conclusion" class="card">
+      <h2>Conclusion</h2>
+      <p>Placeholder content — reflections and analysis.</p>
+    </section>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <p>© 2025 Eason Wei | UC Berkeley CS180 – Neural Radiance Fields</p>
+  </footer>
 </body>
 </html>
