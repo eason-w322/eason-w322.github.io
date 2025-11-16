@@ -30,22 +30,31 @@
 <!-- ===== Part 0 ===== -->
 <section id="part0">
   <h2>Part 0 — Camera Calibration & 3D Object Scanning</h2>
-  <p></p>
 
   <!-- ===== 0.1 Camera Calibration ===== -->
   <h3>0.1 Camera Calibration</h3>
   <p>
     In this section, I printed a 6-tag ArUco grid and captured 50 images of it. Since the originals were 
-    in <code>.heic</code> format and very large, I first converted them to <code>.jpg</code> using a Python script. 
-    I measured each printed tag to be 57mm wide and used the top left tag to define the 3D coordinates of all tag 
-    corners. Using <code>cv2.aruco.detectMarkers</code>, I extracted the 2D corner locations and applied a mask to 
-    correctly index all six tags. Finally, I computed the intrinsic matrix <b>K</b> and distortion coefficients 
-    using <code>cv2.calibrateCamera</code>.
+    in <code>.heic</code> format and very large, I converted them to <code>.jpg</code> using a Python script. 
+    I measured each printed tag to be 0.57 units wide and used this measurement to define the 3D coordinates 
+    of all tag corners. Using <code>cv2.aruco.detectMarkers</code>, I extracted the 2D corner locations and 
+    applied a mask to correctly index all six tags. Finally, I computed the intrinsic matrix <b>K</b> and 
+    distortion coefficients using <code>cv2.calibrateCamera</code>.
   </p>
 
   <!-- ===== 0.2 Object Capture ===== -->
   <h3>0.2 Object Capture</h3>
-  <p>Insert object capture explanation + sample captured images.</p>
+  <p>
+    I captured another 50 images of my chosen object, Labubu, using the same camera settings as calibration. 
+    Below are four example images from the dataset.
+  </p>
+
+  <div class="img-container" style="display:flex; gap:15px; justify-content:center;">
+      <img src="placeholder1.png" alt="Object Example 1" style="width:22%; border-radius:8px;" />
+      <img src="placeholder2.png" alt="Object Example 2" style="width:22%; border-radius:8px;" />
+      <img src="placeholder3.png" alt="Object Example 3" style="width:22%; border-radius:8px;" />
+      <img src="placeholder4.png" alt="Object Example 4" style="width:22%; border-radius:8px;" />
+  </div>
 
   <!-- ===== 0.3 Pose Estimation ===== -->
   <h3>0.3 Pose Estimation (PnP)</h3>
