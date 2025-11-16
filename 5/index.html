@@ -6,11 +6,15 @@
 <title>Project 4: NeRF — Part 0</title>
 <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+
 <header>
-<h1>Project 4: Neural Radiance Fields (NeRF)</h1>
-<h2>Eason Wei — CS180 / Fall 2025</h2>
+  <h1>Project 4: Neural Radiance Fields (NeRF)</h1>
+  <h2>Eason Wei — CS180 / Fall 2025</h2>
 </header>
+
+<!-- ===== Introduction ===== -->
 <section id="intro" class="card">
   <h2>Introduction</h2>
   <p>
@@ -23,36 +27,39 @@
   </p>
 </section>
 
-
+<!-- ===== Part 0 ===== -->
 <section id="part0">
-<h2>Part 0 — Camera Calibration & 3D Object Scanning</h2>
-<p></p>
+  <h2>Part 0 — Camera Calibration & 3D Object Scanning</h2>
+  <p></p>
 
+  <!-- ===== 0.1 Camera Calibration ===== -->
+  <h3>0.1 Camera Calibration</h3>
+  <p>
+    In this section, I printed a 6-tag ArUco grid and captured 50 images of it. Since the originals were 
+    in <code>.heic</code> format and very large, I first converted them to <code>.jpg</code> using a Python script. 
+    I measured each printed tag to be 0.57 units wide and used this to define the 3D coordinates of all tag 
+    corners. Using <code>cv2.aruco.detectMarkers</code>, I extracted the 2D corner locations and applied a mask to 
+    correctly index all six tags. Finally, I computed the intrinsic matrix <b>K</b> and distortion coefficients 
+    using <code>cv2.calibrateCamera</code>.
+  </p>
 
-<h3>0.1 Camera Calibration</h3>
-<p>Insert description + screenshots here.</p>
-<div class="img-container">
-<img src="images/calibration1.png" alt="Calibration Screenshot 1" />
-<img src="images/calibration2.png" alt="Calibration Screenshot 2" />
-</div>
+  <!-- ===== 0.2 Object Capture ===== -->
+  <h3>0.2 Object Capture</h3>
+  <p>Insert object capture explanation + sample captured images.</p>
 
+  <!-- ===== 0.3 Pose Estimation ===== -->
+  <h3>0.3 Pose Estimation (PnP)</h3>
+  <p>Insert Viser camera frustum plots here.</p>
+  <div class="img-container">
+    <img src="images/viser_cam_plot1.png" alt="Viser Camera Plot 1" />
+    <img src="images/viser_cam_plot2.png" alt="Viser Camera Plot 2" />
+  </div>
 
-<h3>0.2 Object Capture</h3>
-<p>Insert object capture explanation + sample captured images.</p>
+  <!-- ===== 0.4 Dataset Packaging ===== -->
+  <h3>0.4 Dataset Packaging</h3>
+  <p>Insert explanation + final dataset statistics.</p>
 
-
-<h3>0.3 Pose Estimation (PnP)</h3>
-<p>Insert Viser camera frustum plots here.</p>
-<div class="img-container">
-<img src="images/viser_cam_plot1.png" alt="Viser Camera Plot 1" />
-<img src="images/viser_cam_plot2.png" alt="Viser Camera Plot 2" />
-</div>
-
-
-<h3>0.4 Dataset Packaging</h3>
-<p>Insert explanation + final dataset statistics.</p>
 </section>
-
 
 </body>
 </html>
