@@ -274,8 +274,6 @@
 
   <p>
     Below are examples of the reconstruction quality at different training iterations.
-    Lower-frequency / narrower-width networks (e.g., freq=2, width=64) struggle with high-frequency
-    details, while the full model (freq=10, width=256) captures the image much more accurately.
   </p>
 
   <!-- ─────────────────────────────────────────────── -->
@@ -284,22 +282,39 @@
   <div class="image-stack">
     <figure>
       <img src="wolf_progress.png" alt="Original">
-      <figcaption class="notes">Original image</figcaption>
     </figure>
+    <p>
+  During training, the MLP learns a continuous mapping from 2D coordinates → RGB values using batches of randomly 
+  sampled pixels. At early iterations (e.g., 50–100), the network captures only coarse color blobs because it first 
+  fits the low-frequency structure of the image. As training progresses, higher-frequency details emerge: edges become 
+  sharper, textures appear, and colors stabilize. By 1000–2000 iterations, the model converges to a smooth, 
+  high-fidelity reconstruction that closely matches the original image. This progression highlights how neural fields 
+  naturally learn images from coarse-to-fine detail through gradient descent.
+</p>
 
     <figure>
       <img src="wolf_grid.png" alt="Iter 50">
-      <figcaption class="notes">Reconstruction at 50 iterations</figcaption>
     </figure>
+    <p>
+  The hyperparameter sweep clearly shows how positional frequency and network width affect reconstruction quality. 
+  With only <b>2 frequency bands</b>, the model cannot represent high-frequency detail, producing overly smooth and 
+  blurry results even with a wider MLP. Increasing to <b>10 frequencies</b> dramatically sharpens edges and textures, 
+  enabling the network to reproduce fine details in the fur and background. Width also matters: the narrow 
+  <b>64-unit</b> MLP struggles with capacity, introducing graininess and losing subtle shading, while the 
+  <b>256-unit</b> version produces smoother colors and more faithful contours. Overall, <b>high frequency + large width</b> 
+  yields the most accurate reconstruction, demonstrating that spatial detail is controlled primarily by positional 
+  encoding, while network width governs representational capacity.
+  </p>
+
 
     <figure>
       <img src="flowers_progress.png" alt="Iter 250">
-      <figcaption class="notes">Reconstruction at 250 iterations</figcaption>
+      <figcaption class="notes">reconstruction for flower image</figcaption>
     </figure>
 
     <figure>
       <img src="flowers_grid.png" alt="Iter 1000">
-      <figcaption class="notes">Reconstruction at 1000 iterations</figcaption>
+      <figcaption class="notes">reconstruction using a 2x2 grid of results</figcaption>
     </figure>
 
     <figure>
