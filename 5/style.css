@@ -62,35 +62,4 @@ text-decoration: none;
 font-size: 0.95rem;
 }
 .sidebar a:hover {
-color: white;
 }
-
-
-/* ===== MAIN CONTENT ===== */
-.container {
-margin-left: 270px;
-padding: 40px;
-max-width: 1200px;
-}
-
-
-/* ===== CARD SECTIONS ===== */
-.card {
-background: var(--card-bg);
-padding: 28px;
-margin-bottom: 45px;
-border-radius: 10px;
-border: 1px solid var(--border);
-box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-}
-.card h2 {
-margin-top: 0;
-border-left: 5px solid var(--accent);
-padding-left: 10px;
-}
-
-
-/* ===== IMAGES ===== */
-.image-stack {
-display: flex;
-flex-wrap: wrap;
