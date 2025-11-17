@@ -538,7 +538,7 @@
   </p>
 
   <p>
-    I implement the standard NeRF rendering equation:
+    I implement the standard volume rendering equation:
   </p>
 
   <p class="math-block">
@@ -559,18 +559,18 @@
 
   <div class="image-stack">
     <figure>
-      <img src="images/volrend_samples.png" alt="Samples along ray">
-      <figcaption>Samples along a ray: each point has a predicted density and color.</figcaption>
+      <img src="training_progress.png" alt="Samples along ray">
+      <figcaption>volume rendering of images at different iterations</figcaption>
     </figure>
 
     <figure>
-      <img src="images/volrend_accumulation.png" alt="Alpha compositing diagram">
-      <figcaption>Alpha compositing: densities are converted into transmittance \(T_i\) and weights.</figcaption>
+      <img src="psnr_curves.png" alt="Alpha compositing diagram">
+      <figcaption>psnrs curves for both training and validation set</figcaption>
     </figure>
 
     <figure>
-      <img src="images/volrend_output.png" alt="Final rendered validation image">
-      <figcaption>Final rendered validation image using 64 samples per ray.</figcaption>
+      <img src="lego_rotation.gif" alt="Final rendered validation image">
+      <figcaption>novel view of the lego</figcaption>
     </figure>
   </div>
 </section>
