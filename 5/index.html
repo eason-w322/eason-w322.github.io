@@ -385,11 +385,38 @@
 </section>
 
   <!-- ===== Part 2.3 ===== -->
-  <h3>2.3 — Putting the Dataloading All Together</h3>
+<section id="part2_3" class="card">
+  <h2>Part 2.3 — Putting the Dataloading All Together</h2>
+
   <p>
-    Placeholder content — packaging rays, RGB targets, batching, shuffling,
-    and preparing the dataset for training.
+    In this step, I build a <b>RaysData</b> class that converts the entire training set into a 
+    unified ray dataset. For every image, I generate a full grid of pixel centers, convert each 
+    pixel into a ray using its camera pose, and flatten all rays across all views into:
   </p>
+
+  <p class="math-block">
+    \[
+      \text{rays\_o},\; \text{rays\_d},\; \text{pixels}
+      \in \mathbb{R}^{(N\,H\,W)\times 3}.
+    \]
+  </p>
+
+  <p>
+    This lets NeRF randomly sample rays from the <b>entire multi-view dataset</b> in constant time, 
+    without recomputing per-image ray geometry. I also verify correctness by checking that UV 
+    coordinates from the flattened buffer match the original pixel RGBs.
+  </p>
+
+  <p>
+    To better understand the geometry, I visualize the setup in <b>Viser</b> by rendering all camera 
+    frustums, a random subset of rays, and their sampled 3D points. The result clearly shows a 
+    <b>dome-shaped capture pattern</b> around the object—ideal for NeRF training.
+  </p>
+
+  <div class="image-stack">
+    <figure>
+      <img src="viser3.png" alt="Camera frustums">
+    </figure>
 
   <!-- ===== Part 2.4 ===== -->
   <section id="part2_4" class="card">
