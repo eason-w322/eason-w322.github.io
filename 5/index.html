@@ -17,6 +17,13 @@
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
 </head>
+<script>
+document.getElementById("replay-btn").onclick = function () {
+    const gif = document.getElementById("lego-gif");
+    const base = gif.src.split("?")[0];
+    gif.src = base + "?t=" + Date.now();  // force reload
+};
+</script>
 
 <body>
   <!-- ===== HEADER ===== -->
