@@ -17,14 +17,8 @@
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
   </script>
 </head>
-<script>
-document.getElementById("replay-btn").onclick = function () {
-    const gif = document.getElementById("lego-gif");
-    const base = gif.src.split("?")[0];
-    gif.src = base + "?t=" + Date.now();  // force reload
-};
-</script>
 
+  
 <body>
   <!-- ===== HEADER ===== -->
   <header class="site-header">
@@ -636,6 +630,19 @@ T_i = \exp\!\left( -\sum_{j=1}^{i-1} \sigma_j \, \delta_j \right),
   </div>
 
 </section>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const replay = document.getElementById("replay-btn");
+  const gif = document.getElementById("lego-gif");
+
+  if (replay && gif) {
+    replay.addEventListener("click", () => {
+      const base = gif.src.split("?")[0];
+      gif.src = base + "?t=" + Date.now(); // force reload
+    });
+  }
+});
+</script>
 
 
 </main>
