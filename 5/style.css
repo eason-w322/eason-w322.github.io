@@ -241,6 +241,27 @@ document.getElementById("replay-btn").onclick = function () {
     }, 20);                // small delay avoids caching
 };
 </script>
+.gif-wrapper {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+#replay-btn {
+  margin-top: 12px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+#replay-btn:hover {
+  background: #005fa3;
+  transform: translateY(-2px);
+}
 
 /* ────────────────────────────── */
 /* Footer                         */
