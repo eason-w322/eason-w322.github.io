@@ -243,11 +243,14 @@
     the full-resolution image.
   </p>
 
+  <!-- ─────────────────────────────────────────────── -->
+  <!-- Concise Architecture Box -->
+  <!-- ─────────────────────────────────────────────── -->
   <div style="
     background: rgba(20,25,35,0.8);
     border: 1px solid var(--border);
     border-radius: 12px;
-      padding: 14px 18px;
+    padding: 14px 18px;
     margin: 20px 0;
     font-size: 0.93rem;
   ">
@@ -275,54 +278,68 @@
     Below are examples of the reconstruction quality at different training iterations.
   </p>
 
+  <!-- ─────────────────────────────────────────────── -->
+  <!-- Five-image placeholder gallery -->
+  <!-- ─────────────────────────────────────────────── -->
   <div class="image-stack">
     <figure>
       <img src="wolf_progress.png" alt="Original">
     </figure>
-
     <p>
-      During training, the MLP learns a continuous mapping from 2D coordinates → RGB values using
-      batches of randomly sampled pixels. Early iterations capture only coarse low-frequency colors,
-      and later iterations refine sharp edges and textures.
-    </p>
+  During training, the MLP learns a continuous mapping from 2D coordinates → RGB values using batches of randomly 
+  sampled pixels. At early iterations (e.g., 50–100), the network captures only coarse color blobs because it first 
+  fits the low-frequency structure of the image. As training progresses, higher-frequency details emerge: edges become 
+  sharper, textures appear, and colors stabilize. By 1000–2000 iterations, the model converges to a smooth, 
+  high-fidelity reconstruction that closely matches the original image. This progression highlights how neural fields 
+  naturally learn images from coarse-to-fine detail through gradient descent.
+</p>
 
     <figure>
       <img src="wolf_grid.png" alt="Iter 50">
     </figure>
-
     <p>
-      High frequencies dramatically improve detail. A 10-frequency, 256-width model reconstructs
-      edges, textures, and shading far better than the low-frequency or narrow-width versions.
-    </p>
+  The hyperparameter sweep clearly shows how positional frequency and network width affect reconstruction quality. 
+  With only <b>2 frequency bands</b>, the model cannot represent high-frequency detail, producing overly smooth and 
+  blurry results even with a wider MLP. Increasing to <b>10 frequencies</b> dramatically sharpens edges and textures, 
+  enabling the network to reproduce fine details in the fur and background. Width also matters: the narrow 
+  <b>64-unit</b> MLP struggles with capacity, introducing graininess and losing subtle shading, while the 
+  <b>256-unit</b> version produces smoother colors and more faithful contours. Overall, <b>high frequency + large width</b> 
+  yields the most accurate reconstruction, demonstrating that spatial detail is controlled primarily by positional 
+  encoding, while network width governs representational capacity.
+  </p>
+
 
     <figure>
       <img src="flowers_progress.png" alt="Iter 250">
-      <figcaption class="notes">reconstruction of flower image</figcaption>
+      <figcaption class="notes">reconstruction for flower image</figcaption>
     </figure>
 
     <figure>
       <img src="flowers_grid.png" alt="Iter 1000">
-      <figcaption class="notes">grid of flower reconstructions</figcaption>
+      <figcaption class="notes">reconstruction using a 2x2 grid of results</figcaption>
     </figure>
 
     <figure>
       <img src="psnrs.png" alt="Final Reconstruction">
-      <figcaption class="notes">PSNR curves</figcaption>
+      <figcaption class="notes">psnrs for flower image</figcaption>
     </figure>
   </div>
 
 </section>
 
-<!-- ====================================================== -->
+    <!-- ====================================================== -->
 <!-- ===================== PART 2 ========================= -->
 <!-- ====================================================== -->
-
-<section id="part2_1" class="card">
+  <section id="part2_1" class="card">
   <h2>Part 2.1 — Create Rays from Cameras</h2>
 
   <p>
-    For every pixel \((u, v)\), I convert it into a ray in world space using the intrinsics \(K\)
-    and camera pose <code>c2w</code>. This yields a ray origin and normalized direction.
+    In this step, I convert each pixel in an image into a <b>3D camera ray</b> that NeRF can train on.
+    For every pixel coordinate \((u, v)\), I first back-project it through the intrinsic matrix 
+    <code>K</code> to obtain a point at unit depth in <i>camera coordinates</i>. I then transform this 
+    point into <i>world coordinates</i> using the camera-to-world matrix <code>c2w</code>, which gives 
+    me the ray origin (the camera center) and a normalized ray direction. This produces one ray per pixel — 
+    the fundamental input representation for NeRF.
   </p>
 
   <p class="math-block">
@@ -332,130 +349,280 @@
   </p>
 
   <p>
-    I validate the implementation by verifying consistent projection and visualizing test rays.
+    I verify the implementation by round-tripping a test point through <code>c2w</code> and its inverse,
+    and I also visualize a small pixel grid's ray directions to ensure they are consistent with the image 
+    geometry. These checks confirm that my camera-to-ray conversion is correct.
   </p>
 </section>
 
-<section id="part2_2" class="card">
+  <!-- ===== Part 2.2 ===== -->
+  <section id="part2_2" class="card">
   <h2>Part 2.2 — Sampling Points Along Rays</h2>
 
   <p>
-    For each ray, I sample 64 points between near and far bounds using stratified sampling. Each
-    point is passed to the NeRF network to predict color and density.
+    After generating camera rays, the next step is to sample 3D points along each ray so the NeRF 
+    MLP can predict color and density at those positions. I first randomly select an image, then 
+    randomly choose pixel indices and convert them into ray origins \(\mathbf{o}\) and directions 
+    \(\mathbf{d}\). This produces a batch of rays and their corresponding ground-truth RGB values.
+  </p>
+
+  <p>
+    For each ray, I sample <b>64 points</b> between a near and far bound (2.0 → 6.0). 
+    I use <b>stratified sampling</b>, which jitters each interval to produce unbiased Monte-Carlo samples 
+    and reduce aliasing. This is the standard NeRF sampling approach.
   </p>
 
   <p class="math-block">
     \[
-      \mathbf{x}_i = \mathbf{o} + t_i\,\mathbf{d},
-      \qquad
-      t_i \sim \text{Uniform}(t_{i,\text{lower}}, t_{i,\text{upper}})
+    t_i \sim \text{Uniform}(t_{i,\text{lower}},\, t_{i,\text{upper}}), \qquad
+    \mathbf{x}_i = \mathbf{o} + t_i\,\mathbf{d}.
     \]
+  </p>
+
+  <p>
+    The result is a tensor of sampled 3D points of shape \((N, 64, 3)\), and corresponding distances 
+    \(t_i\). These samples are later fed into the NeRF network and volume renderer. I also confirm the 
+    implementation by printing example rays, directions, and their first few sampled 3D points.
   </p>
 </section>
 
+  <!-- ===== Part 2.3 ===== -->
 <section id="part2_3" class="card">
   <h2>Part 2.3 — Putting the Dataloading All Together</h2>
 
   <p>
-    I generate rays for every pixel in every training image and store:
+    In this step, I build a <b>RaysData</b> class that converts the entire training set into a 
+    unified ray dataset. For every image, I generate a full grid of pixel centers, convert each 
+    pixel into a ray using its camera pose, and flatten all rays across all views into:
   </p>
 
   <p class="math-block">
     \[
-      (\text{rays}_o,\; \text{rays}_d,\; \text{pixels})
-      \in \mathbb{R}^{N H W \times 3}.
+      \text{rays_o},\; \text{rays_d},\; \text{pixels}
+      \in \mathbb{R}^{(N\,H\,W)\times 3}.
     \]
   </p>
 
-  <ul>
-    <li><b>Global sampling</b>: used for training.</li>
-    <li><b>Single-camera sampling</b>: used for clean debugging visualization.</li>
-  </ul>
+  <p>
+    I implemented <b>two complementary sampling modes</b>:
+  </p>
 
+  <ul>
+    <li>
+      <b>① Global Ray Sampling</b> — I flatten all rays from every training image into one array:
+      <code>N_images × H × W</code> rays. A minibatch is created by random indexing, which gives
+      uniform coverage across all viewpoints and is used for the actual NeRF training loop.
+    </li>
+
+    <li>
+      <b>② Single-Camera Sampling (for debugging)</b> — To avoid visual clutter in debugging,
+      I also allow sampling <b>only from one selected camera pose</b>. This makes Viser
+      visualizations clean and easy to interpret, since all rays originate from the same location.
+    </li>
+  </ul>
   <div class="image-stack">
     <figure>
       <img src="viser3.png" alt="Camera frustums">
     </figure>
+
     <figure>
       <img src="viser4.png" alt="Random rays">
     </figure>
-  </div>
-</section>
 
-<section id="part2_4" class="card">
+  <!-- ===== Part 2.4 ===== -->
+  <section id="part2_4" class="card">
   <h2>Part 2.4 — Neural Radiance Field (NeRF)</h2>
 
+  <p>
+    I implement a full NeRF model whose goal is to learn a volumetric scene representation that maps 
+    3D world coordinates and viewing directions into <b>density</b> and <b>RGB color</b>. 
+    The model follows the original NeRF architecture: positional encoding on both 
+    spatial coordinates and directions, an 8-layer MLP with a skip connection, and separate 
+    heads for density and color prediction.
+  </p>
+
+  <!-- ------------------------ -->
+  <!-- Architecture Summary Box -->
+  <!-- ------------------------ -->
   <div class="textbox">
-    <h3>NeRF Architecture</h3>
+    <h3>NeRF Architecture (My Implementation)</h3>
     <ul>
-      <li>10-freq positional encoding for xyz</li>
-      <li>4-freq encoding for directions</li>
-      <li>8-layer MLP, width 256</li>
-      <li>Skip connection at layer 4</li>
-      <li>Outputs: σ(x) and RGB(x, d)</li>
+      <li><b>Positional Encoding:</b>  
+        xyz → 3 + 2×3×L<sub>xyz</sub> (with L<sub>xyz</sub> = 10)  
+        dir → 3 + 2×3×L<sub>dir</sub> (with L<sub>dir</sub> = 4)
+      </li>
+
+      <li><b>MLP Depth:</b> 8 fully connected layers</li>
+      <li><b>Hidden Width:</b> 256</li>
+      <li><b>Skip Connection:</b> after layer 4 (concatenate xyz-encoding)</li>
+      <li><b>Outputs:</b>
+        <ul>
+          <li>Density σ(x) ∈ ℝ (ReLU)</li>
+          <li>Color c(x,d) ∈ [0,1]³ (Sigmoid)</li>
+        </ul>
+      </li>
     </ul>
   </div>
-</section>
 
-<section id="part2-5" class="card">
-  <h2>Part 2.5 — Volume Rendering</h2>
+  <h3>Positional Encoding</h3>
+  <p>
+    For both 3D location \(x \in \mathbb{R}^3\) and viewing direction \(d \in \mathbb{S}^2\),
+    NeRF applies multi-frequency sinusoidal encoding:
+  </p>
 
   <p class="math-block">
+    \[
+    \gamma(x)
+    = 
+    \big[
+      x,\;
+      \sin(2^0\pi x),\cos(2^0\pi x),\;
+      \dots,\;
+      \sin(2^{L-1}\pi x),\cos(2^{L-1}\pi x)
+    \big].
+    \]
+  </p>
+
+  <h3>MLP with Skip Connection</h3>
+  <p>
+    The encoded position \(\gamma(x)\) flows through the first 4 layers. 
+    After layer 4, NeRF concatenates the original \(\gamma(x)\) to form a controlled 
+    skip connection that preserves high-frequency geometry:
+  </p>
+
+  <p class="math-block">
+    \[
+    h_4 = F_4(\gamma(x)), \qquad 
+    h_{\text{skip}} = [h_4,\, \gamma(x)].
+    \]
+  </p>
+
+  <p>
+    The following layers compute a feature vector \(f\), then predict:
+  </p>
+
+  <p class="math-block">
+    \[
+    \sigma = \text{ReLU}(W_\sigma h_{\text{skip}}),
+    \qquad
+    f = W_f h_{\text{skip}}.
+    \]
+  </p>
+
+  <p>
+    Directional encoding \(\gamma(d)\) is concatenated with features to produce RGB:
+  </p>
+
+  <p class="math-block">
+    \[
+    c = \text{Sigmoid}(W_c [f,\, \gamma(d)]).
+    \]
+  </p>
+
+  <h3>Output</h3>
+  <p>
+    Given many 3D sample points along a ray, NeRF predicts both
+    <b>volume density</b> and <b>view-dependent color</b>. These outputs feed into 
+    the volume rendering equation in Part&nbsp;2.5 to synthesize pixel colors.
+  </p>
+</section>
+
+  <!-- ===== Part 2.5 ===== -->
+  <section id="part2-5" class="card">
+  <h2>Part 2.5 — Volume Rendering</h2>
+
+  <p>
+    Once the NeRF MLP predicts <b>density</b> \( \sigma \) and <b>color</b> \( \mathbf{c} \)
+    for every sampled 3D point, the next step is to convert these values into a final pixel
+    color using <b>volume rendering</b>. For each ray, I accumulate contributions from all
+    samples using alpha compositing, which models how light is absorbed and emitted along
+    the ray.
+  </p>
+
+  <p>
+    I implement the standard volume rendering equation:
+  </p>
+
+<p class="math-block">
 \[
-C(\mathbf{r})
-   = \sum_{i=1}^{N}
-     T_i\,\alpha_i\,\mathbf{c}_i,
-\quad
-T_i = \exp\!\left(-\sum_{j < i}\sigma_j\delta_j\right),
-\quad
-\alpha_i = 1 - \exp(-\sigma_i\delta_i).
+C(\mathbf{r}) = \sum_{i=1}^{N} T_i \, \alpha_i \, \mathbf{c}_i,
+\qquad
+T_i = \exp\!\left( -\sum_{j=1}^{i-1} \sigma_j \, \delta_j \right),
+\qquad
+\alpha_i = 1 - \exp(-\sigma_i \, \delta_i).
 \]
+</p>
+
+  <p>
+    The model uses a numerically stable formulation based on cumulative log-transmittance.
+    After calculating ray colors for thousands of rays per iteration, I compute the MSE loss
+    against ground-truth RGB values and backpropagate through the entire rendering pipeline.
   </p>
 
   <div class="image-stack">
     <figure>
       <img src="training_progress.png" alt="Samples along ray">
-      <figcaption>volume rendering during iterations</figcaption>
+      <figcaption>volume rendering of images at different iterations</figcaption>
     </figure>
+
     <figure>
-      <img src="psnr_curves.png" alt="PSNR curves">
-      <figcaption>PSNR curves</figcaption>
+      <img src="psnr_curves.png" alt="Alpha compositing diagram">
+      <figcaption>psnrs curves for both training and validation set</figcaption>
     </figure>
-  </div>
 
   <div class="gif-wrapper">
-    <img id="lego-gif" src="lego_rotation.gif" alt="Lego Rotation GIF">
-    <button id="replay-btn">Replay GIF</button>
-  </div>
+  <img id="lego-gif" src="lego_rotation.gif" alt="Lego Rotation GIF">
+
+  <button id="replay-btn">Replay GIF</button>
+</div>
 </section>
 
+  <!-- ===== Part 2.6 ===== -->
 <section id="part2-6" class="card">
   <h2>Part 2.6 — Training NeRF on My Own Data</h2>
 
+  <!-- Hyperparameters Box -->
   <div class="textbox">
     <h3>Training Hyperparameters</h3>
     <ul>
-      <li>10,000 iterations</li>
-      <li>Batch size: 8192</li>
-      <li>64 samples per ray</li>
-      <li>Near/Far = 0.01 / 1.5</li>
-      <li>Adam, lr=3e-4</li>
+      <li><b>Iterations:</b> 10,000</li>
+      <li><b>Batch size:</b> 8192 rays</li>
+      <li><b>Samples per ray:</b> 64</li>
+      <li><b>Near bound:</b> 0.01</li>
+      <li><b>Far bound:</b> 1.5</li>
+      <li><b>Learning rate:</b> 3e-4 (Adam)</li>
+      <li><b>Model:</b> 8-layer NeRF, width 256, skip connection at layer 4</li>
     </ul>
   </div>
 
+  <h3>Reconstruction Progress</h3>
+  <p>
+    Below are six snapshots of the validation view rendered at different
+    iterations[200, 1500, 2500, 5000, 8000, 10000] during training. These demonstrate how the scene gradually
+    becomes sharper and more consistent as NeRF learns geometry and color.
+  </p>
+
+  <!-- 6-image grid -->
   <div class="image-grid-3col">
-    <img src="val_0200.png">
-    <img src="val_1500.png">
-    <img src="val_2500.png">
-    <img src="val_5000.png">
-    <img src="val_8000.png">
-    <img src="val_10000.png">
+    <img src="val_0200.png" alt="200 iters">
+    <img src="val_1500.png" alt="1500 iters">
+    <img src="val_2500.png" alt="2500 iters">
+    <img src="val_5000.png" alt="5000 iters">
+    <img src="val_8000.png" alt="8000 iters">
+    <img src="val_10000.png" alt="10000 iters">
   </div>
 
+  <h3>Training Curves</h3>
   <div class="image-grid-2col">
-    <img src="psnr_labubu_curve.png">
-    <img src="loss_curve.png">
+    <img src="psnr_labubu_curve.png" alt="PSNR curve">
+    <img src="loss_curve.png" alt="Loss curve">
   </div>
+
+  <h3>Final Novel View Synthesis</h3>
+  <p>
+    I generate a 360° orbit GIF around the reconstructed object by rotating a
+    virtual camera around the estimated scene center.
+  </p>
 
   <div class="gif-container">
     <img src="results/my_nerf_training/orbit.gif" alt="orbit gif">
@@ -463,31 +630,12 @@ T_i = \exp\!\left(-\sum_{j < i}\sigma_j\delta_j\right),
 
 </section>
 
+
 </main>
 
+<!-- ===== FOOTER ===== -->
 <footer>
   <p>© 2025 Eason Wei | UC Berkeley CS180 – Neural Radiance Fields</p>
 </footer>
-
-<!-- ==================================================== -->
-<!--  FIXED REPLAY BUTTON SCRIPT (this makes it work)    -->
-<!-- ==================================================== -->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const replay = document.getElementById("replay-btn");
-  const gif = document.getElementById("lego-gif");
-
-  if (replay && gif) {
-    replay.addEventListener("click", () => {
-      const src = gif.src;
-      gif.src = "";      // force full reload
-      setTimeout(() => {
-        gif.src = src;   // restart GIF
-      }, 30);
-    });
-  }
-});
-</script>
-
 </body>
 </html>
