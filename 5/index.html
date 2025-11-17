@@ -542,13 +542,13 @@
   </p>
 
   <p class="math-block">
-    \[
-      C(\mathbf{r}) \;=\; \sum_{i=1}^{N} T_i \, \alpha_i \, \mathbf{c}_i,
-      \qquad
-      T_i = \exp\!\Big(-\sum_{j<i} \sigma_j \Delta t \Big),
-      \qquad
-      \alpha_i = 1 - e^{-\sigma_i \Delta t}.
-    \]
+\[
+C(\mathbf{r}) = \sum_{i=1}^{N} T_i \, \alpha_i \, \mathbf{c}_i,
+\qquad
+T_i = \exp\!\Big(-\sum_{j<i} \sigma_j \, \delta_j\Big),
+\qquad
+\alpha_i = 1 - \exp(-\sigma_i \, \delta_i).
+\]
   </p>
 
   <p>
