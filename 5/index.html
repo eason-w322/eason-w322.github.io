@@ -629,6 +629,39 @@ T_i = \exp\!\left( -\sum_{j=1}^{i-1} \sigma_j \, \delta_j \right),
     <img src="labubu1.gif" alt="orbit gif">
   </div>
 
+  <div class="gif-container">
+    <img src="" alt="orbit gif">
+  </div>
+
+  <p>
+  Training a full NeRF on my own dataset turned out to be significantly more challenging
+  than the earlier parts. The validation renderings were initially low-resolution and often
+  contained artifacts such as black borders, missing geometry, and incorrect colors.
+  Even after 5,000 iterations, the validation PSNR consistently plateaued below 19 dB,
+  indicating that the model was failing to generalize well. I experimented with increasing
+  <code>N_samples</code> and the batch size, but these changes provided only marginal visual
+  improvements while greatly increasing runtime. Training on my MacBook CPU became
+  impractical, so I switched to running the NeRF on an MBS GPU, which allowed more
+  iterations and larger batches—but still required extensive hyperparameter tuning.
+</p>
+
+<p>
+  The most impactful improvement came from increasing the size of the training set.
+  Instead of using 70% of the 35 captured images, I expanded the training subset to
+  45 images and reserved only 5 for validation. This provided the model with much denser
+  multi-view coverage, noticeably improving stability and reducing artifacts. In the final
+  reconstruction, the Labubu figure and the ArUco marker both become clearly recognizable,
+  although some fine facial details remain missing—likely due to small pose-estimation
+  inaccuracies and imperfect extrinsics during data capture.
+</p>
+
+<p>
+  Despite these challenges, the final 360° novel-view GIF is reasonably smooth and visually
+  coherent. While not perfect, it demonstrates that with sufficient training coverage
+  and careful tuning, a full NeRF can be reconstructed from a small, real-world dataset.
+</p>
+
+  
 </section>
 
 
