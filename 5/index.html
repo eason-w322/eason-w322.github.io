@@ -578,11 +578,56 @@ T_i = \exp\!\left( -\sum_{j=1}^{i-1} \sigma_j \, \delta_j \right),
 </section>
 
   <!-- ===== Part 2.6 ===== -->
-  <h3>2.6 — Training with Your Own Data</h3>
+<section id="part2-6" class="card">
+  <h2>Part 2.6 — Training NeRF on My Own Data</h2>
+
+  <!-- Hyperparameters Box -->
+  <div class="textbox">
+    <h3>Training Hyperparameters</h3>
+    <ul>
+      <li><b>Iterations:</b> 10,000</li>
+      <li><b>Batch size:</b> 8192 rays</li>
+      <li><b>Samples per ray:</b> 64</li>
+      <li><b>Near bound:</b> 0.01</li>
+      <li><b>Far bound:</b> 1.5</li>
+      <li><b>Learning rate:</b> 3e-4 (Adam)</li>
+      <li><b>Model:</b> 8-layer NeRF, width 256, skip connection at layer 4</li>
+    </ul>
+  </div>
+
+  <h3>Reconstruction Progress</h3>
   <p>
-    Placeholder content — training loop, batching strategy, PSNR curves,
-    and convergence behavior on your Labubu dataset.
+    Below are six snapshots of the validation view rendered at different
+    checkpoints during training. These demonstrate how the scene gradually
+    becomes sharper and more consistent as NeRF learns geometry and color.
   </p>
+
+  <!-- 6-image grid -->
+  <div class="image-grid-3col">
+    <img src="results/my_nerf_training/val_0200.png" alt="200 iters">
+    <img src="results/my_nerf_training/val_0500.png" alt="500 iters">
+    <img src="results/my_nerf_training/val_1000.png" alt="1000 iters">
+    <img src="results/my_nerf_training/val_3000.png" alt="3000 iters">
+    <img src="results/my_nerf_training/val_6000.png" alt="6000 iters">
+    <img src="results/my_nerf_training/val_10000.png" alt="10000 iters">
+  </div>
+
+  <h3>Training Curves</h3>
+  <div class="image-grid-2col">
+    <img src="results/my_nerf_training/psnr_curve.png" alt="PSNR curve">
+    <img src="results/my_nerf_training/loss_curve.png" alt="Loss curve">
+  </div>
+
+  <h3>Final Novel View Synthesis</h3>
+  <p>
+    I generate a 360° orbit GIF around the reconstructed object by rotating a
+    virtual camera around the estimated scene center. The GIF loops forever.
+  </p>
+
+  <div class="gif-container">
+    <img src="results/my_nerf_training/orbit.gif" alt="orbit gif">
+  </div>
+
 </section>
 
 
