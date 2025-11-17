@@ -231,16 +231,8 @@ p {
   margin: auto;
   border: 1px solid var(--border);
 }
-<script>
-document.getElementById("replay-btn").onclick = function () {
-    const gif = document.getElementById("lego-gif");
-    const src = gif.src;
-    gif.src = "";          // clear source (forces browser reset)
-    setTimeout(() => {
-        gif.src = src;     // reapply source
-    }, 20);                // small delay avoids caching
-};
-</script>
+
+/* Replay button styles */
 .gif-wrapper {
   text-align: center;
   margin-top: 1rem;
