@@ -593,6 +593,7 @@ T_i = \exp\!\left( -\sum_{j=1}^{i-1} \sigma_j \, \delta_j \right),
       <li><b>Far bound:</b> 1.5</li>
       <li><b>Learning rate:</b> 3e-4 (Adam)</li>
       <li><b>Model:</b> 8-layer NeRF, width 256, skip connection at layer 4</li>
+      <li><b>image size is downscaled from 3024 by 4032 to 600 by 800 for efficiency)</li>
     </ul>
   </div>
 
@@ -602,6 +603,10 @@ T_i = \exp\!\left( -\sum_{j=1}^{i-1} \sigma_j \, \delta_j \right),
     iterations[200, 1500, 2500, 5000, 8000, 10000] during training. These demonstrate how the scene gradually
     becomes sharper and more consistent as NeRF learns geometry and color.
   </p>
+  
+  <div class="image-grid-3col" style="margin-bottom: 20px;">
+  <img src="val_original.png" alt="Original validation image">
+</div>
 
   <!-- 6-image grid -->
   <div class="image-grid-3col">
@@ -648,7 +653,7 @@ T_i = \exp\!\left( -\sum_{j=1}^{i-1} \sigma_j \, \delta_j \right),
 <p>
   The most impactful improvement came from increasing the size of the training set.
   Instead of using 70% of the 35 captured images, I expanded the training subset to
-  45 images and reserved only 5 for validation. This provided the model with much denser
+  90% of 45 images and reserved only 5 for validation(out of total 50 images). This provided the model with much denser
   multi-view coverage, noticeably improving stability and reducing artifacts. In the final
   reconstruction, the Labubu figure and the ArUco marker both become clearly recognizable,
   although some fine facial details remain missing—likely due to small pose-estimation
