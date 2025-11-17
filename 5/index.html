@@ -402,20 +402,29 @@
   </p>
 
   <p>
-    This lets NeRF randomly sample rays from the <b>entire multi-view dataset</b> in constant time, 
-    without recomputing per-image ray geometry. I also verify correctness by checking that UV 
-    coordinates from the flattened buffer match the original pixel RGBs.
+    I implemented <b>two complementary sampling modes</b>:
   </p>
 
-  <p>
-    To better understand the geometry, I visualize the setup in <b>Viser</b> by rendering all camera 
-    frustums, a random subset of rays, and their sampled 3D points. The result clearly shows a 
-    <b>dome-shaped capture pattern</b> around the object—ideal for NeRF training.
-  </p>
+  <ul>
+    <li>
+      <b>① Global Ray Sampling</b> — I flatten all rays from every training image into one array:
+      <code>N_images × H × W</code> rays. A minibatch is created by random indexing, which gives
+      uniform coverage across all viewpoints and is used for the actual NeRF training loop.
+    </li>
 
+    <li>
+      <b>② Single-Camera Sampling (for debugging)</b> — To avoid visual clutter in debugging,
+      I also allow sampling <b>only from one selected camera pose</b>. This makes Viser
+      visualizations clean and easy to interpret, since all rays originate from the same location.
+    </li>
+  </ul>
   <div class="image-stack">
     <figure>
       <img src="viser3.png" alt="Camera frustums">
+    </figure>
+
+    <figure>
+      <img src="viser4.png" alt="Random rays">
     </figure>
 
   <!-- ===== Part 2.4 ===== -->
