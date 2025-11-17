@@ -526,12 +526,54 @@
 </section>
 
   <!-- ===== Part 2.5 ===== -->
-  <h3>2.5 — Volume Rendering</h3>
+  <section id="part2-5" class="card">
+  <h2>Part 2.5 — Volume Rendering</h2>
+
   <p>
-    Placeholder content — converting sampled densities into alpha weights,
-    computing transmittance, integrating color along rays, and producing
-    differentiable RGB predictions.
+    Once the NeRF MLP predicts <b>density</b> \( \sigma \) and <b>color</b> \( \mathbf{c} \)
+    for every sampled 3D point, the next step is to convert these values into a final pixel
+    color using <b>volume rendering</b>. For each ray, I accumulate contributions from all
+    samples using alpha compositing, which models how light is absorbed and emitted along
+    the ray.
   </p>
+
+  <p>
+    I implement the standard NeRF rendering equation:
+  </p>
+
+  <p class="math-block">
+    \[
+      C(\mathbf{r}) \;=\; \sum_{i=1}^{N} T_i \, \alpha_i \, \mathbf{c}_i,
+      \qquad
+      T_i = \exp\!\Big(-\sum_{j<i} \sigma_j \Delta t \Big),
+      \qquad
+      \alpha_i = 1 - e^{-\sigma_i \Delta t}.
+    \]
+  </p>
+
+  <p>
+    The model uses a numerically stable formulation based on cumulative log-transmittance.
+    After calculating ray colors for thousands of rays per iteration, I compute the MSE loss
+    against ground-truth RGB values and backpropagate through the entire rendering pipeline.
+  </p>
+
+  <div class="image-stack">
+    <figure>
+      <img src="images/volrend_samples.png" alt="Samples along ray">
+      <figcaption>Samples along a ray: each point has a predicted density and color.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="images/volrend_accumulation.png" alt="Alpha compositing diagram">
+      <figcaption>Alpha compositing: densities are converted into transmittance \(T_i\) and weights.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="images/volrend_output.png" alt="Final rendered validation image">
+      <figcaption>Final rendered validation image using 64 samples per ray.</figcaption>
+    </figure>
+  </div>
+</section>
 
   <!-- ===== Part 2.6 ===== -->
   <h3>2.6 — Training with Your Own Data</h3>
