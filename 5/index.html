@@ -29,18 +29,23 @@
   <nav class="sidebar">
     <ul>
       <li><a href="#intro">Introduction</a></li>
+
+      <!-- Part 0 -->
       <li><a href="#part0">Part 0 — Data Capture & Calibration</a></li>
       <li><a href="#part01">0.1 — Camera Calibration</a></li>
       <li><a href="#part02">0.2 — Object Capture</a></li>
       <li><a href="#part03">0.3 — Pose Estimation</a></li>
       <li><a href="#part04">0.4 — Dataset Packaging</a></li>
+
+      <!-- Future Parts -->
       <li><a href="#part1">Part 1 — 2D Neural Field</a></li>
-      <li><a href="#part2_1">Part 2.1 — Create Rays</a></li>
-      <li><a href="#part2_2">Part 2.2 — Sampling</a></li>
-      <li><a href="#part2_3">Part 2.3 — Dataloading</a></li>
-      <li><a href="#part2_4">Part 2.4 — NeRF Model</a></li>
-      <li><a href="#part2_5">Part 2.5 — Volume Rendering</a></li>
-      <li><a href="#part2_6">Part 2.6 — Own Data Training</a></li>
+      <li><a href="#part2.1">Part 2.1 — Create Rays from Cameras</a></li>
+      <li><a href="#part2.2">Part 2.2 — Sampling Points Along Rays</a></li>
+      <li><a href="#part2.3">Part 2.3 — Putting the Dataloading All Together</a></li>
+      <li><a href="#part2.4">Part 2.4 — Neural Radiance Field (NeRF)</a></li>
+      <li><a href="#part2.5">Part 2.5 — Volume Rendering</a></li>
+      <li><a href="#part2.6">Part 2.6 — Training with Your Own Data</a></li>
+      
     </ul>
   </nav>
 
@@ -79,16 +84,16 @@
       <h2>0.1 — Camera Calibration</h2>
 
       <p>
-        I printed a 6-tag ArUco grid and captured 50 high-resolution images. They were originally in
-        <code>.heic</code> format, so I batch-converted them to <code>.jpg</code> for processing. Each
-        printed marker measured 0.57 units wide, which I used to define the world coordinates of all tag
+        I printed a 6-tag ArUco grid and captured 50 high-resolution images. Since they were originally
+        in <code>.heic</code> format, I batch-converted them into <code>.jpg</code> for processing. Each
+        printed marker measured 0.57 units wide, which I used to define the 3D coordinates of all tag
         corners.
       </p>
 
       <p>
         Using <code>cv2.aruco.detectMarkers</code>, I detected all visible markers and applied a mask to
-        ensure consistent indexing across frames. Then I called <code>cv2.calibrateCamera</code> to recover
-        the intrinsic matrix \(K\) and distortion coefficients.
+        ensure consistent indexing across frames. Finally, I used <code>cv2.calibrateCamera</code> to
+        recover the camera’s intrinsic matrix \(K\) and distortion coefficients.
       </p>
     </section>
 
@@ -97,9 +102,12 @@
     <!-- ========================= -->
     <section id="part02" class="card">
       <h2>0.2 — Object Capture</h2>
+
       <p>
-        I captured ~50 images of my Labubu figure beside a single ArUco tag. I kept exposure fixed and
-        rotated around the object to maximize multi-view coverage.
+        I captured ~50 images of my Labubu figure beside a single ArUco tag. The camera remained
+        10–20 cm away, ensuring the object filled roughly half the frame. I kept exposure
+        consistent, avoided motion blur, and varied the angle around a circular path to maximize
+        multi-view coverage.
       </p>
     </section>
 
@@ -108,7 +116,11 @@
     <!-- ========================= -->
     <section id="part03" class="card">
       <h2>0.3 — Pose Estimation (PnP)</h2>
-      <p>For each image, I detect the tag corners and solve the PnP problem.</p>
+
+      <p>
+        For each image, I detect the tag, extract its 2D corners, and solve for camera extrinsics
+        using <code>cv2.solvePnP</code>. The projection model follows:
+      </p>
 
       <p class="math-block">
         \[
@@ -117,10 +129,18 @@
         \]
       </p>
 
+      <p>
+        The rotation vector is converted using Rodrigues:
+      </p>
+
       <p class="math-block">
         \[
         R = \mathrm{Rodrigues}(\mathbf{r})
         \]
+      </p>
+
+      <p>
+        World-to-camera:
       </p>
 
       <p class="math-block">
@@ -132,6 +152,10 @@
         \]
       </p>
 
+      <p>
+        And camera-to-world:
+      </p>
+
       <p class="math-block">
         \[
         \mathrm{c2w} =
@@ -141,187 +165,329 @@
         \]
       </p>
 
+      <p>
+        Because NeRF uses a different coordinate convention, I apply a diagonal flip:
+      </p>
+
+      <p class="math-block">
+        \[
+        D = \mathrm{diag}(1,-1,-1)
+        \]
+      </p>
+
+      <p>
+        Below are the Viser-rendered camera frustums:
+      </p>
+
       <div class="image-stack">
         <figure>
           <img src="viser1.png" alt="Viser Plot 1">
+          <figcaption>Dome-like coverage — dense sampling of azimuth angles.</figcaption>
         </figure>
 
         <figure>
           <img src="viser2.png" alt="Viser Plot 2">
+          <figcaption>Full 360° pose sweep ensures strong multi-view parallax.</figcaption>
         </figure>
       </div>
     </section>
 
     <!-- ========================= -->
-    <!-- 0.4 PACKAGING -->
+    <!-- 0.4 DATASET PACKAGING -->
     <!-- ========================= -->
     <section id="part04" class="card">
       <h2>0.4 — Dataset Packaging</h2>
       <p>
-        I load all images, undistort them using the calibrated intrinsics, compute the resized focal
-        length, and then package everything into <code>my_data.npz</code>.
+  In this step, I load the 50 resized Labubu images and their camera poses from Part&nbsp;0.3, then
+  undistort each image using the scaled intrinsic matrix \(K\) and the distortion coefficients from
+  the original calibration. This produces a clean, distortion-free set of inputs for NeRF.
+</p>
+
+<p>
+  I then split the 50 images into <b>train/val/test</b> sets using a 70/15/15 ratio. The split is
+  done over image indices with a fixed random seed, and each subset contains both the undistorted
+  RGB images and their corresponding camera-to-world matrices.
+</p>
+
+<p>
+  The focal length is computed from the resized intrinsics as
+  \( f = (K_{00} + K_{11}) / 2 \), and all data—images, poses, intrinsics, and focal—is packaged
+  into <code>my_data.npz</code> for NeRF training.
+</p>
+
+      <p>
+        This single file is used for every remaining stage of the NeRF pipeline.
       </p>
     </section>
 
     <!-- ========================= -->
-    <!-- PART 1 -->
+    <!-- PLACEHOLDER SECTIONS -->
     <!-- ========================= -->
     <section id="part1" class="card">
-      <h2>Part 1 — Neural Field for 2D Image Reconstruction</h2>
+  <h2>Part 1 — Neural Field for 2D Image Reconstruction</h2>
 
-      <p>
-        I train a coordinate-based MLP to reconstruct a 2D RGB image from normalized pixel coordinates.
-      </p>
+  <p>
+    In this part, I train a coordinate-based neural network to reconstruct a 2D image. 
+    The model learns a continuous mapping
+  </p>
 
-      <p class="math-block">
-        \[
-        F_\theta(x, y) \to \text{RGB}
-        \]
-      </p>
+  <p class="math-block">
+    \[
+      F_{\theta}(x, y) \rightarrow \text{RGB},
+    \]
+  </p>
 
-      <div class="textbox">
-        <h3>Neural Field Architecture</h3>
-        <p><b>Positional Encoding:</b> 10 frequencies (also compared with 2)</p>
-        <p><b>MLP:</b> width 256 (also compared with 64), two hidden layers</p>
-        <p><b>Output:</b> Sigmoid RGB</p>
-      </div>
+  <p>
+    where each pixel is represented by normalized \((x, y)\) coordinates in \([0,1]^2\).
+    With positional encoding and a small MLP, the network gradually learns to reproduce 
+    the full-resolution image.
+  </p>
 
-      <div class="image-stack">
-        <figure><img src="wolf_progress.png"></figure>
-        <figure><img src="wolf_grid.png"></figure>
-        <figure><img src="flowers_progress.png"></figure>
-        <figure><img src="flowers_grid.png"></figure>
-        <figure><img src="psnrs.png"></figure>
-      </div>
-    </section>
+  <div style="
+    background: rgba(20,25,35,0.8);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+      padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 0.93rem;
+  ">
+    <h3 style="color: var(--accent); margin-bottom: 8px;">Neural Field Architecture</h3>
 
-    <!-- ========================= -->
-    <!-- PART 2.1 -->
-    <!-- ========================= -->
-    <section id="part2_1" class="card">
-      <h2>Part 2.1 — Create Rays from Cameras</h2>
-      <p>Convert pixel coordinates to 3D world rays using intrinsics and camera poses.</p>
+    <p><b>Input:</b> 2D pixel coordinate \((x, y)\)</p>
 
-      <p class="math-block">
-        \[
-        \mathbf{r}(t) = \mathbf{o} + t\,\mathbf{d}
-        \]
-      </p>
-    </section>
+    <p><b>Positional Encoding:</b> 10 frequency bands  
+       <span style="color: var(--muted);">(also compared with 2)</span>
+    </p>
 
-    <!-- ========================= -->
-    <!-- PART 2.2 -->
-    <!-- ========================= -->
-    <section id="part2_2" class="card">
-      <h2>Part 2.2 — Sampling Points Along Rays</h2>
+    <p><b>MLP:</b></p>
+    <ul style="margin-left: 18px;">
+      <li>Hidden width: 256 
+        <span style="color: var(--muted);">(also tested 64)</span>
+      </li>
+      <li>Two Linear + ReLU layers</li>
+      <li>Final Linear → Sigmoid (RGB)</li>
+    </ul>
 
-      <p>
-        For each ray, I sample 64 stratified points between a near/far bound.
-      </p>
-    </section>
+    <p><b>Loss:</b> MSE <b>Optimizer:</b> Adam (lr = 1e−2)</p>
+  </div>
 
-    <!-- ========================= -->
-    <!-- PART 2.3 -->
-    <!-- ========================= -->
-    <section id="part2_3" class="card">
-      <h2>Part 2.3 — Dataloading</h2>
+  <p>
+    Below are examples of the reconstruction quality at different training iterations.
+  </p>
 
-      <ul>
-        <li><b>Global sampling</b>: sample rays across all images</li>
-        <li><b>Single-camera sampling</b>: debugging mode</li>
-      </ul>
+  <div class="image-stack">
+    <figure>
+      <img src="wolf_progress.png" alt="Original">
+    </figure>
 
-      <div class="image-stack">
-        <figure><img src="viser3.png"></figure>
-        <figure><img src="viser4.png"></figure>
-      </div>
-    </section>
+    <p>
+      During training, the MLP learns a continuous mapping from 2D coordinates → RGB values using
+      batches of randomly sampled pixels. Early iterations capture only coarse low-frequency colors,
+      and later iterations refine sharp edges and textures.
+    </p>
 
-    <!-- ========================= -->
-    <!-- PART 2.4 -->
-    <!-- ========================= -->
-    <section id="part2_4" class="card">
-      <h2>Part 2.4 — Neural Radiance Field</h2>
-      <p>Standard NeRF architecture with positional encoding and skip connections.</p>
-    </section>
+    <figure>
+      <img src="wolf_grid.png" alt="Iter 50">
+    </figure>
 
-    <!-- ========================= -->
-    <!-- PART 2.5 — VOLUME RENDERING -->
-    <!-- ========================= -->
-    <section id="part2_5" class="card">
-      <h2>Part 2.5 — Volume Rendering</h2>
+    <p>
+      High frequencies dramatically improve detail. A 10-frequency, 256-width model reconstructs
+      edges, textures, and shading far better than the low-frequency or narrow-width versions.
+    </p>
 
-      <p class="math-block">
-      \[
-      C(\mathbf{r}) = \sum_{i=1}^{N} T_i \alpha_i \mathbf{c}_i,
-      \quad
-      T_i = \exp\!\Big(-\sum_{j<i} \sigma_j \delta_j\Big),
-      \quad
-      \alpha_i = 1 - \exp(-\sigma_i \delta_i)
-      \]
-      </p>
+    <figure>
+      <img src="flowers_progress.png" alt="Iter 250">
+      <figcaption class="notes">reconstruction of flower image</figcaption>
+    </figure>
 
-      <div class="image-stack">
-        <figure><img src="training_progress.png"></figure>
-        <figure><img src="psnr_curves.png"></figure>
-      </div>
+    <figure>
+      <img src="flowers_grid.png" alt="Iter 1000">
+      <figcaption class="notes">grid of flower reconstructions</figcaption>
+    </figure>
 
-      <!-- GIF + Replay -->
-      <div class="gif-wrapper">
-        <img id="lego-gif" src="lego_rotation.gif" alt="Lego Rotation GIF">
-        <button id="replay-btn">Replay GIF</button>
-      </div>
-    </section>
+    <figure>
+      <img src="psnrs.png" alt="Final Reconstruction">
+      <figcaption class="notes">PSNR curves</figcaption>
+    </figure>
+  </div>
 
-    <!-- ========================= -->
-    <!-- PART 2.6 -->
-    <!-- ========================= -->
-    <section id="part2_6" class="card">
-      <h2>Part 2.6 — Training on My Own Data</h2>
+</section>
 
-      <div class="textbox">
-        <h3>Hyperparameters</h3>
-        <ul>
-          <li>10k iterations</li>
-          <li>Batch size 8192</li>
-          <li>NeRF: 8 layers, width 256</li>
-        </ul>
-      </div>
+<!-- ====================================================== -->
+<!-- ===================== PART 2 ========================= -->
+<!-- ====================================================== -->
 
-      <div class="image-grid-3col">
-        <img src="val_0200.png">
-        <img src="val_1500.png">
-        <img src="val_2500.png">
-        <img src="val_5000.png">
-        <img src="val_8000.png">
-        <img src="val_10000.png">
-      </div>
+<section id="part2_1" class="card">
+  <h2>Part 2.1 — Create Rays from Cameras</h2>
 
-      <div class="image-grid-2col">
-        <img src="psnr_labubu_curve.png">
-        <img src="loss_curve.png">
-      </div>
+  <p>
+    For every pixel \((u, v)\), I convert it into a ray in world space using the intrinsics \(K\)
+    and camera pose <code>c2w</code>. This yields a ray origin and normalized direction.
+  </p>
 
-      <div class="gif-container">
-        <img src="results/my_nerf_training/orbit.gif" alt="orbit gif">
-      </div>
-    </section>
+  <p class="math-block">
+    \[
+    \mathbf{r}(t) = \mathbf{o} + t\,\mathbf{d}
+    \]
+  </p>
 
-  </main>
+  <p>
+    I validate the implementation by verifying consistent projection and visualizing test rays.
+  </p>
+</section>
 
-  <!-- ===== FOOTER ===== -->
-  <footer>
-    <p>© 2025 Eason Wei | UC Berkeley CS180 – Neural Radiance Fields</p>
-  </footer>
+<section id="part2_2" class="card">
+  <h2>Part 2.2 — Sampling Points Along Rays</h2>
 
-  <!-- ===== GIF REPLAY SCRIPT ===== -->
-  <script>
-    document.getElementById("replay-btn").onclick = function () {
-      const gif = document.getElementById("lego-gif");
-      const base = gif.src.split("?")[0];
-      gif.src = base + "?t=" + Date.now();  // force reload
-    };
-  </script>
+  <p>
+    For each ray, I sample 64 points between near and far bounds using stratified sampling. Each
+    point is passed to the NeRF network to predict color and density.
+  </p>
+
+  <p class="math-block">
+    \[
+      \mathbf{x}_i = \mathbf{o} + t_i\,\mathbf{d},
+      \qquad
+      t_i \sim \text{Uniform}(t_{i,\text{lower}}, t_{i,\text{upper}})
+    \]
+  </p>
+</section>
+
+<section id="part2_3" class="card">
+  <h2>Part 2.3 — Putting the Dataloading All Together</h2>
+
+  <p>
+    I generate rays for every pixel in every training image and store:
+  </p>
+
+  <p class="math-block">
+    \[
+      (\text{rays}_o,\; \text{rays}_d,\; \text{pixels})
+      \in \mathbb{R}^{N H W \times 3}.
+    \]
+  </p>
+
+  <ul>
+    <li><b>Global sampling</b>: used for training.</li>
+    <li><b>Single-camera sampling</b>: used for clean debugging visualization.</li>
+  </ul>
+
+  <div class="image-stack">
+    <figure>
+      <img src="viser3.png" alt="Camera frustums">
+    </figure>
+    <figure>
+      <img src="viser4.png" alt="Random rays">
+    </figure>
+  </div>
+</section>
+
+<section id="part2_4" class="card">
+  <h2>Part 2.4 — Neural Radiance Field (NeRF)</h2>
+
+  <div class="textbox">
+    <h3>NeRF Architecture</h3>
+    <ul>
+      <li>10-freq positional encoding for xyz</li>
+      <li>4-freq encoding for directions</li>
+      <li>8-layer MLP, width 256</li>
+      <li>Skip connection at layer 4</li>
+      <li>Outputs: σ(x) and RGB(x, d)</li>
+    </ul>
+  </div>
+</section>
+
+<section id="part2-5" class="card">
+  <h2>Part 2.5 — Volume Rendering</h2>
+
+  <p class="math-block">
+\[
+C(\mathbf{r})
+   = \sum_{i=1}^{N}
+     T_i\,\alpha_i\,\mathbf{c}_i,
+\quad
+T_i = \exp\!\left(-\sum_{j < i}\sigma_j\delta_j\right),
+\quad
+\alpha_i = 1 - \exp(-\sigma_i\delta_i).
+\]
+  </p>
+
+  <div class="image-stack">
+    <figure>
+      <img src="training_progress.png" alt="Samples along ray">
+      <figcaption>volume rendering during iterations</figcaption>
+    </figure>
+    <figure>
+      <img src="psnr_curves.png" alt="PSNR curves">
+      <figcaption>PSNR curves</figcaption>
+    </figure>
+  </div>
+
+  <div class="gif-wrapper">
+    <img id="lego-gif" src="lego_rotation.gif" alt="Lego Rotation GIF">
+    <button id="replay-btn">Replay GIF</button>
+  </div>
+</section>
+
+<section id="part2-6" class="card">
+  <h2>Part 2.6 — Training NeRF on My Own Data</h2>
+
+  <div class="textbox">
+    <h3>Training Hyperparameters</h3>
+    <ul>
+      <li>10,000 iterations</li>
+      <li>Batch size: 8192</li>
+      <li>64 samples per ray</li>
+      <li>Near/Far = 0.01 / 1.5</li>
+      <li>Adam, lr=3e-4</li>
+    </ul>
+  </div>
+
+  <div class="image-grid-3col">
+    <img src="val_0200.png">
+    <img src="val_1500.png">
+    <img src="val_2500.png">
+    <img src="val_5000.png">
+    <img src="val_8000.png">
+    <img src="val_10000.png">
+  </div>
+
+  <div class="image-grid-2col">
+    <img src="psnr_labubu_curve.png">
+    <img src="loss_curve.png">
+  </div>
+
+  <div class="gif-container">
+    <img src="results/my_nerf_training/orbit.gif" alt="orbit gif">
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  <p>© 2025 Eason Wei | UC Berkeley CS180 – Neural Radiance Fields</p>
+</footer>
+
+<!-- ==================================================== -->
+<!--  FIXED REPLAY BUTTON SCRIPT (this makes it work)    -->
+<!-- ==================================================== -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const replay = document.getElementById("replay-btn");
+  const gif = document.getElementById("lego-gif");
+
+  if (replay && gif) {
+    replay.addEventListener("click", () => {
+      const src = gif.src;
+      gif.src = "";      // force full reload
+      setTimeout(() => {
+        gif.src = src;   // restart GIF
+      }, 30);
+    });
+  }
+});
+</script>
 
 </body>
 </html>
