@@ -683,7 +683,7 @@ inputs with pure noise. The model is trained for 5 epochs using an MSE loss.
 <!-- =============================== -->
 <div class="image-stack">
   <figure>
-    <img src="pure_noise_loss_curve.png" alt="Training loss curve for pure noise denoising">
+    <img src="888.png" alt="Training loss curve for pure noise denoising">
     <figcaption>
       <b>Training loss curve.</b>
       The denoiser is trained to map pure Gaussian noise to clean MNIST digits.
@@ -698,11 +698,10 @@ inputs with pure noise. The model is trained for 5 epochs using an MSE loss.
 <!-- =============================== -->
 <div class="image-stack">
   <figure>
-    <img src="pure_noise_epoch1.png" alt="Pure noise denoising after epoch 1">
+    <img src="8.png" alt="Pure noise denoising after epoch 1">
     <figcaption>
       <b>Denoising results after epoch 1.</b>
-      Outputs remain largely unstructured, with only faint digit-like blobs beginning
-      to emerge from the random noise.
+      Outputs remain largely unstructured, with only faint digit-like resembling an average of 9, 8, 5, and 3 from the random noise.
     </figcaption>
   </figure>
 </div>
@@ -712,10 +711,10 @@ inputs with pure noise. The model is trained for 5 epochs using an MSE loss.
 <!-- =============================== -->
 <div class="image-stack">
   <figure>
-    <img src="pure_noise_epoch5.png" alt="Pure noise denoising after epoch 5">
+    <img src="88.png" alt="Pure noise denoising after epoch 5">
     <figcaption>
       <b>Denoising results after epoch 5.</b>
-      Although the outputs are smoother and exhibit digit-like shapes, they collapse
+       The outputs after 5 epoch are not much better than output after the first epoch, they collapse
       toward a similar average appearance rather than producing diverse digits.
     </figcaption>
   </figure>
@@ -727,11 +726,7 @@ With an MSE objective, the model learns to predict the conditional mean of the t
 distribution. When the input contains no information (pure noise), the optimal prediction
 resembles a centroid-like average over all MNIST digits rather than a specific sample.
 </p>
-
-<p>
-This failure mode motivates the need for <b>iterative generative methods</b>, such as
-flow matching, which we explore in Part B.
-</p>
+    
 </main>
 
 <!-- ===== FOOTER ===== -->
