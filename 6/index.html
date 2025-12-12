@@ -259,6 +259,40 @@ x0_hat = (im_noisy - torch.sqrt(1 - alpha_bar) * noise_est) / torch.sqrt(alpha_b
   </div>
 </section>
 
+  <section id="part1_6" class="card">
+  <h2>1.6 — Classifier-Free Guidance (CFG)</h2>
+
+  <p>
+    The final guided noise estimate is computed using the following equation:
+  </p>
+
+  <pre><code>
+noise_est = noise_u + scale * (noise_c - noise_u)
+  </code></pre>
+
+  <p>
+    Here, <code>scale</code> controls the strength of guidance. In my implementation,
+    I use the prompt <code>"a high quality photo"</code> as the conditional input,
+    and an empty string <code>""</code> as the unconditional input. Larger guidance
+    scales improve prompt adherence at the cost of reduced sample diversity.
+  </p>
+
+  <!-- ========================= -->
+  <!-- CFG Sampling Results -->
+  <!-- ========================= -->
+  <div class="image-stack">
+    <figure>
+      <img src="PATH_TO_PART1_6_CFG_SAMPLES.png" alt="CFG sampling results">
+      <figcaption>
+        Five images generated using classifier-free guidance with
+        <code>scale = 7</code>. Compared to unguided sampling, CFG produces sharper
+        images with stronger semantic alignment to the prompt
+        <code>"a high quality photo"</code>.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
 </main>
 
 <!-- ===== FOOTER ===== -->
