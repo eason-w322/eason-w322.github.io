@@ -178,7 +178,7 @@ code {
 .anagram-pair img {
   width: 100%;
   height: auto;
-  max-height: 520px;     /* 🔥 MUCH larger */
+  max-height: 400px;     /* 🔥 MUCH larger */
   object-fit: contain;
   border-radius: 10px;
 }
