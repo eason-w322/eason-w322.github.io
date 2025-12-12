@@ -336,6 +336,68 @@ noise_est = noise_u + scale * (noise_c - noise_u)
   </div>
 </section>
 
+  <section id="part1_7_1" class="card">
+  <h2>1.7.1 — Editing Hand-Drawn and Web Images</h2>
+
+  <p>
+    Image-to-image translation works particularly well when starting from
+    <b>non-photorealistic inputs</b>, such as sketches, paintings, or hand-drawn
+    images. By adding noise and applying CFG-guided iterative denoising, the diffusion
+    model projects these inputs onto the natural image manifold while preserving
+    coarse structure.
+  </p>
+
+  <p>
+    I apply the same editing procedure as in Section&nbsp;1.7 to one image downloaded
+    from the web and two hand-drawn images. As the noise level increases, the model
+    becomes more creative, producing edits that increasingly resemble realistic images
+    while still reflecting the original input.
+  </p>
+
+  <!-- ========================= -->
+  <!-- Web Image Editing -->
+  <!-- ========================= -->
+  <div class="image-stack">
+    <figure>
+      <img src="PATH_TO_WEB_IMAGE_EDITS.png" alt="Web image edits">
+      <figcaption>
+        Image-to-image translation applied to a non-photorealistic image downloaded
+        from the web. Results are shown for starting indices
+        <code>[1, 3, 5, 7, 10, 20]</code>, demonstrating increasing deviation from the
+        original image as noise increases.
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- ========================= -->
+  <!-- Hand-Drawn Image 1 -->
+  <!-- ========================= -->
+  <div class="image-stack">
+    <figure>
+      <img src="PATH_TO_HAND_DRAWN_IMAGE_1_EDITS.png" alt="Hand-drawn image 1 edits">
+      <figcaption>
+        Image-to-image translation applied to a hand-drawn image. The diffusion model
+        progressively projects the sketch onto the natural image manifold, producing
+        realistic textures while preserving the original composition.
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- ========================= -->
+  <!-- Hand-Drawn Image 2 -->
+  <!-- ========================= -->
+  <div class="image-stack">
+    <figure>
+      <img src="PATH_TO_HAND_DRAWN_IMAGE_2_EDITS.png" alt="Hand-drawn image 2 edits">
+      <figcaption>
+        Image-to-image translation applied to a second hand-drawn image. Higher noise
+        levels encourage the model to hallucinate more details, resulting in a stronger
+        transformation guided by the prompt.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
 </main>
 
 <!-- ===== FOOTER ===== -->
