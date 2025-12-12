@@ -156,6 +156,7 @@ code {
 .hybrid-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  justify-items: center;   /* ← ADD THIS */
   gap: 36px;
   margin: 36px auto;
   width: 100%;
@@ -178,6 +179,7 @@ code {
   border-radius: 10px;
   margin: 0 auto;
 }
+
 
 .hybrid-row figcaption {
   margin-top: 14px;
