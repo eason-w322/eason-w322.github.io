@@ -1,1 +1,113 @@
+:root {
+  --bg: #f7f9fc;
+  --panel: #ffffff;
+  --text: #1a1a1a;
+  --muted: #606b7d;
+  --accent: #0077cc;
+  --border: #d9dee7;
+}
 
+/* Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Header */
+.site-header {
+  padding: 40px 20px 10px;
+  text-align: center;
+}
+
+.site-header h1 {
+  font-size: 2rem;
+  color: #0c1f33;
+}
+
+.subtitle {
+  color: var(--muted);
+  margin-top: 0.25rem;
+  font-size: 1rem;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 120px;
+  left: 30px;
+  background: #eef2f7;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  width: 230px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.08);
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+}
+
+.sidebar a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.sidebar a:hover {
+  text-decoration: underline;
+}
+
+/* Main layout */
+.container {
+  margin-left: 280px;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Card */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  max-width: 900px;
+  padding: 24px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.06);
+}
+
+h2 {
+  color: var(--accent);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 24px 0;
+  font-size: 0.85rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container {
+    margin-left: 0;
+  }
+  .sidebar {
+    display: none;
+  }
+}
