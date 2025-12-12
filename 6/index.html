@@ -214,42 +214,12 @@ x0_hat = (im_noisy - torch.sqrt(1 - alpha_bar) * noise_est) / torch.sqrt(alpha_b
   <section id="part1_4" class="card">
   <h2>1.4 — Iterative Denoising</h2>
 
-  <p>
-    In Section 1.3, we saw that one-step denoising using the pretrained UNet significantly
-    outperforms classical Gaussian filtering. However, as the noise level increases, a
-    single denoising step becomes insufficient to fully recover the underlying image.
-    This is expected, since reconstructing the clean image from highly noisy inputs is a
-    much harder problem.
-  </p>
-
-  <p>
-    Diffusion models are designed to denoise <em>iteratively</em>. Rather than removing all
-    noise in a single step, the model gradually refines the image by moving from a highly
-    noisy timestep toward a clean image through a sequence of intermediate timesteps.
-  </p>
-
-  <p>
-    Directly denoising from timestep \(T = 1000\) to \(t = 0\) would require running the
-    model 1000 times, which is computationally expensive. To accelerate sampling, we use
-    a strided schedule of timesteps, denoted <code>strided_timesteps</code>, which skips
-    intermediate steps while still producing high-quality results. In this implementation,
-    we start from timestep 990 and use a stride of 30 until reaching 0.
-  </p>
-
-  <p>
-    At each denoising step, we estimate the clean image \(x_0\) using one-step denoising,
-    then interpolate between this estimate and the current noisy image using the diffusion
-    coefficients. Additional variance is injected using the provided
-    <code>add_variance</code> function, which accounts for stochasticity in the reverse
-    diffusion process.
-  </p>
-
   <!-- ========================= -->
   <!-- Iterative Denoising Loop -->
   <!-- ========================= -->
   <div class="image-stack">
     <figure>
-      <img src="PATH_TO_ITERATIVE_DENOISING_PROGRESS.png" alt="Iterative denoising progression">
+      <img src="1.4_1.png" alt="Iterative denoising progression">
       <figcaption>
         Iterative denoising progression starting from timestep
         <code>strided_timesteps[10]</code>. The image is shown every 5 denoising steps.
@@ -264,7 +234,7 @@ x0_hat = (im_noisy - torch.sqrt(1 - alpha_bar) * noise_est) / torch.sqrt(alpha_b
   <!-- ========================= -->
   <div class="image-stack">
     <figure>
-      <img src="PATH_TO_DENOISING_COMPARISON.png" alt="Denoising method comparison">
+      <img src="1.4_2.png" alt="Denoising method comparison">
       <figcaption>
         Comparison of denoising methods using the same starting noisy image
         (<code>i_start = 10</code>). From left to right: iterative diffusion denoising,
