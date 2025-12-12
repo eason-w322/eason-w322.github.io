@@ -296,31 +296,16 @@ noise_est = noise_u + scale * (noise_c - noise_u)
   <section id="part1_7" class="card">
   <h2>1.7 — Image-to-Image Translation</h2>
 
-  <p>
-    From this point forward, all experiments use <b>classifier-free guidance (CFG)</b>.
-    Image-to-image translation is performed by first adding noise to a real image and
-    then iteratively denoising it using CFG. The amount of noise added controls the
-    strength of the edit: lower noise preserves the original structure, while higher
-    noise allows the model to hallucinate more significant changes.
-  </p>
-
-  <p>
-    Using the conditional prompt <code>"a high quality photo"</code>, I apply this
-    procedure to the Campanile image and two additional test images. For each image,
-    I vary the starting timestep index to produce a range of edits that gradually
-    diverge from and then reconverge toward the original image.
-  </p>
-
   <!-- ========================= -->
   <!-- Campanile Edits -->
   <!-- ========================= -->
   <div class="image-stack">
     <figure>
-      <img src="PATH_TO_CAMPANILE_EDITS.png" alt="Campanile image-to-image edits">
+      <img src="1.7.png" alt="Campanile image-to-image edits">
       <figcaption>
         Image-to-image translation results for the Campanile image using CFG.
         Edits are generated with starting indices
-        <code>[1, 3, 5, 7, 10, 20]</code>, showing progressively stronger deviations
+        <code>[1, 3, 5, 7, 10, 20]</code>  with conditional text prompt "a high quality photo", showing progressively stronger deviations
         from the original image as the noise level increases.
       </figcaption>
     </figure>
@@ -331,11 +316,9 @@ noise_est = noise_u + scale * (noise_c - noise_u)
   <!-- ========================= -->
   <div class="image-stack">
     <figure>
-      <img src="PATH_TO_TEST_IMAGE_1_EDITS.png" alt="Test image 1 edits">
+      <img src="1.7_1.png" alt="Test image 1 edits">
       <figcaption>
-        Image-to-image translation applied to a custom test image.
-        Lower noise levels preserve the original structure, while higher noise
-        levels introduce more creative reinterpretations guided by the prompt.
+
       </figcaption>
     </figure>
   </div>
@@ -345,12 +328,9 @@ noise_est = noise_u + scale * (noise_c - noise_u)
   <!-- ========================= -->
   <div class="image-stack">
     <figure>
-      <img src="PATH_TO_TEST_IMAGE_2_EDITS.png" alt="Test image 2 edits">
+      <img src="1.7_2.png" alt="Test image 2 edits">
       <figcaption>
-        Image-to-image translation applied to a second custom test image.
-        The diffusion model forces the noisy image back onto the natural
-        image manifold, producing edits that remain visually coherent
-        while gradually diverging from the original input.
+   
       </figcaption>
     </figure>
   </div>
