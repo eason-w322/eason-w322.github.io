@@ -76,8 +76,11 @@ body {
 .container {
   margin-left: 280px;
   padding: 20px;
+
   display: flex;
-  justify-content: center;
+  flex-direction: column;      /* stack cards vertically */
+  align-items: flex-start;     /* align cards to left edge */
+  gap: 24px;                   /* consistent spacing */
 }
 
 /* Card */
