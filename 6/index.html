@@ -650,6 +650,27 @@ eps = low1 + high2
     </figure>
   </div>
 </section>
+
+    <section class="card">
+  <h3>1.2.2 Out-of-Distribution Testing</h3>
+
+  <div class="image-stack">
+    <figure>
+      <img src="mnist_ood_noise_levels.png"
+           alt="Out-of-distribution denoising results across noise levels">
+      <figcaption>
+        Out-of-distribution denoising results on a fixed MNIST digit (<b>7</b>)
+        across noise levels
+        <code>σ = 0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0</code> (left to right).
+        Although the denoiser was trained only on MNIST digits corrupted with
+    <code>σ = 0.5</code>, it generalizes remarkably well to unseen noise levels.
+    As the noise level increases, fine-grained details gradually degrade and the
+    output becomes blurrier, but the underlying digit structure remains clearly
+    recognizable—even at <code>σ = 1.0</code> (pure noise).
+      </figcaption>
+    </figure>
+  </div>
+</section>
 </main>
 
 <!-- ===== FOOTER ===== -->
