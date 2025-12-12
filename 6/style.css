@@ -154,6 +154,41 @@ code {
   line-height: 1.4;
 }
 
+/* =============================== */
+/* Visual Anagram Layout           */
+/* =============================== */
+
+.anagram-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;   /* side-by-side */
+  gap: 32px;
+  margin: 32px 0;
+  align-items: start;
+}
+
+.anagram-pair figure {
+  background: #f8faff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08);
+}
+
+.anagram-pair img {
+  width: 100%;
+  height: auto;
+  max-height: 520px;     /* 🔥 MUCH larger */
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.anagram-pair figcaption {
+  margin-top: 12px;
+  font-size: 1rem;
+  color: var(--muted);
+}
+
 /* Footer */
 footer {
   text-align: center;
