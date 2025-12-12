@@ -154,6 +154,40 @@ def forward(im, t):
   </div>
 </section>
 
+  <section id="part1_2" class="card">
+  <h2>1.2 — Classical Denoising</h2>
+
+  <p>
+    I apply
+    Gaussian denoising to images corrupted at timesteps
+    \(t \in \{250, 500, 750\}\).
+  </p>
+
+  <p>
+    Gaussian blur smooths local pixel variations by averaging neighboring values,
+    which can reduce high-frequency noise. However, because diffusion noise is
+    structured across many frequencies and scales, this method is fundamentally
+    limited.
+  </p>
+
+  <p>
+    In the output, Gaussian denoising fails to meaningfully recover image structure.
+
+  <!-- ========================= -->
+  <!-- Gaussian Denoising Results -->
+  <!-- ========================= -->
+  <div class="image-stack">
+    <figure>
+      <img src="PATH_TO_GAUSSIAN_DENOISING_IMAGE.png" alt="Gaussian denoising results">
+      <figcaption>
+        Gaussian-denoised Campanile images at timesteps
+        \(t = 250, 500, 750\). The filtering smooths noise but primarily
+        introduces blur, failing to restore meaningful structure or sharp edges.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
 </main>
 
 <!-- ===== FOOTER ===== -->
