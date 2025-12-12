@@ -790,6 +790,33 @@ as training progresses.
     </figcaption>
   </figure>
 </div>
+
+    <h2>2.5 Training the UNet</h2>
+
+<p>
+Training the class-conditioned UNet follows the same procedure as the time-only
+model, with the key difference being the addition of a class-conditioning vector
+<i>c</i>. During training, the class condition is randomly dropped with a small
+probability to enable classifier-free guidance at sampling time.
+</p>
+
+<p>
+The model is trained to predict the flow from noisy samples to clean images,
+conditioned on both time <i>t</i> and class <i>c</i>. The training loss steadily
+decreases over time, indicating successful learning of the conditional flow field.
+</p>
+
+<div class="image-stack">
+  <figure>
+    <img src="class_conditioned_loss_curve.png"
+         alt="Training loss curve for class-conditioned UNet">
+    <figcaption>
+      <b>Training loss curve.</b>
+      The class-conditioned UNet converges smoothly over training, demonstrating
+      stable optimization and effective use of class information.
+    </figcaption>
+  </figure>
+</div>
     
 </main>
 
