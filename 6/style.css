@@ -126,7 +126,7 @@ code {
 
 .image-stack figure {
   width: 100%;
-  max-width: 700px;        /* ← controls image size */
+  max-width: 650px;        /* ← controls image size */
   margin: 0;
 
   background: #f8faff;
