@@ -730,6 +730,13 @@ resembles a centroid-like average over all MNIST digits rather than a specific s
     <h2>2.2 Training the UNet</h2>
 
 <p>
+I build and train a time-conditioned UNet to predict the flow from noisy samples
+<i>x<sub>t</sub></i> to clean images <i>x</i>. During training, I randomly sample
+a timestep <i>t</i>, generate an interpolated noisy image, and optimize the network
+to predict the corresponding flow using an L2 loss.
+</p>
+
+<p>
 The model is trained on the MNIST training set using a batch size of 64 and an Adam
 optimizer with an initial learning rate of <code>1e-2</code>. An exponential learning
 rate decay scheduler is applied after each epoch.
@@ -737,7 +744,7 @@ rate decay scheduler is applied after each epoch.
 
 <div class="image-stack">
   <figure>
-    <img src="flow_matching_training_loss.png"
+    <img src="2.2.png"
          alt="Training loss curve for time-conditioned UNet">
     <figcaption>
       <b>Training loss curve.</b>
