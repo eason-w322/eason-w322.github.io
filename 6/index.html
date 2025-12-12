@@ -726,6 +726,24 @@ With an MSE objective, the model learns to predict the conditional mean of the t
 distribution. When the input contains no information (pure noise), the optimal prediction
 resembles a centroid-like average over all MNIST digits rather than a specific sample.
 </p>
+
+    <h2>2.2 Training the UNet</h2>
+
+<p>
+The model is trained on the MNIST training set using a batch size of 64 and an Adam
+optimizer with an initial learning rate of <code>1e-2</code>. An exponential learning
+rate decay scheduler is applied after each epoch.
+</p>
+
+<div class="image-stack">
+  <figure>
+    <img src="flow_matching_training_loss.png"
+         alt="Training loss curve for time-conditioned UNet">
+    <figcaption>
+      <b>Training loss curve.</b>
+    </figcaption>
+  </figure>
+</div>
     
 </main>
 
