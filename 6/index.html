@@ -516,6 +516,58 @@ eps = (eps1 + eps2) / 2.0
     <figcaption>Flipped view: <i>a realistic portrait of a human face</i></figcaption>
   </figure>
 </div>
+
+    <section id="part1_9" class="card">
+  <h2>1.9 — Hybrid Images</h2>
+
+  <p>
+    In this section, I implement <b>factorized diffusion</b> to generate hybrid images,
+    following the same idea as hybrid images from Project 2. The key idea is to combine
+    <b>low-frequency structure</b> from one prompt with <b>high-frequency details</b>
+    from another prompt directly in the <i>noise prediction space</i>.
+  </p>
+
+  <p>
+    At each diffusion step, I run the UNet twice with different text prompts to obtain
+    two noise estimates. I then extract low frequencies from the first noise estimate
+    and high frequencies from the second, and combine them to form a composite noise
+    estimate for the reverse diffusion step.
+  </p>
+
+  <pre><code>
+low1 = TF.gaussian_blur(eps1, kernel_size=33, sigma=2.0)
+low2 = TF.gaussian_blur(eps2, kernel_size=33, sigma=2.0)
+
+high2 = eps2 - low2
+
+eps = low1 + high2
+  </code></pre>
+
+  <p>
+    Here, <code>eps1</code> and <code>eps2</code> are noise predictions produced using two
+    different text prompts. The resulting image exhibits one semantic interpretation
+    when viewed from afar (low frequencies) and another when viewed up close
+    (high frequencies).
+  </p>
+
+  <div class="hybrid-row">
+    <figure>
+      <img src="skull_and_cottage.png" alt="Hybrid Image 1">
+      <figcaption>
+        Hybrid image combining <i>a skull</i> (low frequency) and
+        <i>a small cottage on a hill at sunset</i> (low frequency)
+      </figcaption>
+    </figure>
+
+    <figure>
+      <img src="oldman_and_chinese_ink_painting.png" alt="Hybrid Image 2">
+      <figcaption>
+        Hybrid image combining <i>an oil painting of an old man</i> (low frequency) and
+        <i>a traditional Chinese ink painting of mountains, water, and a small boat</i> (low frequency)
+      </figcaption>
+    </figure>
+  </div>
+</section>
 </main>
 
 <!-- ===== FOOTER ===== -->
