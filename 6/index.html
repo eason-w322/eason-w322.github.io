@@ -601,6 +601,55 @@ eps = low1 + high2
     </figure>
   </div>
 </section>
+    
+    <section class="card" id="part-b-1-2-1">
+  <h2>1.2.1 Training</h2>
+
+  <p>
+    We train the UNet denoiser to map noisy MNIST digits back to clean images using
+    MSE. During training, each image batch is corrupted  with
+    Gaussian noise with σ = 0.5.
+  </p>
+
+  <!-- ========================= -->
+  <!-- Image Stack 1: Loss Curve -->
+  <!-- ========================= -->
+  <div class="image-stack">
+    <figure>
+      <img src="1.2.1_1.png" alt="Training loss curve">
+      <figcaption>
+        Training loss curve for the single-step denoising UNet over 5 epochs
+        (σ = 0.5). The steadily decreasing loss indicates stable convergence.
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- ===================================== -->
+  <!-- Image Stack 2: Results After Epoch 1 -->
+  <!-- ===================================== -->
+  <div class="image-stack">
+    <figure>
+      <img src="denoising_epoch1.png" alt="Denoising results after epoch 1">
+      <figcaption>
+        Denoising results on the MNIST test set after the <b>1st epoch</b>.
+        While digit structure begins to emerge, outputs remain blurry and noisy.
+      </figcaption>
+    </figure>
+  </div>
+
+  <!-- ===================================== -->
+  <!-- Image Stack 3: Results After Epoch 5 -->
+  <!-- ===================================== -->
+  <div class="image-stack">
+    <figure>
+      <img src="denoising_epoch5.png" alt="Denoising results after epoch 5">
+      <figcaption>
+        Denoising results on the MNIST test set after the <b>5th epoch</b>.
+        Digits are significantly sharper and closely resemble clean MNIST images.
+      </figcaption>
+    </figure>
+  </div>
+</section>
 </main>
 
 <!-- ===== FOOTER ===== -->
