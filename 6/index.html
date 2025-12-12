@@ -747,7 +747,46 @@ rate decay scheduler is applied after each epoch.
     <img src="2.2.png"
          alt="Training loss curve for time-conditioned UNet">
     <figcaption>
-      <b>Training loss curve.</b>
+      <h2>2.3 Sampling from the UNet</h2>
+
+<p>
+After training, we can sample from the time-conditioned UNet by starting from pure
+Gaussian noise and iteratively following the learned flow field. Although early
+samples are noisy and ambiguous, recognizable digit structures gradually emerge
+as training progresses.
+</p>
+
+<div class="image-stack">
+  <figure>
+    <img src="sampling_epoch_1.png"
+         alt="Sampling results after 1 epoch">
+    <figcaption>
+      <b>Epoch 1.</b>
+      Samples are highly noisy and fragmented, with only weak hints of digit-like
+      structure.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="sampling_epoch_5.png"
+         alt="Sampling results after 5 epochs">
+    <figcaption>
+      <b>Epoch 5.</b>
+      Digit shapes begin to form more clearly. While some samples are still blurry,
+      most digits are now recognizable.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="sampling_epoch_10.png"
+         alt="Sampling results after 10 epochs">
+    <figcaption>
+      <b>Epoch 10.</b>
+      Samples are significantly sharper and more coherent, with well-defined
+      digit structures closely resembling MNIST digits.
+    </figcaption>
+  </figure>
+</div>
     </figcaption>
   </figure>
 </div>
