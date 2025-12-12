@@ -153,6 +153,45 @@ code {
   color: var(--muted);
   line-height: 1.4;
 }
+.hybrid-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 36px;
+  margin: 36px auto;
+  width: 100%;
+}
+
+.hybrid-row figure {
+  background: #f8faff;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  text-align: center;
+  box-shadow: 0 0 14px rgba(0,0,0,0.08);
+}
+
+.hybrid-row img {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+
+.hybrid-row figcaption {
+  margin-top: 14px;
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* Stack vertically on small screens */
+@media (max-width: 900px) {
+  .hybrid-row {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* =============================== */
 /* Visual Anagram Layout           */
