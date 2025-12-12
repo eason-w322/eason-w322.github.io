@@ -425,21 +425,6 @@ pred_prev_image = mask * pred_prev_image + (1 - mask) * noised_original
 
   <section id="part1_7_3" class="card">
   <h2>1.7.3 — Text-Conditional Image-to-Image Translation</h2>
-
-  <p>
-    In this section, we extend the SDEdit-style image-to-image translation by introducing
-    <b>text conditioning</b>. Instead of projecting the noisy image back onto the natural
-    image manifold alone, we guide the denoising process using a text prompt, allowing us
-    to control the semantic direction of the edit.
-  </p>
-
-  <p>
-    This is implemented by simply replacing the default prompt
-    <code>"a high quality photo"</code> with a custom text prompt, while continuing to use
-    classifier-free guidance (CFG). As the noise level increases, the generated images
-    gradually move away from the original image and increasingly reflect the text prompt.
-  </p>
-
   <!-- ===== Image Stack 1 ===== -->
   <div class="image-stack">
     <figure>
