@@ -215,9 +215,9 @@ code {
 }
 
 .anagram-pair img {
-  width: 100%;
+  width: 70%;
   height: auto;
-  max-height: 300px;     /* 🔥 MUCH larger */
+  max-height: 200px;     /* 🔥 MUCH larger */
   object-fit: contain;
   border-radius: 10px;
 }
