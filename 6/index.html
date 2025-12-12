@@ -457,6 +457,63 @@ pred_prev_image = mask * pred_prev_image + (1 - mask) * noised_original
 
 </section>
 
+  <section id="part1_8" class="card">
+  <h2>1.8 — Visual Anagrams</h2>
+
+  <p>
+    At each denoising step, I run the diffusion model twice on the <i>same image and
+    timestep</i>, but with two different text prompts. One pass uses the image as-is,
+    while the other pass uses a vertically flipped version of the image. I then flip
+    the second noise estimate back and <b>average the two predicted noises</b> before
+    performing the reverse diffusion step.
+  </p>
+
+  <p>
+    The core implementation is shown below:
+  </p>
+
+  <pre><code>
+eps1 = uncond_noise1 + scale * (noise1 - uncond_noise1)
+eps2 = uncond_noise2 + scale * (noise2 - uncond_noise2)
+eps2 = torch.flip(eps2, dims=[2])
+eps = (eps1 + eps2) / 2.0
+  </code></pre>
+
+  <h3>Visual Anagram Results</h3>
+
+  <div class="image-grid">
+    <figure>
+      <img src="anagram1_upright.png" alt="Visual Anagram 1 Upright">
+      <figcaption>Upright view: <i>Oil painting of people around a campfire</i></figcaption>
+    </figure>
+
+    <figure>
+      <img src="anagram1_flipped.png" alt="Visual Anagram 1 Flipped">
+      <figcaption>Flipped view: <i>Oil painting of an old man</i></figcaption>
+    </figure>
+
+    <figure>
+      <img src="anagram2_upright.png" alt="Visual Anagram 2 Upright">
+      <figcaption>Upright view (Prompt 1)</figcaption>
+    </figure>
+
+    <figure>
+      <img src="anagram2_flipped.png" alt="Visual Anagram 2 Flipped">
+      <figcaption>Flipped view (Prompt 2)</figcaption>
+    </figure>
+
+    <figure>
+      <img src="anagram3_upright.png" alt="Visual Anagram 3 Upright">
+      <figcaption>Upright view (Prompt 1)</figcaption>
+    </figure>
+
+    <figure>
+      <img src="anagram3_flipped.png" alt="Visual Anagram 3 Flipped">
+      <figcaption>Flipped view (Prompt 2)</figcaption>
+    </figure>
+  </div>
+</section>
+
 </main>
 
 <!-- ===== FOOTER ===== -->
