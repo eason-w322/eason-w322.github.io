@@ -178,6 +178,51 @@ def forward(im, t):
   </div>
 </section>
 
+  <section id="part1_3" class="card">
+  <h2>1.3 — One-Step Denoising</h2>
+
+  <p>
+    In this section, I use a pretrained diffusion denoiser to perform <em>one-step denoising</em>
+    on noisy images. Specifically, I leverage the pretrained
+    <code>stage_1.unet</code>, which has been trained on a large dataset of
+    image pairs \((x_0, x_t)\) to predict the Gaussian noise present in a noisy image.
+  </p>
+
+  <p>
+    Given a noisy image \(x_t\) at timestep \(t\), the UNet predicts the noise
+    \(\varepsilon_\theta(x_t, t)\). Using this predicted noise and the known noise
+    coefficient \(\bar{\alpha}_t\), I estimate the original clean image \(x_0\)
+    by appropriately scaling and subtracting the noise estimate.
+  </p>
+
+  <p>
+    Because the diffusion model is text-conditioned, I provide a prompt embedding
+    corresponding to the prompt <code>"a high quality photo"</code>. This allows
+    the denoiser to leverage learned natural image priors during reconstruction.
+  </p>
+
+  <p>
+    Compared to classical Gaussian denoising, one-step diffusion denoising produces
+    significantly sharper results and recovers meaningful semantic structure, even
+    at relatively high noise levels.
+  </p>
+
+  <!-- ========================= -->
+  <!-- One-Step Denoising Results -->
+  <!-- ========================= -->
+  <div class="image-stack">
+    <figure>
+      <img src="PATH_TO_ONE_STEP_DENOISING_IMAGE.png" alt="One-step denoising results">
+      <figcaption>
+        One-step denoising results for the Campanile image at timesteps
+        \(t = 250, 500, 750\). Each group shows the original image, the noisy image,
+        and the one-step denoised estimate. The diffusion-based denoiser preserves
+        structure and edges far more effectively than classical Gaussian filtering.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
 </main>
 
 <!-- ===== FOOTER ===== -->
