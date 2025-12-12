@@ -74,7 +74,7 @@ body {
 
 /* Main layout */
 .container {
-  max-width: 1200px;      /* ← BIG canvas */
+  max-width: 1000px;      /* ← BIG canvas */
   margin: 0 auto;         /* ← center horizontally */
   padding: 32px 48px;     /* ← breathing room */
 
@@ -126,7 +126,7 @@ code {
 
 .image-stack figure {
   width: 100%;
-  max-width: 650px;        /* ← controls image size */
+  max-width: 750px;        /* ← controls image size */
   margin: 0;
 
   background: #f8faff;
