@@ -809,6 +809,95 @@ probability to enable classifier-free guidance at sampling time.
     </figcaption>
   </figure>
 </div>
+
+
+    <h2>2.6 Sampling from the UNet</h2>
+
+<p>
+We sample from the class-conditioned UNet using classifier-free guidance with
+guidance scale <i>&gamma; = 5.0</i>. We first show results obtained using the
+exponential learning rate scheduler, followed by results after removing the
+scheduler while keeping the rest of the training setup unchanged.
+</p>
+
+<p>
+For each setting, we visualize samples generated after 1, 5, and 10 epochs.
+Each row contains 4 generated instances for digits 0–9.
+</p>
+
+<div class="image-stack">
+  <!-- WITH SCHEDULER -->
+  <figure>
+    <img src="epoch1.png" alt="With scheduler sampling epoch 1">
+    <figcaption>
+      <b>With scheduler — Epoch 1.</b>
+      Early samples are noisy and incomplete, but class-conditioning already
+      provides rough digit structure.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="epoch5.png" alt="With scheduler sampling epoch 5">
+    <figcaption>
+      <b>With scheduler — Epoch 5.</b>
+      Digits become more recognizable and consistent across classes as training progresses.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="epoch10.png" alt="With scheduler sampling epoch 10">
+    <figcaption>
+      <b>With scheduler — Epoch 10.</b>
+      The generated digits are sharp and clearly class-aligned, demonstrating
+      successful convergence with classifier-free guidance.
+    </figcaption>
+  </figure>
+
+  <!-- LOSS WITHOUT SCHEDULER -->
+  <figure>
+    <img src="2.6.png" alt="Training loss without scheduler">
+    <figcaption>
+      <b>Training loss without scheduler.</b>
+      By using a smaller fixed learning rate, stable convergence is achieved
+      even without exponential decay.
+    </figcaption>
+  </figure>
+
+  <!-- WITHOUT SCHEDULER -->
+  <figure>
+    <img src="epoch1_without.png" alt="Without scheduler sampling epoch 1">
+    <figcaption>
+      <b>Without scheduler — Epoch 1.</b>
+      Early samples exhibit similar noise patterns compared to the scheduler-based training.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="epoch5_without.png" alt="Without scheduler sampling epoch 5">
+    <figcaption>
+      <b>Without scheduler — Epoch 5.</b>
+      Digits become increasingly legible, closely matching the quality obtained
+      with the scheduler.
+    </figcaption>
+  </figure>
+
+  <figure>
+    <img src="epoch10_without.png" alt="Without scheduler sampling epoch 10">
+    <figcaption>
+      <b>Without scheduler — Epoch 10.</b>
+      Final samples are comparable in sharpness and diversity to those trained
+      with a scheduler, indicating minimal performance degradation.
+    </figcaption>
+  </figure>
+</div>
+
+<p>
+Overall, removing the learning rate scheduler does not significantly impact
+sample quality. By compensating with a smaller fixed learning rate, the model
+maintains stable training dynamics and achieves comparable convergence.
+This suggests that the scheduler is helpful but not strictly necessary for
+good performance in this setting.
+</p>
     
 </main>
 
