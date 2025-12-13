@@ -800,20 +800,12 @@ model, with the key difference being the addition of a class-conditioning vector
 probability to enable classifier-free guidance at sampling time.
 </p>
 
-<p>
-The model is trained to predict the flow from noisy samples to clean images,
-conditioned on both time <i>t</i> and class <i>c</i>. The training loss steadily
-decreases over time, indicating successful learning of the conditional flow field.
-</p>
-
 <div class="image-stack">
   <figure>
-    <img src="class_conditioned_loss_curve.png"
+    <img src="2.5.png"
          alt="Training loss curve for class-conditioned UNet">
     <figcaption>
       <b>Training loss curve.</b>
-      The class-conditioned UNet converges smoothly over training, demonstrating
-      stable optimization and effective use of class information.
     </figcaption>
   </figure>
 </div>
